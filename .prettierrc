@@ -1,3 +1,4 @@
+arrowParens: always
 bracketSpacing: false
 tabWidth: 4
 trailingComma: all
