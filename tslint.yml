@@ -1,0 +1,16 @@
+extends: tslint:recommended
+rules:
+  indent:
+    options:
+      - true
+      - tabs
+      - 4
+  interface-name: false
+  object-literal-sort-keys: false
+  variable-name:
+    options:
+      - true
+      - ban-keywords
+      - check-format
+      - allow-leading-underscore
+      - allow-pascal-case
