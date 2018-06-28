@@ -5,62 +5,72 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const StylelintWebpackPlugin = require("stylelint-webpack-plugin");
 const TslintWebpackPlugin = require("tslint-webpack-plugin");
 
-module.exports = {
-	entry: {
-		app: "./src/index.tsx",
-		styles: "bootstrap-loader",
-	},
-	resolve: {
-		extensions: [".tsx", ".ts", ".js"],
-	},
-	output: {
-		filename: "[name].[chunkhash].js",
-		path: path.resolve(__dirname, "dist"),
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				use: "babel-loader",
-			},
-			{
-				test: /\.tsx?$/,
-				use: ["babel-loader", "ts-loader"],
-			},
-			{
-				test: /\.ttf$/,
-				use: {
-					loader: "file-loader",
-					options: {
-						name: "[name].[hash].[ext]",
+module.exports = (env, options) => {
+	var config = {
+		entry: {
+			app: "./src/index.tsx",
+			styles: "bootstrap-loader",
+		},
+		resolve: {
+			extensions: [".tsx", ".ts", ".js"],
+		},
+		output: {
+			filename: "[name].[chunkhash].js",
+			path: path.resolve(__dirname, "dist"),
+		},
+		module: {
+			rules: [
+				{
+					test: /\.js$/,
+					use: "babel-loader",
+				},
+				{
+					test: /\.tsx?$/,
+					use: ["babel-loader", "ts-loader"],
+				},
+				{
+					test: /\.ttf$/,
+					use: {
+						loader: "file-loader",
+						options: {
+							name: "[name].[hash].[ext]",
+						},
+					},
+				},
+			],
+		},
+		optimization: {
+			splitChunks: {
+				chunks(chunk) {
+					return chunk.name !== "styles";
+				},
+				cacheGroups: {
+					vendor: {
+						name: "vendor",
+						test: /[\\/]node_modules[\\/]/,
 					},
 				},
 			},
-		],
-	},
-	optimization: {
-		splitChunks: {
-			chunks(chunk) {
-				return chunk.name !== "styles";
-			},
-			cacheGroups: {
-				vendor: {
-					name: "vendor",
-					test: /[\\/]node_modules[\\/]/,
-				},
-			},
 		},
-	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: "src/index.html",
-		}),
-		new MiniCssExtractPlugin({
-			filename: "[name].[contenthash].css",
-		}),
-		new StylelintWebpackPlugin(),
-		new TslintWebpackPlugin({
-			files: ["src/**/*.ts", "src/**/*.tsx"],
-		}),
-	],
+		plugins: [
+			new HtmlWebpackPlugin({
+				template: "src/index.html",
+			}),
+			new MiniCssExtractPlugin({
+				filename: "[name].[contenthash].css",
+			}),
+			new StylelintWebpackPlugin(),
+			new TslintWebpackPlugin({
+				files: ["src/**/*.ts", "src/**/*.tsx"],
+			}),
+		],
+	};
+
+	if (options.mode === "development") {
+		config.resolve.alias = {
+			inferno: __dirname + "/node_modules/inferno/dist/index.dev.esm.js",
+		};
+	}
+
+	return config;
 };
