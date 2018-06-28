@@ -4,6 +4,7 @@
 	"version": "1.0.0",
 	"dependencies": {
 		"inferno": "5.2.0",
+		"inferno-bootstrap": "5.0.2",
 		"inferno-component": "5.2.0",
 		"inferno-mobx": "5.2.0",
 		"inferno-router": "5.2.0",
