@@ -1,6 +1,6 @@
 import {Component, render} from "inferno";
 import {HashRouter} from "inferno-router";
-import {TabsComponent} from "./nav/tabs.component";
+import {NavComponent} from "./nav/nav.component";
 
 /**
  * Root component that renders the entire app and holds its state.
@@ -9,7 +9,7 @@ class IndexComponent extends Component {
 	public render() {
 		return (
 			<HashRouter>
-				<TabsComponent />
+				<NavComponent />
 			</HashRouter>
 		);
 	}
