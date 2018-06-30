@@ -1,16 +1,34 @@
 import {Component, render} from "inferno";
+import {Provider} from "inferno-mobx";
 import {HashRouter} from "inferno-router";
+import {Model} from "./model/model";
 import {NavComponent} from "./nav/nav.component";
+
+interface State {
+	model: Model;
+}
 
 /**
  * Root component that renders the entire app and holds its state.
  */
 class IndexComponent extends Component {
+	public state: State;
+
+	constructor() {
+		super();
+
+		this.state = {
+			model: new Model(),
+		};
+	}
+
 	public render() {
 		return (
-			<HashRouter>
-				<NavComponent />
-			</HashRouter>
+			<Provider model={this.state.model}>
+				<HashRouter>
+					<NavComponent />
+				</HashRouter>
+			</Provider>
 		);
 	}
 }
