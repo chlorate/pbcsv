@@ -22,7 +22,7 @@ export class CategoriesComponent extends Component {
 	public render() {
 		const categories = this.stores.model.categories;
 		if (!categories.length) {
-			return <Alert color="info">No categories.</Alert>;
+			return <Alert color="primary">No categories.</Alert>;
 		}
 
 		return (
