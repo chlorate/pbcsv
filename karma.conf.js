@@ -22,6 +22,7 @@ module.exports = function(config) {
 			outputFile: "results.xml",
 		},
 		webpack: {
+			mode: "development",
 			externals: ["mobx"], // mobx fix
 			resolve: {
 				extensions: [".tsx", ".ts", ".js"],
