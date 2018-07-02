@@ -107,9 +107,14 @@ function alertList(color, messages: string[]) {
 }
 
 const handleSubmit = action((component: FileComponent) => {
-	component.injected.model.open(component.state.url).then(() => {
-		component.injected.history.push("/categories");
-	});
+	component.injected.model
+		.open(component.state.url)
+		.then(() => {
+			component.injected.history.push("/categories");
+		})
+		.catch(() => {
+			// Nothing to handle. Callback required to prevent console error.
+		});
 });
 
 function handleInputUrl(component: FileComponent, event) {
