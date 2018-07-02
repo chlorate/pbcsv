@@ -9,17 +9,16 @@ describe("SlugGenerator", () => {
 
 	describe("slugify", () => {
 		it("lowercases and hyphenates names", () => {
-			expect(generator.slugify("Some Name 1.2")).toBe("some-name-1.2");
+			expect(generator.slugify("Some Name 1.2")).toBe("some-name-1-2");
 		});
 
 		it("collapses multiple hyphens", () => {
 			expect(generator.slugify("a!!!b!!!c")).toBe("a-b-c");
 		});
 
-		it("trims non-letters and non-digits", () => {
+		it("trims hyphens", () => {
 			expect(generator.slugify("   name   ")).toBe("name");
 			expect(generator.slugify("!!!name2!!!")).toBe("name2");
-			expect(generator.slugify("...name3...")).toBe("name3");
 		});
 
 		it("strips apostrophes", () => {
@@ -33,8 +32,7 @@ describe("SlugGenerator", () => {
 		it("returns unique slugs for duplicate names", () => {
 			expect(generator.slugify("name")).toBe("name");
 			expect(generator.slugify("name")).toBe("name.2");
-			expect(generator.slugify("name.3")).toBe("name.3");
-			expect(generator.slugify("name")).toBe("name.4");
+			expect(generator.slugify("name")).toBe("name.3");
 		});
 	});
 });

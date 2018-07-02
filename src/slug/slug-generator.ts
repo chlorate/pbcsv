@@ -13,9 +13,9 @@ export class SlugGenerator {
 			.normalize("NFD")
 			.toLowerCase()
 			.replace(/['\u0300-\u036f]/g, "")
-			.replace(/[^a-z\d.]/g, "-")
+			.replace(/[^a-z\d]/g, "-")
 			.replace(/--+/g, "-")
-			.replace(/^[-.]+|[-.]+$/g, "");
+			.replace(/^-+|-+$/g, "");
 
 		if (this.used[slug]) {
 			let count = 2;
