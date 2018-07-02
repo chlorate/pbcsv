@@ -82,6 +82,25 @@ G5 /  /        / G6,0,`;
 			}, done.fail);
 		});
 
+		it("should assign unambiguous slugs", (done) => {
+			const csv = `Category,Value
+C1 / C1,0
+C1? / C1,0`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.errors.length).toBe(0);
+
+				const c = parser.categories;
+				expect(c[0].fullSlug).toBe("c1");
+				expect(c[0].children[0].fullSlug).toBe("c1/c1");
+				expect(c[1].fullSlug).toBe("c1.2");
+				expect(c[1].children[0].fullSlug).toBe("c1.2/c1");
+
+				done();
+			}, done.fail);
+		});
+
 		it("should trim whitespace", (done) => {
 			const csv = `Category,Value
  C1  /  C2 , 0 `;

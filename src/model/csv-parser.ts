@@ -1,5 +1,6 @@
 import parse from "csv-parse";
 import {Category} from "../category/category";
+import {SlugGenerator} from "../slug/slug-generator";
 
 const separator = " / ";
 
@@ -40,6 +41,7 @@ export class CsvParser {
 	private categoryIndices: number[] = [];
 
 	private _categories: Category[] = [];
+	private categorySlugs: {[name: string]: SlugGenerator} = {};
 	private categoriesByName: {[name: string]: Category} = {};
 
 	get warnings() {
@@ -152,13 +154,21 @@ export class CsvParser {
 		}
 
 		let parent;
+		let parentJoinedName = "";
 		if (nameParts.length > 1) {
 			const parentParts = nameParts.slice(0, nameParts.length - 1);
 			parent = this.ensureCategory(parentParts);
+			parentJoinedName = parentParts.join(separator);
+		}
+
+		let slugs = this.categorySlugs[parentJoinedName];
+		if (!slugs) {
+			slugs = new SlugGenerator();
+			this.categorySlugs[parentJoinedName] = slugs;
 		}
 
 		const lastPart = nameParts[nameParts.length - 1];
-		category = new Category(lastPart, parent);
+		category = new Category(lastPart, slugs.slugify(lastPart), parent);
 		if (!parent) {
 			this.categories.push(category);
 		} else {
