@@ -15,6 +15,7 @@ export const SubcategoryListComponent = (props: Props) => {
 			items.push(
 				<ListGroupItem
 					tag="a"
+					action
 					className="d-flex justify-content-between align-items-center"
 					href="#"
 				>
