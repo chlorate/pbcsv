@@ -2,6 +2,7 @@ import {Component} from "inferno";
 import {Nav, NavItem} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
 import {NavLink, Route, Switch, withRouter} from "inferno-router";
+import {CategoriesComponent} from "../category/categories.component";
 import {FileComponent} from "../file/file.component";
 import {HelpComponent} from "../help/help.component";
 import {Model} from "../model/model";
@@ -73,7 +74,7 @@ export class NavComponent extends Component {
 				</Nav>
 				<Switch>
 					<Route exact path="/" component={FileComponent} />
-					<Route path="/categories" />
+					<Route path="/categories" component={CategoriesComponent} />
 					<Route path="/years" />
 					<Route path="/help" component={HelpComponent} />
 				</Switch>
