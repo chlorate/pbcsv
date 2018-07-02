@@ -4,16 +4,9 @@ const webpack = require("webpack");
 // https://github.com/mobxjs/mobx/issues/1097#issuecomment-323698853
 module.exports = function(config) {
 	config.set({
+		browsers: ["ChromeHeadless", "FirefoxHeadless"],
 		frameworks: ["jasmine"],
 		reporters: ["junit", "progress"],
-		customLaunchers: {
-			// Until a headless option is added:
-			// https://github.com/karma-runner/karma-firefox-launcher/issues/76
-			FirefoxHeadless: {
-				base: "Firefox",
-				flags: ["-headless"],
-			},
-		},
 		files: [
 			"node_modules/mobx/lib/mobx.umd.js", // mobx fix
 			"src/**/*.spec.ts",

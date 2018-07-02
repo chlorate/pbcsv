@@ -10,7 +10,7 @@ build: node_modules
 
 .PHONY: test
 test: node_modules
-	$(KARMA) start --browsers ChromeHeadless,FirefoxHeadless --single-run
+	$(KARMA) start --single-run
 
 .PHONY: watch
 watch: node_modules
