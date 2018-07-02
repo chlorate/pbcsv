@@ -42,7 +42,7 @@ module.exports = function(config) {
 					filename: null,
 					test: /\.[jt]sx?($|\?)/i,
 				}),
-			]
+			],
 		},
 	});
 };
