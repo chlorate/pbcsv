@@ -12,6 +12,7 @@ const links = [
 	{
 		path: "/",
 		name: "File",
+		exact: true,
 	},
 	{
 		path: "/categories",
@@ -58,7 +59,7 @@ export class NavComponent extends Component {
 					<NavLink
 						className="nav-link"
 						activeClassName="active"
-						exact
+						exact={l.exact}
 						to={l.path}
 					>
 						{l.name}
@@ -74,7 +75,10 @@ export class NavComponent extends Component {
 				</Nav>
 				<Switch>
 					<Route exact path="/" component={FileComponent} />
-					<Route path="/categories" component={CategoriesComponent} />
+					<Route
+						path="/categories/:fullSlug*"
+						component={CategoriesComponent}
+					/>
 					<Route path="/years" />
 					<Route path="/help" component={HelpComponent} />
 				</Switch>

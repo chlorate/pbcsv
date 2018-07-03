@@ -1,4 +1,5 @@
-import {Badge, ListGroup, ListGroupItem} from "inferno-bootstrap";
+import {Badge, ListGroup} from "inferno-bootstrap";
+import {Link} from "inferno-router";
 import {Category} from "./category";
 
 interface Props {
@@ -13,15 +14,13 @@ export const SubcategoryListComponent = (props: Props) => {
 	props.categories.forEach((c) => {
 		if (c.children.length) {
 			items.push(
-				<ListGroupItem
-					tag="a"
-					action
-					className="d-flex justify-content-between align-items-center"
-					href="#"
+				<Link
+					className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+					to={`/categories/${c.fullSlug}`}
 				>
 					{c.name}
 					<Badge pill>{c.children.length}</Badge>
-				</ListGroupItem>,
+				</Link>,
 			);
 		}
 	});
@@ -29,5 +28,5 @@ export const SubcategoryListComponent = (props: Props) => {
 		return null;
 	}
 
-	return <ListGroup className="mb-3">{items}</ListGroup>;
+	return <ListGroup tag="div" className="mb-3">{items}</ListGroup>;
 };

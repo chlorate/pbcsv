@@ -1,11 +1,13 @@
 import {Component} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
+import {withRouter} from "inferno-router";
 import {Model} from "../model/model";
 import {Store} from "../store";
 import {SubcategoryListComponent} from "./subcategory-list.component";
 
-interface Stores {
+interface Injected {
+	match: {params: {fullSlug: string}};
 	model: Model;
 }
 
@@ -13,21 +15,35 @@ interface Stores {
  * Contents of the Categories tab.
  */
 @inject(Store.Model)
+@withRouter
 @observer
 export class CategoriesComponent extends Component {
-	get stores() {
-		return this.props as Stores;
+	get injected() {
+		return this.props as Injected;
 	}
 
 	public render() {
-		const categories = this.stores.model.categories;
-		if (!categories.length) {
+		const model = this.injected.model;
+
+		let category;
+		let subcategories = model.categories;
+
+		const fullSlug = this.injected.match.params.fullSlug;
+		if (fullSlug) {
+			category = model.findCategory(fullSlug);
+			if (!category) {
+				return <Alert color="warning">Category not found.</Alert>;
+			}
+			subcategories = category.children;
+		}
+
+		if (!subcategories.length) {
 			return <Alert color="primary">No categories.</Alert>;
 		}
 
 		return (
 			<section>
-				<SubcategoryListComponent categories={categories} />
+				<SubcategoryListComponent categories={subcategories} />
 			</section>
 		);
 	}
