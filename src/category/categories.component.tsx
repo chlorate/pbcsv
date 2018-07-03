@@ -4,6 +4,7 @@ import {inject, observer} from "inferno-mobx";
 import {withRouter} from "inferno-router";
 import {Model} from "../model/model";
 import {Store} from "../store";
+import {CategoryTableComponent} from "./category-table.component";
 import {SubcategoryListComponent} from "./subcategory-list.component";
 
 interface Injected {
@@ -44,6 +45,7 @@ export class CategoriesComponent extends Component {
 		return (
 			<section>
 				<SubcategoryListComponent categories={subcategories} />
+				<CategoryTableComponent categories={subcategories} />
 			</section>
 		);
 	}
