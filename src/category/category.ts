@@ -17,6 +17,10 @@ export class Category {
 		return this._name;
 	}
 
+	get slug() {
+		return this._slug;
+	}
+
 	get fullSlug() {
 		return (this._parent ? `${this._parent.fullSlug}/` : "") + this._slug;
 	}

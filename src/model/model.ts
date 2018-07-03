@@ -48,4 +48,26 @@ export class Model {
 				return Promise.reject();
 			});
 	}
+
+	/**
+	 * Finds a category by its full slug or undefined if not found.
+	 */
+	public findCategory(fullSlug: string): Category | undefined {
+		return this.find(fullSlug.split("/"), this.categories);
+	}
+
+	private find(
+		slugs: string[],
+		categories: Category[],
+	): Category | undefined {
+		const slug = slugs.shift();
+		const category = categories.find((c) => c.slug === slug);
+		if (!category) {
+			return;
+		}
+		if (slugs.length) {
+			return this.find(slugs, category.children);
+		}
+		return category;
+	}
 }
