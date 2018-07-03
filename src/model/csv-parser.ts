@@ -1,5 +1,6 @@
 import parse from "csv-parse";
 import {Category} from "../category/category";
+import {Run} from "../run/run";
 import {SlugGenerator} from "../slug/slug-generator";
 
 const separator = " / ";
@@ -131,7 +132,15 @@ export class CsvParser {
 			return;
 		}
 
-		this.ensureCategory(nameParts);
+		const category = this.ensureCategory(nameParts);
+		const run = new Run(
+			category,
+			this.parseString(row, this.platformIndex),
+			this.parseString(row, this.versionIndex),
+			this.parseString(row, this.emulatorIndex),
+			this.parseString(row, this.commentIndex),
+		);
+		category.runs.push(run);
 	}
 
 	private parseCategoryName(row: string[]): string[] {
@@ -144,6 +153,13 @@ export class CsvParser {
 			.split(separator)
 			.map((p) => p.trim())
 			.filter((p) => p);
+	}
+
+	private parseString(row: string[], index?: number): string {
+		if (index === undefined) {
+			return "";
+		}
+		return row[index].trim();
 	}
 
 	private ensureCategory(nameParts: string[]): Category {

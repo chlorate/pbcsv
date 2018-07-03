@@ -101,6 +101,24 @@ C1? / C1,0`;
 			}, done.fail);
 		});
 
+		it("should add runs to categories", (done) => {
+			const csv = `Category,Value,Platform,Version,Emulator,Comment
+Empty,0,,,,
+Category,0,NES,1.1,FCEU,Run 1...
+Category,0,NES,1.0,FCEU,Run 2...`;
+
+			parser.parse(csv).then(() => {
+				const c = parser.categories;
+				expect(c[0].runs.length).toBe(1);
+				checkRun(c[0].runs[0], c[0], "", "", "", "");
+				expect(c[1].runs.length).toBe(2);
+				checkRun(c[1].runs[0], c[1], "NES", "1.1", "FCEU", "Run 1...");
+				checkRun(c[1].runs[1], c[1], "NES", "1.0", "FCEU", "Run 2...");
+
+				done();
+			}, done.fail);
+		});
+
 		it("should trim whitespace", (done) => {
 			const csv = `Category,Value
  C1  /  C2 , 0 `;
@@ -122,6 +140,14 @@ C1? / C1,0`;
 			expect(category.name).toBe(name);
 			expect(category.parent).toBe(parent);
 			expect(category.children.length).toBe(numChildren);
+		}
+
+		function checkRun(run, category, platform, version, emulator, comment) {
+			expect(run.category).toBe(category);
+			expect(run.platform).toBe(platform);
+			expect(run.version).toBe(version);
+			expect(run.emulator).toBe(emulator);
+			expect(run.comment).toBe(comment);
 		}
 
 		it("should ignore rows with blank category", (done) => {
