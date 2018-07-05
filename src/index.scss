@@ -48,6 +48,10 @@
 	display: block;
 	margin: -$table-cell-padding;
 	padding: $table-cell-padding;
+
+	&:hover {
+		text-decoration: none;
+	}
 }
 
 // List group padding is noticeably inconsistent with cards and tables.
