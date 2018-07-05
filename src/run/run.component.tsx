@@ -10,6 +10,7 @@ export const RunComponent = (props: Props) => {
 	const run = props.run;
 
 	const fields: JSX.Element[] = [];
+	addField(fields, "Personal best:", `#${props.number}`);
 	if (run.platform) {
 		addField(fields, "Platform:", run.platform);
 	}
@@ -40,7 +41,7 @@ export const RunComponent = (props: Props) => {
 	return (
 		<Card className="mb-3">
 			<CardHeader tag="h3" className="h4 m-0">
-				{`#${props.number}`}
+				{"1:23:45"}
 			</CardHeader>
 			<CardBody>{body}</CardBody>
 		</Card>
@@ -52,6 +53,10 @@ function addField(
 	dt: string,
 	dd: JSX.Element | string,
 ) {
+	if (children.length) {
+		children.push(<div className="w-100" />);
+	}
+
 	children.push(
 		<Col tag="dt" xs="auto" className="pr-1">
 			{dt}
@@ -59,6 +64,5 @@ function addField(
 		<Col tag="dd" className="mb-0 text-right">
 			{dd}
 		</Col>,
-		<div className="w-100" />,
 	);
 }
