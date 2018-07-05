@@ -68,7 +68,7 @@ export const CategoryTableComponent = (props: Props) => {
 
 	return (
 		<Card>
-			<table class="table table-hover table-responsive m-0">
+			<table class="table table-bordered table-hover table-responsive card-table">
 				<thead>
 					<tr>
 						<th className="border-top-0 w-100">Category</th>
