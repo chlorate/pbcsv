@@ -15,7 +15,14 @@ export const SubcategoryListComponent = (props: Props) => {
 		if (c.children.length) {
 			items.push(
 				<Link
-					className="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+					className="
+						list-group-item
+						list-group-item-card-padding
+						list-group-item-action
+						d-flex
+						justify-content-between
+						align-items-center
+					"
 					to={`/categories/${c.fullSlug}`}
 				>
 					{c.name}
@@ -28,5 +35,9 @@ export const SubcategoryListComponent = (props: Props) => {
 		return null;
 	}
 
-	return <ListGroup tag="div" className="mb-3">{items}</ListGroup>;
+	return (
+		<ListGroup tag="div" className="mb-3">
+			{items}
+		</ListGroup>
+	);
 };

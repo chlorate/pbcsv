@@ -49,3 +49,8 @@
 	margin: -$table-cell-padding;
 	padding: $table-cell-padding;
 }
+
+// List group padding is noticeably inconsistent with cards and tables.
+.list-group-item-card-padding {
+	padding: $card-spacer-x;
+}
