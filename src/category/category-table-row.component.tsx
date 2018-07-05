@@ -49,7 +49,10 @@ export const CategoryTableRowComponent = (props: Props) => {
 	return (
 		<tr>
 			<td>
-				<Link to={`/categories/${category.fullSlug}`}>
+				<Link
+					className="td-link"
+					to={`/categories/${category.fullSlug}`}
+				>
 					{category.name}
 				</Link>
 			</td>

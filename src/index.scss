@@ -42,3 +42,10 @@
 	}
 	/* stylelint-enable */
 }
+
+// Link that fits its entire parent table cell.
+.td-link {
+	display: block;
+	margin: -$table-cell-padding;
+	padding: $table-cell-padding;
+}
