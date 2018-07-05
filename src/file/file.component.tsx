@@ -106,7 +106,9 @@ function alertList(color, messages: string[]) {
 	);
 }
 
-const handleSubmit = action((component: FileComponent) => {
+const handleSubmit = action((component: FileComponent, event: Event) => {
+	event.preventDefault();
+
 	component.injected.model
 		.open(component.state.url)
 		.then(() => {
