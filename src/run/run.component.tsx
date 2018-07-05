@@ -25,18 +25,21 @@ export const RunComponent = (props: Props) => {
 		);
 	}
 
-	const body: Array<JSX.Element | string> = [];
-	if (run.comment) {
-		body.push(run.comment, <hr className="d-block d-md-none" />);
-	}
-	body.push(
+	const body: Array<JSX.Element | string> = [
 		<Row
 			tag="dl"
-			className="run-fields row no-gutters float-md-right mb-0 small"
+			className="run-fields row no-gutters float-md-right mb-0 pl-md-3 small"
 		>
 			{fields}
 		</Row>,
-	);
+	];
+	if (run.comment) {
+		body.push(<hr className="d-block d-md-none" />, run.comment);
+	} else {
+		body.push(
+			<span className="text-muted d-none d-md-inline">No comment.</span>,
+		);
+	}
 
 	return (
 		<Card className="mb-3">
