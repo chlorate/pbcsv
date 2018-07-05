@@ -12,7 +12,13 @@ interface Props {
 export const SubcategoryListComponent = (props: Props) => {
 	const items: JSX.Element[] = [];
 	props.categories.forEach((c) => {
-		if (c.children.length) {
+		const count = c.children.length;
+		if (count) {
+			let title = "1 subcategory";
+			if (count > 1) {
+				title = `${count} subcategories`;
+			}
+
 			items.push(
 				<Link
 					className="
@@ -26,7 +32,9 @@ export const SubcategoryListComponent = (props: Props) => {
 					to={`/categories/${c.fullSlug}`}
 				>
 					{c.name}
-					<Badge pill>{c.children.length}</Badge>
+					<Badge pill title={title}>
+						{c.children.length}
+					</Badge>
 				</Link>,
 			);
 		}
