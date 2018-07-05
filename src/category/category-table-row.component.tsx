@@ -1,4 +1,5 @@
 import {Badge} from "inferno-bootstrap";
+import {Link} from "inferno-router";
 import {Category} from "./category";
 
 interface Props {
@@ -10,7 +11,8 @@ interface Props {
  * A table row that displays information about a category and its latest run.
  */
 export const CategoryTableRowComponent = (props: Props) => {
-	const pb = props.category.runs[0];
+	const category = props.category;
+	const pb = category.runs[0];
 
 	let versionCell;
 	if (props.showVersion) {
@@ -46,7 +48,11 @@ export const CategoryTableRowComponent = (props: Props) => {
 
 	return (
 		<tr>
-			<td>{props.category.name}</td>
+			<td>
+				<Link to={`/categories/${category.fullSlug}`}>
+					{category.name}
+				</Link>
+			</td>
 			{versionCell}
 		</tr>
 	);

@@ -2,7 +2,9 @@ import {Component} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
 import {withRouter} from "inferno-router";
+import {Category} from "../category/category";
 import {Model} from "../model/model";
+import {RunComponent} from "../run/run.component";
 import {Store} from "../store";
 import {CategoryTableComponent} from "./category-table.component";
 import {SubcategoryListComponent} from "./subcategory-list.component";
@@ -26,7 +28,7 @@ export class CategoriesComponent extends Component {
 	public render() {
 		const model = this.injected.model;
 
-		let category;
+		let category: Category | undefined;
 		let subcategories = model.categories;
 
 		const fullSlug = this.injected.match.params.fullSlug;
@@ -38,15 +40,25 @@ export class CategoriesComponent extends Component {
 			subcategories = category.children;
 		}
 
-		if (!subcategories.length) {
-			return <Alert color="primary">No categories.</Alert>;
+		if (!subcategories.length && (!category || !category.runs.length)) {
+			return <Alert color="primary">No categories or runs.</Alert>;
 		}
 
-		return (
-			<section>
-				<SubcategoryListComponent categories={subcategories} />
-				<CategoryTableComponent categories={subcategories} />
-			</section>
+		const children: JSX.Element[] = [];
+		if (category) {
+			children.push(<h2 className="mb-3">{category.fullName}</h2>);
+		}
+		children.push(
+			<SubcategoryListComponent categories={subcategories} />,
+			<CategoryTableComponent categories={subcategories} />,
 		);
+		if (category && category.runs.length) {
+			const numRuns = category.runs.length;
+			category.runs.forEach((r, i) => {
+				children.push(<RunComponent run={r} number={numRuns - i} />);
+			});
+		}
+
+		return <section>{children}</section>;
 	}
 }

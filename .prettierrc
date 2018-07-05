@@ -8,3 +8,6 @@ overrides:
   - files: "*.md"
     options:
       tabWidth: 2
+  - files: "*.scss"
+    options:
+      singleQuote: true
