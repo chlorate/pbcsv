@@ -1,4 +1,5 @@
 import {Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
+import {MarkdownComponent} from "../markdown/markdown.component";
 import {Run} from "./run";
 
 interface Props {
@@ -6,6 +7,9 @@ interface Props {
 	run: Run;
 }
 
+/**
+ * A card that displays information about a run.
+ */
 export const RunComponent = (props: Props) => {
 	const run = props.run;
 
@@ -34,7 +38,10 @@ export const RunComponent = (props: Props) => {
 		</Row>,
 	];
 	if (run.comment) {
-		body.push(<hr className="d-block d-md-none" />, run.comment);
+		body.push(
+			<hr className="d-block d-md-none" />,
+			<MarkdownComponent markdown={run.comment} />,
+		);
 	} else {
 		body.push(
 			<span className="text-muted d-none d-md-inline">No comment.</span>,
