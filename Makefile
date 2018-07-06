@@ -30,7 +30,9 @@ clean-deps:
 
 .PHONY: upgrade
 upgrade:
-	# Waiting on rejected packages to update peer deps.
+	# Waiting on:
+	# - inferno-mobx to use latest mobx
+	# - stylelint-webpack-plugin to use latest stylelint
 	$(NCU) --upgrade --reject mobx,stylelint,stylelint-config-sass-guidelines
 
 node_modules: package.json
