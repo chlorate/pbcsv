@@ -18,7 +18,15 @@ export const MarkdownComponent = (props: Props) => {
 			"h1",
 			"h2",
 			"img",
+			"del",
 		]),
+		allowedAttributes: Object.assign(
+			{
+				ol: ["start"],
+				td: ["align"],
+			},
+			sanitizeHtml.defaults.allowedAttributes,
+		),
 	});
 
 	return <div class="markdown" dangerouslySetInnerHTML={{__html: html}} />;

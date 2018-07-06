@@ -1,6 +1,25 @@
 .markdown {
+	blockquote {
+		font-size: $blockquote-font-size;
+	}
+
+	hr {
+		clear: both;
+	}
+
 	img {
 		max-width: 100%;
+	}
+
+	table {
+		margin-bottom: $spacer;
+		border: $table-border-width solid $table-border-color;
+	}
+
+	th,
+	td {
+		border: $table-border-width solid $table-border-color;
+		padding: $table-cell-padding-sm;
 	}
 
 	> :last-child {
