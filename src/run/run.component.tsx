@@ -1,4 +1,5 @@
 import {Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
+import {ApproxDateComponent} from "../date/approx-date.component";
 import {MarkdownComponent} from "../markdown/markdown.component";
 import {Run} from "./run";
 
@@ -12,15 +13,6 @@ interface Props {
  */
 export const RunComponent = (props: Props) => {
 	const run = props.run;
-
-	let date: JSX.Element | undefined;
-	if (run.date) {
-		date = (
-			<span className="float-right text-muted text-nowrap">
-				{run.date.string}
-			</span>
-		);
-	}
 
 	const fields: JSX.Element[] = [];
 	addField(fields, "Personal best:", `#${props.number}`);
@@ -61,7 +53,7 @@ export const RunComponent = (props: Props) => {
 		<Card className="mb-3">
 			<CardHeader tag="h3" className="h4 m-0">
 				<span>{"1:23:45"}</span>
-				{date}
+				<ApproxDateComponent className="float-right" date={run.date} />
 			</CardHeader>
 			<CardBody>{body}</CardBody>
 		</Card>
