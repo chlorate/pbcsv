@@ -3,6 +3,24 @@ import {DatePrecision} from "./date-precision";
 
 const dayToMilliseconds = 24 * 60 * 60 * 1000;
 
+// TODO: Should use Date.toLocaleDateString but Chrome and Firefox want to have
+// a whack-a-mole game of "unsupported time zone specified" errors when running
+// tests, so I can't be bothered to figure it out right now.
+const months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+
 /**
  * A date that is either exact day or an approximate month or year.
  */
@@ -67,6 +85,24 @@ export class ApproxDate {
 		}
 
 		return `${s}-${pad(this._date.getDate(), 2)}`;
+	}
+
+	/**
+	 * Returns this date in "YYYY", "Month YYYY", or "Month DD, YYYY" format.
+	 */
+	get fullString(): string {
+		const year = this._date.getFullYear();
+		const month = months[this._date.getMonth()];
+		const day = this._date.getDate();
+
+		switch (this.precision) {
+			case DatePrecision.Year:
+				return `${year}`;
+			case DatePrecision.Month:
+				return `${month} ${year}`;
+			default:
+				return `${month} ${day}, ${year}`;
+		}
 	}
 
 	constructor(s: string, d: Date, p: DatePrecision) {

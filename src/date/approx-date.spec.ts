@@ -91,6 +91,25 @@ describe("ApproxDate", () => {
 			expect(d.iso8601).toBe("2018-03-04");
 		});
 	});
+
+	describe("fullString", () => {
+		const date = new Date(2018, 2, 4);
+
+		it("should return 'YYYY' for year precision", () => {
+			const d = new ApproxDate("", date, DatePrecision.Year);
+			expect(d.fullString).toBe("2018");
+		});
+
+		it("should return 'Month YYYY' for month precision", () => {
+			const d = new ApproxDate("", date, DatePrecision.Month);
+			expect(d.fullString).toBe("March 2018");
+		});
+
+		it("should return 'Month DD, YYYY' for day precision", () => {
+			const d = new ApproxDate("", date, DatePrecision.Day);
+			expect(d.fullString).toBe("March 4, 2018");
+		});
+	});
 });
 
 describe("parseApproxDate", () => {
