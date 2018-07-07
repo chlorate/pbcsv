@@ -1,5 +1,7 @@
 import {DatePrecision} from "./date-precision";
 
+const dayToMilliseconds = 24 * 60 * 60 * 1000;
+
 /**
  * A date that is either exact day or an approximate month or year.
  */
@@ -13,17 +15,46 @@ export class ApproxDate {
 	}
 
 	get date() {
-		return this._date;
+		return new Date(this._date);
 	}
 
 	get precision() {
 		return this._precision;
 	}
 
-	constructor(str, date, precision) {
-		this._string = str;
-		this._date = date;
-		this._precision = precision;
+	/**
+	 * Returns an approximate number of days between this date and now or
+	 * undefined if it cannot be determined or if this date is in the future. If
+	 * the date precision is month or year, then the end of the month or year
+	 * will be used and the minimum number of days since is returned.
+	 */
+	get daysSince(): number | undefined {
+		const now = new Date();
+
+		const then = this.date;
+		switch (this.precision) {
+			case DatePrecision.Month:
+				then.setMonth(then.getMonth() + 1);
+				then.setDate(then.getDate() - 1);
+				break;
+			case DatePrecision.Year:
+				then.setFullYear(then.getFullYear() + 1);
+				then.setDate(then.getDate() - 1);
+				break;
+		}
+
+		const diff = now.getTime() - then.getTime();
+		if (diff < 0) {
+			return undefined;
+		}
+
+		return Math.floor(diff / dayToMilliseconds);
+	}
+
+	constructor(s: string, d: Date, p: DatePrecision) {
+		this._string = s;
+		this._date = d;
+		this._precision = p;
 	}
 }
 
