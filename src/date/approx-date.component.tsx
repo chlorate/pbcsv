@@ -27,7 +27,7 @@ export const ApproxDateComponent = (props: Props): JSX.Element | null => {
 		colorClass = "text-muted";
 	}
 
-	const ago = date.daysSince;
+	const ago = date.daysAgo;
 	if (ago) {
 		title += "\n";
 		if (date.precision !== DatePrecision.Day) {

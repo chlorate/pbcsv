@@ -47,7 +47,7 @@ export class ApproxDate {
 	 * the date precision is month or year, then the end of the month or year
 	 * will be used and the minimum number of days since is returned.
 	 */
-	get daysSince(): number | undefined {
+	get daysAgo(): number | undefined {
 		const now = new Date();
 
 		const then = this.date;

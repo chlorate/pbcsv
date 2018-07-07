@@ -8,7 +8,7 @@ describe("ApproxDate", () => {
 		expect(d.date.getFullYear()).toBe(1987);
 	});
 
-	describe("daysSince", () => {
+	describe("daysAgo", () => {
 		beforeEach(() => {
 			jasmine.clock().install();
 			jasmine.clock().mockDate(new Date(1987, 11, 17, 1, 2, 3, 4));
@@ -24,7 +24,7 @@ describe("ApproxDate", () => {
 				new Date(1987, 11, 10),
 				DatePrecision.Day,
 			);
-			expect(d.daysSince).toBe(7);
+			expect(d.daysAgo).toBe(7);
 		});
 
 		it("should return undefined if day precision and in the future", () => {
@@ -33,7 +33,7 @@ describe("ApproxDate", () => {
 				new Date(2018, 1, 2),
 				DatePrecision.Day,
 			);
-			expect(d.daysSince).toBeUndefined();
+			expect(d.daysAgo).toBeUndefined();
 		});
 
 		it("should return days since month end for month precision", () => {
@@ -42,7 +42,7 @@ describe("ApproxDate", () => {
 				new Date(1987, 10, 1),
 				DatePrecision.Month,
 			);
-			expect(d.daysSince).toBe(17);
+			expect(d.daysAgo).toBe(17);
 		});
 
 		it("should return undefined if month precision and same month", () => {
@@ -51,7 +51,7 @@ describe("ApproxDate", () => {
 				new Date(1987, 11, 1),
 				DatePrecision.Month,
 			);
-			expect(d.daysSince).toBeUndefined();
+			expect(d.daysAgo).toBeUndefined();
 		});
 
 		it("should returns days since year end for year precision", () => {
@@ -60,7 +60,7 @@ describe("ApproxDate", () => {
 				new Date(1986, 0, 1),
 				DatePrecision.Year,
 			);
-			expect(d.daysSince).toBe(351);
+			expect(d.daysAgo).toBe(351);
 		});
 
 		it("should return undefined if year precision and same year", () => {
@@ -69,7 +69,7 @@ describe("ApproxDate", () => {
 				new Date(1987, 0, 1),
 				DatePrecision.Year,
 			);
-			expect(d.daysSince).toBeUndefined();
+			expect(d.daysAgo).toBeUndefined();
 		});
 	});
 
