@@ -1,6 +1,6 @@
 import parse from "csv-parse";
 import {Category} from "../category/category";
-import {DateString, parseDate} from "../date/date-string";
+import {ApproxDate, parseApproxDate} from "../date/approx-date";
 import {Run} from "../run/run";
 import {SlugGenerator} from "../slug/slug-generator";
 
@@ -164,12 +164,12 @@ export class CsvParser {
 		return row[index].trim();
 	}
 
-	private parseDate(row: string[], index?: number): DateString | undefined {
+	private parseDate(row: string[], index?: number): ApproxDate | undefined {
 		if (index === undefined) {
 			return undefined;
 		}
 
-		const date = parseDate(row[index]);
+		const date = parseApproxDate(row[index]);
 		if (!date) {
 			this.warnings.push(`Invalid date: ${row[index]}`);
 		}

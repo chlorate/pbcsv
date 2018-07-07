@@ -1,5 +1,5 @@
 import {Category} from "../category/category";
-import {DateString} from "../date/date-string";
+import {ApproxDate} from "../date/approx-date";
 
 /**
  * A run describes a current or former personal best playthrough of some
@@ -10,7 +10,7 @@ export class Run {
 	private _platform: string;
 	private _version: string;
 	private _emulator: string;
-	private _date?: DateString;
+	private _date?: ApproxDate;
 	private _comment: string;
 
 	constructor(category, platform, version, emulator, date, comment) {
