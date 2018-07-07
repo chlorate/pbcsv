@@ -1,10 +1,12 @@
 import {Badge} from "inferno-bootstrap";
 import {Link} from "inferno-router";
+import {ApproxDateComponent} from "../date/approx-date.component";
 import {Category} from "./category";
 
 interface Props {
 	category: Category;
 	showVersion: boolean;
+	showDate: boolean;
 }
 
 /**
@@ -46,6 +48,15 @@ export const CategoryTableRowComponent = (props: Props) => {
 		);
 	}
 
+	let dateCell: JSX.Element | undefined;
+	if (props.showDate) {
+		dateCell = (
+			<td>
+				<ApproxDateComponent date={pb.date} />
+			</td>
+		);
+	}
+
 	return (
 		<tr>
 			<td>
@@ -57,6 +68,7 @@ export const CategoryTableRowComponent = (props: Props) => {
 				</Link>
 			</td>
 			{versionCell}
+			{dateCell}
 		</tr>
 	);
 };

@@ -43,4 +43,8 @@ export class Category {
 	get runs() {
 		return this._runs;
 	}
+
+	get hasDates(): boolean {
+		return this._runs.some((r): boolean => r.date !== undefined);
+	}
 }

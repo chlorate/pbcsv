@@ -62,8 +62,17 @@ export const CategoryTableComponent = (props: Props) => {
 		);
 	}
 
+	let dateHeader: JSX.Element | undefined;
+	if (categories.some((c) => c.hasDates)) {
+		dateHeader = <th className="border-top-0">Date</th>;
+	}
+
 	const rows = categories.map((c) => (
-		<CategoryTableRowComponent category={c} showVersion={versionHeader} />
+		<CategoryTableRowComponent
+			category={c}
+			showVersion={versionHeader}
+			showDate={dateHeader !== undefined}
+		/>
 	));
 
 	return (
@@ -73,6 +82,7 @@ export const CategoryTableComponent = (props: Props) => {
 					<tr>
 						<th className="border-top-0 w-100">Category</th>
 						{versionHeader}
+						{dateHeader}
 					</tr>
 				</thead>
 				<tbody>{rows}</tbody>

@@ -6,8 +6,8 @@ const veryRecentThreshold = 30;
 const recentThreshold = 90;
 
 interface Props {
-	className: string | undefined;
-	date: ApproxDate | undefined;
+	className?: string;
+	date?: ApproxDate;
 }
 
 /**
