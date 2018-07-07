@@ -1,5 +1,6 @@
 import {Badge, ListGroup} from "inferno-bootstrap";
 import {Link} from "inferno-router";
+import {formatNumber} from "../math/util";
 import {Category} from "./category";
 
 interface Props {
@@ -16,7 +17,7 @@ export const SubcategoryListComponent = (props: Props) => {
 		if (count) {
 			let title = "1 subcategory";
 			if (count > 1) {
-				title = `${count} subcategories`;
+				title = `${formatNumber(count)} subcategories`;
 			}
 
 			items.push(
@@ -33,7 +34,7 @@ export const SubcategoryListComponent = (props: Props) => {
 				>
 					{c.name}
 					<Badge pill title={title}>
-						{c.children.length}
+						{formatNumber(c.children.length)}
 					</Badge>
 				</Link>,
 			);

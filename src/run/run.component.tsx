@@ -1,6 +1,7 @@
 import {Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
 import {ApproxDateComponent} from "../date/approx-date.component";
 import {MarkdownComponent} from "../markdown/markdown.component";
+import {formatNumber} from "../math/util";
 import {Run} from "./run";
 
 interface Props {
@@ -15,7 +16,7 @@ export const RunComponent = (props: Props) => {
 	const run = props.run;
 
 	const fields: JSX.Element[] = [];
-	addField(fields, "Personal best:", `#${props.number}`);
+	addField(fields, "Personal best:", `#${formatNumber(props.number)}`);
 	if (run.platform) {
 		addField(fields, "Platform:", run.platform);
 	}

@@ -1,3 +1,4 @@
+import {formatNumber} from "../math/util";
 import {ApproxDate} from "./approx-date";
 import {DatePrecision} from "./date-precision";
 
@@ -33,7 +34,7 @@ export const ApproxDateComponent = (props: Props): JSX.Element | null => {
 		if (date.precision !== DatePrecision.Day) {
 			title += "At least ";
 		}
-		title += `${ago} day${ago === 1 ? "" : "s"} ago.`;
+		title += `${formatNumber(ago)} day${ago === 1 ? "" : "s"} ago.`;
 
 		if (ago <= veryRecentThreshold) {
 			colorClass = "text-success";
