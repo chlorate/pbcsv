@@ -1,4 +1,5 @@
 import {Category} from "../category/category";
+import {DateString} from "../date/date-string";
 
 /**
  * A run describes a current or former personal best playthrough of some
@@ -9,13 +10,15 @@ export class Run {
 	private _platform: string;
 	private _version: string;
 	private _emulator: string;
+	private _date?: DateString;
 	private _comment: string;
 
-	constructor(category, platform, version, emulator, comment) {
+	constructor(category, platform, version, emulator, date, comment) {
 		this._category = category;
 		this._platform = platform;
 		this._version = version;
 		this._emulator = emulator;
+		this._date = date;
 		this._comment = comment;
 	}
 
@@ -33,6 +36,10 @@ export class Run {
 
 	get emulator() {
 		return this._emulator;
+	}
+
+	get date() {
+		return this._date;
 	}
 
 	get comment() {

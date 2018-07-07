@@ -13,6 +13,15 @@ interface Props {
 export const RunComponent = (props: Props) => {
 	const run = props.run;
 
+	let date: JSX.Element | undefined;
+	if (run.date) {
+		date = (
+			<span className="float-right text-muted text-nowrap">
+				{run.date.string}
+			</span>
+		);
+	}
+
 	const fields: JSX.Element[] = [];
 	addField(fields, "Personal best:", `#${props.number}`);
 	if (run.platform) {
@@ -51,7 +60,8 @@ export const RunComponent = (props: Props) => {
 	return (
 		<Card className="mb-3">
 			<CardHeader tag="h3" className="h4 m-0">
-				{"1:23:45"}
+				<span>{"1:23:45"}</span>
+				{date}
 			</CardHeader>
 			<CardBody>{body}</CardBody>
 		</Card>

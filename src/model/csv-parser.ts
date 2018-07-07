@@ -1,5 +1,6 @@
 import parse from "csv-parse";
 import {Category} from "../category/category";
+import {DateString, parseDate} from "../date/date-string";
 import {Run} from "../run/run";
 import {SlugGenerator} from "../slug/slug-generator";
 
@@ -29,17 +30,17 @@ const valueAliases = [
 export class CsvParser {
 	public valueIndices: number[] = [];
 	public valueNames: string[] = [];
-	public platformIndex?: number;
-	public versionIndex?: number;
-	public emulatorIndex?: number;
-	public dateIndex?: number;
-	public commentIndex?: number;
 
 	private _warnings: string[] = [];
 	private _errors: string[] = [];
 
 	private readHeader = false;
 	private categoryIndices: number[] = [];
+	private platformIndex?: number;
+	private versionIndex?: number;
+	private emulatorIndex?: number;
+	private dateIndex?: number;
+	private commentIndex?: number;
 
 	private _categories: Category[] = [];
 	private categorySlugs: {[name: string]: SlugGenerator} = {};
@@ -138,6 +139,7 @@ export class CsvParser {
 			this.parseString(row, this.platformIndex),
 			this.parseString(row, this.versionIndex),
 			this.parseString(row, this.emulatorIndex),
+			this.parseDate(row, this.dateIndex),
 			this.parseString(row, this.commentIndex),
 		);
 		category.runs.push(run);
@@ -160,6 +162,18 @@ export class CsvParser {
 			return "";
 		}
 		return row[index].trim();
+	}
+
+	private parseDate(row: string[], index?: number): DateString | undefined {
+		if (index === undefined) {
+			return undefined;
+		}
+
+		const date = parseDate(row[index]);
+		if (!date) {
+			this.warnings.push(`Invalid date: ${row[index]}`);
+		}
+		return date;
 	}
 
 	private ensureCategory(nameParts: string[]): Category {
