@@ -72,6 +72,25 @@ describe("ApproxDate", () => {
 			expect(d.daysSince).toBeUndefined();
 		});
 	});
+
+	describe("iso8601", () => {
+		const date = new Date(2018, 2, 4);
+
+		it("should return YYYY for year precision", () => {
+			const d = new ApproxDate("", date, DatePrecision.Year);
+			expect(d.iso8601).toBe("2018");
+		});
+
+		it("should return YYYY-MM for month precision", () => {
+			const d = new ApproxDate("", date, DatePrecision.Month);
+			expect(d.iso8601).toBe("2018-03");
+		});
+
+		it("should return YYYY-MM-DD for day precision", () => {
+			const d = new ApproxDate("", date, DatePrecision.Day);
+			expect(d.iso8601).toBe("2018-03-04");
+		});
+	});
 });
 
 describe("parseApproxDate", () => {

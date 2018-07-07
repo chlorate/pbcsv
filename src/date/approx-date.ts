@@ -1,3 +1,4 @@
+import {pad} from "../math/util";
 import {DatePrecision} from "./date-precision";
 
 const dayToMilliseconds = 24 * 60 * 60 * 1000;
@@ -49,6 +50,23 @@ export class ApproxDate {
 		}
 
 		return Math.floor(diff / dayToMilliseconds);
+	}
+
+	/**
+	 * Returns this date formatted as an ISO-8601 string.
+	 */
+	get iso8601(): string {
+		let s = `${this._date.getFullYear()}`;
+		if (this.precision === DatePrecision.Year) {
+			return s;
+		}
+
+		s += `-${pad(this._date.getMonth() + 1, 2)}`;
+		if (this.precision === DatePrecision.Month) {
+			return s;
+		}
+
+		return `${s}-${pad(this._date.getDate(), 2)}`;
 	}
 
 	constructor(s: string, d: Date, p: DatePrecision) {
