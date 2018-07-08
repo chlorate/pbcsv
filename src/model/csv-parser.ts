@@ -175,7 +175,7 @@ export class CsvParser {
 			this.warnings.push(`Unrecognized date: ${row[index]}`);
 		} else if (date.ambiguous && !this.hasAmbiguousDates) {
 			this.warnings.push(
-				"Ambiguous date: assuming format is MM/DD/YYYY, not DD/MM/YYYY.",
+				"Ambiguous date found: assuming format is MM/DD/YYYY, not DD/MM/YYYY.",
 			);
 			this.hasAmbiguousDates = true;
 		}

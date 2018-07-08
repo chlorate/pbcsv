@@ -118,6 +118,7 @@ export class ApproxDate {
 
 const formats = [
 	{
+		// DD-MM-YYYY or DD/MM/YYYY
 		regExp: /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4,})/,
 		year: 3,
 		month: 1,
@@ -125,17 +126,27 @@ const formats = [
 		ambiguous: true,
 	},
 	{
+		// MM-YYYY or MM/YYYY
 		regExp: /(\d{1,2})[-\/](\d{4,})/,
 		year: 2,
 		month: 1,
 		ambiguous: false,
 	},
 	{
+		// YYYY, YYYY-MM, YYYY/MM, YYYY-MM-DD, or YYYY/MM/DD
 		regExp: /(\d{4,})(?:[-\/](\d{1,2}))?(?:[-\/](\d{1,2}))?/,
 		year: 1,
 		month: 2,
 		day: 3,
 		ambiguous: false,
+	},
+	{
+		// MM-DD-YY or MM/DD/YY
+		regExp: /(\d{1,2})[-\/](\d{1,2})[-\/](\d{2})/,
+		year: 3,
+		month: 1,
+		day: 2,
+		ambiguous: true,
 	},
 ];
 
@@ -155,8 +166,11 @@ export function parseApproxDate(s: string): ApproxDate | undefined {
 		return undefined;
 	}
 
-	const year = parseInt(match[format.year], 10);
+	let year = parseInt(match[format.year], 10);
 	let precision = DatePrecision.Year;
+	if (year < 100) {
+		year += 2000;
+	}
 
 	let month: number | undefined;
 	if (match[format.month] !== undefined) {
