@@ -32,6 +32,7 @@ export class CsvParser {
 
 	private _warnings: string[] = [];
 	private _errors: string[] = [];
+	private hasAmbiguousDates: boolean = false;
 
 	private readHeader = false;
 	private categoryIndices: number[] = [];
@@ -171,7 +172,12 @@ export class CsvParser {
 
 		const date = parseApproxDate(row[index]);
 		if (!date) {
-			this.warnings.push(`Invalid date: ${row[index]}`);
+			this.warnings.push(`Unrecognized date: ${row[index]}`);
+		} else if (date.ambiguous && !this.hasAmbiguousDates) {
+			this.warnings.push(
+				"Ambiguous date: assuming format is MM/DD/YYYY, not DD/MM/YYYY.",
+			);
+			this.hasAmbiguousDates = true;
 		}
 		return date;
 	}

@@ -102,10 +102,10 @@ C1? / C1,0`;
 		});
 
 		it("should add runs to categories", (done) => {
-			const csv = `Category,Value,Platform,Version,Emulator,Comment
-Empty,0,,,,
-Category,0,NES,1.1,FCEU,Run 1...
-Category,0,NES,1.0,FCEU,Run 2...`;
+			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment
+Empty,0,,,,,
+Category,0,NES,1.1,FCEU,1987-12-17,Run 1...
+Category,0,NES,1.0,FCEU,2010-03-01,Run 2...`;
 
 			parser.parse(csv).then(() => {
 				const c = parser.categories;
@@ -117,6 +117,17 @@ Category,0,NES,1.0,FCEU,Run 2...`;
 
 				done();
 			}, done.fail);
+		});
+
+		it("should warn if any date is ambiguous", (done) => {
+			const csv = `Category,Value,Date
+Category,0,1/2/2003`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(1);
+				expect(parser.warnings[0]).toContain("Ambiguous date");
+				done();
+			});
 		});
 
 		it("should trim whitespace", (done) => {
