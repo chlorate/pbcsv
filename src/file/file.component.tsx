@@ -151,13 +151,13 @@ export class FileComponent extends Component<{}, State> {
 
 		return (
 			<Row tag="section">
-				<Col md="9" lg="7" xl="6">
-					<Card>
+				<Col xs="12" md="9" lg="7" xl="6">
+					<Card className="mb-3">
 						<CardHeader>{nav}</CardHeader>
 						<CardBody>{body}</CardBody>
 					</Card>
 				</Col>
-				<Col md="3" lg="5" xl="6">
+				<Col xs="12" md="9" lg="5" xl="6">
 					{warnings}
 					{errors}
 				</Col>
