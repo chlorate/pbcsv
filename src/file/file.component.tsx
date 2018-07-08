@@ -150,12 +150,14 @@ export class FileComponent extends Component<{}, State> {
 		}
 
 		return (
-			<Row tag="section" className="justify-content-center">
+			<Row tag="section">
 				<Col md="9" lg="7" xl="6">
 					<Card>
 						<CardHeader>{nav}</CardHeader>
 						<CardBody>{body}</CardBody>
 					</Card>
+				</Col>
+				<Col md="3" lg="5" xl="6">
 					{warnings}
 					{errors}
 				</Col>
@@ -165,7 +167,7 @@ export class FileComponent extends Component<{}, State> {
 }
 
 const alertList = (color: string, messages: string[]) => (
-	<Alert color={color} className="mt-3">
+	<Alert color={color} className="mb-3">
 		<ul className="list-unstyled m-0">
 			{messages.map((m) => <li>{m}</li>)}
 		</ul>
