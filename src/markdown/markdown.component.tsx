@@ -3,7 +3,7 @@ import sanitizeHtml from "sanitize-html";
 
 const markedOptions = {
 	headerIds: false,
-	smartyPants: true,
+	smartypants: true,
 };
 
 const sanitizeOptions = {
