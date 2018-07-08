@@ -48,16 +48,12 @@ export function CategoryTableComponent(props: Props): JSX.Element | null {
 			title = titleParts.join("/");
 		}
 
-		versionHeader = (
-			<th className="border-top-0" title={title}>
-				{text}
-			</th>
-		);
+		versionHeader = <th title={title}>{text}</th>;
 	}
 
 	let dateHeader: JSX.Element | undefined;
 	if (categories.some((c) => c.hasDates)) {
-		dateHeader = <th className="border-top-0">Date</th>;
+		dateHeader = <th>Date</th>;
 	}
 
 	const rows = categories.map((c) => (
@@ -73,7 +69,7 @@ export function CategoryTableComponent(props: Props): JSX.Element | null {
 			<table class="table table-bordered table-hover table-responsive card-table">
 				<thead>
 					<tr>
-						<th className="border-top-0 w-100">Category</th>
+						<th className="w-100">Category</th>
 						{versionHeader}
 						{dateHeader}
 					</tr>
