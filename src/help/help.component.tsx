@@ -21,6 +21,16 @@ export const HelpComponent = () => (
 								GitHub
 							</a>
 						</li>
+						<li>
+							<a href="https://github.com/chlorate/pbcsv/wiki">
+								Documentation
+							</a>
+						</li>
+						<li>
+							<a href="https://github.com/chlorate/pbcsv/wiki/Spreadsheet-format">
+								Spreadsheet format
+							</a>
+						</li>
 					</ul>
 				</CardBody>
 			</Card>
