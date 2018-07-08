@@ -12,27 +12,27 @@ interface Props {
 /**
  * A table row that displays information about a category and its latest run.
  */
-export const CategoryTableRowComponent = (props: Props) => {
+export function CategoryTableRowComponent(props: Props): JSX.Element {
 	const category = props.category;
 	const pb = category.runs[0];
 
-	let versionCell;
+	let versionCell: JSX.Element | undefined;
 	if (props.showVersion) {
-		let platform;
+		let platform: JSX.Element | undefined;
 		if (pb.platform) {
 			platform = (
 				<span title={`Platform: ${pb.platform}`}>{pb.platform}</span>
 			);
 		}
 
-		let version;
+		let version: JSX.Element | undefined;
 		if (pb.version) {
 			version = (
 				<Badge title={`Version: ${pb.version}`}>{pb.version}</Badge>
 			);
 		}
 
-		let emulator;
+		let emulator: JSX.Element | undefined;
 		if (pb.emulator) {
 			emulator = (
 				<Badge color="warning" title={`Emulator: ${pb.emulator}`}>
@@ -71,4 +71,4 @@ export const CategoryTableRowComponent = (props: Props) => {
 			{dateCell}
 		</tr>
 	);
-};
+}

@@ -14,7 +14,7 @@ interface Props {
  * Displays a date. Colour indicates how recent it is. Title contains extra
  * information.
  */
-export const ApproxDateComponent = (props: Props): JSX.Element | null => {
+export function ApproxDateComponent(props: Props): JSX.Element | null {
 	const date = props.date;
 	if (!date) {
 		return null;
@@ -23,8 +23,7 @@ export const ApproxDateComponent = (props: Props): JSX.Element | null => {
 	let title = date.fullString;
 
 	let colorClass = "";
-	const now = new Date();
-	if (date.date.getFullYear() < now.getFullYear()) {
+	if (date.date.getFullYear() < new Date().getFullYear()) {
 		colorClass = "text-muted";
 	}
 
@@ -44,11 +43,12 @@ export const ApproxDateComponent = (props: Props): JSX.Element | null => {
 	}
 
 	return (
-		<span
+		<time
 			className={`text-nowrap ${colorClass} ${props.className || ""}`}
 			title={title}
+			dateTime={date.iso8601}
 		>
-			<time dateTime={date.iso8601}>{date.string}</time>
-		</span>
+			{date.string}
+		</time>
 	);
-};
+}

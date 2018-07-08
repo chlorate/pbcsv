@@ -22,7 +22,7 @@ class IndexComponent extends Component {
 		};
 	}
 
-	public render() {
+	public render(): JSX.Element {
 		return (
 			<Provider model={this.state.model}>
 				<HashRouter>

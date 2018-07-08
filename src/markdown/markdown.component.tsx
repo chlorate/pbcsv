@@ -1,6 +1,27 @@
 import marked from "marked";
 import sanitizeHtml from "sanitize-html";
 
+const markedOptions = {
+	headerIds: false,
+	smartyPants: true,
+};
+
+const sanitizeOptions = {
+	allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+		"del",
+		"h1",
+		"h2",
+		"img",
+	]),
+	allowedAttributes: Object.assign(
+		{
+			ol: ["start"],
+			td: ["align"],
+		},
+		sanitizeHtml.defaults.allowedAttributes,
+	),
+};
+
 interface Props {
 	markdown: string;
 }
@@ -8,26 +29,9 @@ interface Props {
 /**
  * Renders a Markdown string.
  */
-export const MarkdownComponent = (props: Props) => {
-	let html = marked(props.markdown, {
-		headerIds: false,
-		smartypants: true,
-	});
-	html = sanitizeHtml(html, {
-		allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-			"h1",
-			"h2",
-			"img",
-			"del",
-		]),
-		allowedAttributes: Object.assign(
-			{
-				ol: ["start"],
-				td: ["align"],
-			},
-			sanitizeHtml.defaults.allowedAttributes,
-		),
-	});
+export function MarkdownComponent(props: Props): JSX.Element {
+	let html = marked(props.markdown, markedOptions);
+	html = sanitizeHtml(html, sanitizeOptions);
 
 	return <div class="markdown" dangerouslySetInnerHTML={{__html: html}} />;
-};
+}

@@ -10,47 +10,40 @@ interface Props {
  * A table that displays information about categories and their latest runs.
  * Categories not having any runs are not included.
  */
-export const CategoryTableComponent = (props: Props) => {
+export function CategoryTableComponent(props: Props): JSX.Element | null {
 	const categories = props.categories.filter((c) => c.runs.length);
 	if (!categories.length) {
 		return null;
 	}
 
-	const hasPlatform = categories.some((c) =>
-		c.runs.some((r) => r.platform !== ""),
-	);
-	const hasVersion = categories.some((c) =>
-		c.runs.some((r) => r.version !== ""),
-	);
-	const hasEmulator = categories.some((c) =>
-		c.runs.some((r) => r.emulator !== ""),
-	);
-
-	let versionHeader;
-	if (hasPlatform || hasVersion || hasEmulator) {
+	let versionHeader: JSX.Element | undefined;
+	const hasPlatforms = categories.some((c) => c.hasPlatforms);
+	const hasVersions = categories.some((c) => c.hasVersions);
+	const hasEmulators = categories.some((c) => c.hasEmulators);
+	if (hasPlatforms || hasVersions || hasEmulators) {
 		// These fields are combined into a single column to keep it compact.
 		// A full header is too long and abbreviating is ugly, so just pick the
 		// most fitting term and show everything as a tooltip.
 		let text = "Emulator";
-		if (hasPlatform) {
+		if (hasPlatforms) {
 			text = "Platform";
 		}
-		if (hasVersion) {
+		if (hasVersions) {
 			text = "Version";
 		}
 
 		const titleParts: string[] = [];
-		if (hasPlatform) {
+		if (hasPlatforms) {
 			titleParts.push("Platform");
 		}
-		if (hasVersion) {
+		if (hasVersions) {
 			titleParts.push("Version");
 		}
-		if (hasEmulator) {
+		if (hasEmulators) {
 			titleParts.push("Emulator");
 		}
 
-		let title;
+		let title: string | undefined;
 		if (titleParts.length > 1) {
 			title = titleParts.join("/");
 		}
@@ -70,7 +63,7 @@ export const CategoryTableComponent = (props: Props) => {
 	const rows = categories.map((c) => (
 		<CategoryTableRowComponent
 			category={c}
-			showVersion={versionHeader}
+			showVersion={versionHeader !== undefined}
 			showDate={dateHeader !== undefined}
 		/>
 	));
@@ -89,4 +82,4 @@ export const CategoryTableComponent = (props: Props) => {
 			</table>
 		</Card>
 	);
-};
+}

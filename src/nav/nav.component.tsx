@@ -42,19 +42,16 @@ interface Stores {
 @withRouter
 @observer
 export class NavComponent extends Component {
-	get stores() {
+	get stores(): Stores {
 		return this.props as Stores;
 	}
 
-	public render() {
+	public render(): JSX.Element {
 		const model = this.stores.model;
 
-		const items = links.map((l) => {
-			if (l.loadedOnly && !model.loaded) {
-				return;
-			}
-
-			return (
+		const items = links
+			.filter((l) => !l.loadedOnly || model.loaded)
+			.map((l) => (
 				<NavItem className={l.className}>
 					<NavLink
 						className="nav-link"
@@ -65,8 +62,7 @@ export class NavComponent extends Component {
 						{l.name}
 					</NavLink>
 				</NavItem>
-			);
-		});
+			));
 
 		return (
 			<div>

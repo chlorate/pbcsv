@@ -4,8 +4,8 @@ const statusOk = 200;
  * Sends a GET request and returns a promise that is resolved with the response
  * body or rejected with an error message.
  */
-export function request(url: string) {
-	return new Promise<string>((resolve, reject) => {
+export function request(url: string): Promise<string> {
+	return new Promise((resolve, reject) => {
 		const xhr = new XMLHttpRequest();
 		xhr.addEventListener("load", () => {
 			if (xhr.status !== statusOk) {
@@ -22,7 +22,7 @@ export function request(url: string) {
 	});
 }
 
-function parseError(xhr: XMLHttpRequest) {
+function parseError(xhr: XMLHttpRequest): string {
 	if (xhr.status) {
 		return xhr.statusText || `${xhr.status} status`;
 	}

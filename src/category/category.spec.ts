@@ -32,6 +32,21 @@ describe("Category", () => {
 		expect(child.fullSlug).toBe("parent/child");
 	});
 
+	it("can return if any runs have a platform", () => {
+		expect(emptyRuns.hasPlatforms).toBe(false);
+		expect(fullRuns.hasPlatforms).toBe(true);
+	});
+
+	it("can return if any runs have a version", () => {
+		expect(emptyRuns.hasVersions).toBe(false);
+		expect(fullRuns.hasVersions).toBe(true);
+	});
+
+	it("can return if any runs have an emulator", () => {
+		expect(emptyRuns.hasEmulators).toBe(false);
+		expect(fullRuns.hasEmulators).toBe(true);
+	});
+
 	it("can return if any runs have a date", () => {
 		expect(emptyRuns.hasDates).toBe(false);
 		expect(fullRuns.hasDates).toBe(true);

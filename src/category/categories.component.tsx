@@ -15,17 +15,22 @@ interface Injected {
 }
 
 /**
- * Contents of the Categories tab.
+ * Contents of the Categories tab. Displays the following depending on the
+ * currently selected category:
+ *
+ * - List of subcategories that have their own subcategories.
+ * - Table of subcategories and their latest runs.
+ * - List of runs for the currently selected category.
  */
 @inject(Store.Model)
 @withRouter
 @observer
 export class CategoriesComponent extends Component {
-	get injected() {
+	get injected(): Injected {
 		return this.props as Injected;
 	}
 
-	public render() {
+	public render(): JSX.Element {
 		const model = this.injected.model;
 
 		let category: Category | undefined;
@@ -52,10 +57,10 @@ export class CategoriesComponent extends Component {
 			<SubcategoryListComponent categories={subcategories} />,
 			<CategoryTableComponent categories={subcategories} />,
 		);
-		if (category && category.runs.length) {
-			const numRuns = category.runs.length;
+		if (category) {
+			const runCount = category.runs.length;
 			category.runs.forEach((r, i) => {
-				children.push(<RunComponent run={r} number={numRuns - i} />);
+				children.push(<RunComponent run={r} number={runCount - i} />);
 			});
 		}
 

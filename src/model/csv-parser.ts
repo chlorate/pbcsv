@@ -4,7 +4,7 @@ import {ApproxDate, parseApproxDate} from "../date/approx-date";
 import {Run} from "../run/run";
 import {SlugGenerator} from "../slug/slug-generator";
 
-const separator = " / ";
+const categorySeparator = " / ";
 
 const categoryAliases = ["category", "chart", "game", "segment", "split"];
 const platformAliases = ["platform", "system"];
@@ -28,7 +28,6 @@ const valueAliases = [
  * Parses a CSV file and outputs a hierarchy of categories.
  */
 export class CsvParser {
-	public valueIndices: number[] = [];
 	public valueNames: string[] = [];
 
 	private _warnings: string[] = [];
@@ -36,6 +35,7 @@ export class CsvParser {
 
 	private readHeader = false;
 	private categoryIndices: number[] = [];
+	private valueIndices: number[] = [];
 	private platformIndex?: number;
 	private versionIndex?: number;
 	private emulatorIndex?: number;
@@ -46,15 +46,15 @@ export class CsvParser {
 	private categorySlugs: {[name: string]: SlugGenerator} = {};
 	private categoriesByName: {[name: string]: Category} = {};
 
-	get warnings() {
+	get warnings(): string[] {
 		return this._warnings;
 	}
 
-	get errors() {
+	get errors(): string[] {
 		return this._errors;
 	}
 
-	get categories() {
+	get categories(): Category[] {
 		return this._categories;
 	}
 
@@ -151,8 +151,8 @@ export class CsvParser {
 			parts.push(row[i]);
 		});
 		return parts
-			.join(separator)
-			.split(separator)
+			.join(categorySeparator)
+			.split(categorySeparator)
 			.map((p) => p.trim())
 			.filter((p) => p);
 	}
@@ -177,7 +177,7 @@ export class CsvParser {
 	}
 
 	private ensureCategory(nameParts: string[]): Category {
-		const joinedName = nameParts.join(separator);
+		const joinedName = nameParts.join(categorySeparator);
 		let category = this.categoriesByName[joinedName];
 		if (category) {
 			return category;
@@ -188,7 +188,7 @@ export class CsvParser {
 		if (nameParts.length > 1) {
 			const parentParts = nameParts.slice(0, nameParts.length - 1);
 			parent = this.ensureCategory(parentParts);
-			parentJoinedName = parentParts.join(separator);
+			parentJoinedName = parentParts.join(categorySeparator);
 		}
 
 		let slugs = this.categorySlugs[parentJoinedName];

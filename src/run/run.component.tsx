@@ -12,7 +12,7 @@ interface Props {
 /**
  * A card that displays information about a run.
  */
-export const RunComponent = (props: Props) => {
+export function RunComponent(props: Props): JSX.Element {
 	const run = props.run;
 
 	const fields: JSX.Element[] = [];
@@ -41,7 +41,7 @@ export const RunComponent = (props: Props) => {
 	];
 	if (run.comment) {
 		body.push(
-			<hr className="d-block d-md-none" />,
+			<hr className="d-md-none" />,
 			<MarkdownComponent markdown={run.comment} />,
 		);
 	} else {
@@ -53,19 +53,19 @@ export const RunComponent = (props: Props) => {
 	return (
 		<Card className="mb-3">
 			<CardHeader tag="h3" className="h4 m-0">
-				<span>{"1:23:45"}</span>
+				{"1:23:45"}
 				<ApproxDateComponent className="float-right" date={run.date} />
 			</CardHeader>
 			<CardBody>{body}</CardBody>
 		</Card>
 	);
-};
+}
 
 function addField(
 	children: JSX.Element[],
 	dt: string,
 	dd: JSX.Element | string,
-) {
+): void {
 	if (children.length) {
 		children.push(<div className="w-100" />);
 	}

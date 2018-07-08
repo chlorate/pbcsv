@@ -13,7 +13,7 @@ export class Model {
 	@observable public errors: string[] = [];
 	private _categories: Category[] = [];
 
-	get categories() {
+	get categories(): Category[] {
 		return this._categories;
 	}
 
@@ -22,7 +22,7 @@ export class Model {
 	 * resolved if successful or rejected if there is any error.
 	 */
 	@action
-	public open(url: string) {
+	public open(url: string): Promise<void> {
 		const parser = new CsvParser();
 		this.loading = true;
 		this.warnings = [];

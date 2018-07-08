@@ -13,36 +13,43 @@ export class Run {
 	private _date?: ApproxDate;
 	private _comment: string;
 
-	constructor(category, platform, version, emulator, date, comment) {
-		this._category = category;
+	constructor(
+		c: Category,
+		platform: string,
+		version: string,
+		emulator: string,
+		d: ApproxDate | undefined,
+		comment: string,
+	) {
+		this._category = c;
 		this._platform = platform;
 		this._version = version;
 		this._emulator = emulator;
-		this._date = date;
+		this._date = d;
 		this._comment = comment;
 	}
 
-	get category() {
+	get category(): Category {
 		return this._category;
 	}
 
-	get platform() {
+	get platform(): string {
 		return this._platform;
 	}
 
-	get version() {
+	get version(): string {
 		return this._version;
 	}
 
-	get emulator() {
+	get emulator(): string {
 		return this._emulator;
 	}
 
-	get date() {
+	get date(): ApproxDate | undefined {
 		return this._date;
 	}
 
-	get comment() {
+	get comment(): string {
 		return this._comment;
 	}
 }

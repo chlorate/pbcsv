@@ -10,35 +10,34 @@ interface Props {
 /**
  * A list linking to categories that have subcategories.
  */
-export const SubcategoryListComponent = (props: Props) => {
-	const items: JSX.Element[] = [];
-	props.categories.forEach((c) => {
+export function SubcategoryListComponent(props: Props): JSX.Element | null {
+	const items = props.categories.filter((c) => c.children.length).map((c) => {
 		const count = c.children.length;
-		if (count) {
-			let title = "1 subcategory";
-			if (count > 1) {
-				title = `${formatNumber(count)} subcategories`;
-			}
 
-			items.push(
-				<Link
-					className="
-						list-group-item
-						list-group-item-card-padding
-						list-group-item-action
-						d-flex
-						justify-content-between
-						align-items-center
-					"
-					to={`/categories/${c.fullSlug}`}
-				>
-					{c.name}
-					<Badge pill title={title}>
-						{formatNumber(c.children.length)}
-					</Badge>
-				</Link>,
-			);
+		let title = "1 subcategory";
+		if (count > 1) {
+			title = `${formatNumber(count)} subcategories`;
 		}
+
+		const classes = [
+			"list-group-item",
+			"list-group-item-card-padding",
+			"list-group-item-action",
+			"d-flex",
+			"justify-content-between",
+			"align-items-center",
+		];
+		return (
+			<Link
+				className={classes.join(" ")}
+				to={`/categories/${c.fullSlug}`}
+			>
+				{c.name}
+				<Badge pill title={title}>
+					{formatNumber(count)}
+				</Badge>
+			</Link>
+		);
 	});
 	if (!items.length) {
 		return null;
@@ -49,4 +48,4 @@ export const SubcategoryListComponent = (props: Props) => {
 			{items}
 		</ListGroup>
 	);
-};
+}
