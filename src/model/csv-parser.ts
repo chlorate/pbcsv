@@ -82,6 +82,7 @@ export class CsvParser {
 	}
 
 	private parseHeader(row: string[]): void {
+		let isHeader = false;
 		row.forEach((v, i) => {
 			switch (true) {
 				case categoryRegExp.test(v):
@@ -109,7 +110,12 @@ export class CsvParser {
 				default:
 					return; // Unrecognized column name.
 			}
+
+			isHeader = true;
 		});
+		if (!isHeader) {
+			return; // Skip rows that contain no recognized header columns.
+		}
 
 		if (!this.categoryIndices.length) {
 			this.errors.push("No category columns found.");

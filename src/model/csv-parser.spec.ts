@@ -161,6 +161,21 @@ Category,0,1/2/2003`;
 			expect(run.comment).toBe(comment);
 		}
 
+		it("should ignore empty/unrecognized rows before header", (done) => {
+			const csv = `,
+,
+Not a header,
+,
+Category,Value
+Category,0`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.categories.length).toBe(1);
+				done();
+			}, done.fail);
+		});
+
 		it("should ignore rows with blank category", (done) => {
 			const csv = `Category,Value
 
