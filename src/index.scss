@@ -1,6 +1,11 @@
 @import 'markdown/markdown';
 @import 'run/run';
 
+.btn-nav-link {
+	background: transparent;
+	color: $link-color;
+}
+
 .card-table {
 	margin: 0;
 	border: 0;

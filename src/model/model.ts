@@ -1,5 +1,6 @@
 import {action, observable} from "mobx";
 import {Category} from "../category/category";
+import {readFile} from "../file/util";
 import {request} from "../xhr/util";
 import {CsvParser} from "./csv-parser";
 
@@ -18,21 +19,40 @@ export class Model {
 	}
 
 	/**
-	 * Retrieves and parses a file from some URL. Returns a promise that is
+	 * Fetches a CSV file from a URL and parses its contents. Returns a promise
+	 * that is resolved if successful or rejected if there is any error.
+	 */
+	public parseUrl(url: string): Promise<void> {
+		return this.parse(request(url));
+	}
+
+	/**
+	 * Reads a CSV file and parses its contents. Returns a promise that is
 	 * resolved if successful or rejected if there is any error.
 	 */
+	public parseFile(f: File): Promise<void> {
+		return this.parse(readFile(f));
+	}
+
+	/**
+	 * Finds a category by its full slug or undefined if not found.
+	 */
+	public findCategory(fullSlug: string): Category | undefined {
+		return this.find(fullSlug.split("/"), this.categories);
+	}
+
 	@action
-	public open(url: string): Promise<void> {
+	private parse(p: Promise<string>): Promise<void> {
 		const parser = new CsvParser();
 		this.loading = true;
 		this.warnings = [];
 		this.errors = [];
 
-		return request(url)
+		return p
 			.then(
-				(response) => parser.parse(response),
+				(contents) => parser.parse(contents),
 				(error) => {
-					this.errors.push(`Failed to retrieve file: ${error}`);
+					this.errors.push(`Failed to read file: ${error}`);
 					return Promise.reject();
 				},
 			)
@@ -47,13 +67,6 @@ export class Model {
 				this.loading = false;
 				return Promise.reject();
 			});
-	}
-
-	/**
-	 * Finds a category by its full slug or undefined if not found.
-	 */
-	public findCategory(fullSlug: string): Category | undefined {
-		return this.find(fullSlug.split("/"), this.categories);
 	}
 
 	private find(
