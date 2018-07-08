@@ -118,7 +118,7 @@ export class ApproxDate {
 
 const formats = [
 	{
-		// DD-MM-YYYY or DD/MM/YYYY
+		// MM-DD-YYYY or MM/DD/YYYY
 		regExp: /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4,})/,
 		year: 3,
 		month: 1,
