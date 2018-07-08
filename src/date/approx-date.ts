@@ -28,6 +28,7 @@ export class ApproxDate {
 	private _string: string;
 	private _date: Date;
 	private _precision: DatePrecision;
+	private _ambiguous: boolean;
 
 	get string(): string {
 		return this._string;
@@ -39,6 +40,10 @@ export class ApproxDate {
 
 	get precision(): DatePrecision {
 		return this._precision;
+	}
+
+	get ambiguous(): boolean {
+		return this._ambiguous;
 	}
 
 	/**
@@ -103,10 +108,11 @@ export class ApproxDate {
 		}
 	}
 
-	constructor(s: string, d: Date, p: DatePrecision) {
-		this._string = s;
+	constructor(d: Date, p: DatePrecision, s?: string, ambiguous?: boolean) {
+		this._string = s || "";
 		this._date = d;
 		this._precision = p;
+		this._ambiguous = ambiguous || false;
 	}
 }
 
@@ -173,5 +179,5 @@ export function parseApproxDate(s: string): ApproxDate | undefined {
 	}
 
 	const date = new Date(year, month - 1, day);
-	return new ApproxDate(s, date, precision);
+	return new ApproxDate(date, precision, s, format.ambiguous);
 }
