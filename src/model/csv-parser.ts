@@ -165,7 +165,7 @@ export class CsvParser {
 	}
 
 	private parseDate(row: string[], index?: number): ApproxDate | undefined {
-		if (index === undefined) {
+		if (index === undefined || !row[index]) {
 			return undefined;
 		}
 
