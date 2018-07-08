@@ -37,13 +37,13 @@ export class Model {
 				},
 			)
 			.then(() => {
-				this.warnings.concat(parser.warnings);
+				this.warnings.push(...parser.warnings);
 				this._categories = parser.categories;
 				this.loading = false;
 				this.loaded = true;
 			})
 			.catch(() => {
-				this.errors.concat(parser.errors);
+				this.errors.push(...parser.errors);
 				this.loading = false;
 				return Promise.reject();
 			});
