@@ -127,7 +127,7 @@ Category,0,1/2/2003`;
 				expect(parser.warnings.length).toBe(1);
 				expect(parser.warnings[0]).toContain("Ambiguous date");
 				done();
-			});
+			}, done.fail);
 		});
 
 		it("should trim whitespace", (done) => {
