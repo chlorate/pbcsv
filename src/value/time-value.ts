@@ -1,24 +1,13 @@
-import {Value} from "./value";
+import {NumberValue} from "./number-value";
 
 /**
  * A time (or duration) value associated to a run.
  */
-export class TimeValue extends Value {
-	private _number: number;
-
-	get number(): number {
-		return this._number;
-	}
-
-	constructor(name?: string, s?: string, n?: number) {
-		super(name, s);
-		this._number = n || 0;
-	}
-}
+export class TimeValue extends NumberValue {}
 
 const formats = [
 	{
-		// HH:MM:SS or HH:MM:SS.SSS
+		// HH:MM:SS or HH:MM:SS.SSS (with optional sign)
 		regExp: /([+-])?(\d+):(\d+):(\d+(?:\.\d+)?)/,
 		sign: 1,
 		hours: 2,
@@ -26,13 +15,15 @@ const formats = [
 		seconds: 4,
 	},
 	{
-		// MM:SS or MM:SS.SSS
+		// MM:SS or MM:SS.SSS (with optional sign)
 		regExp: /([+-])?(\d+):(\d+(?:\.\d+)?)/,
 		sign: 1,
 		minutes: 2,
 		seconds: 3,
 	},
-]
+	// SS and SS.SSS are not accepted here because they are ambiguous; could be
+	// a number or a time. Assume it's a number.
+];
 
 const minutesToSeconds = 60;
 const hoursToSeconds = 60 * minutesToSeconds;
