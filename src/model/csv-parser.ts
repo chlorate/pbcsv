@@ -6,23 +6,13 @@ import {SlugGenerator} from "../slug/slug-generator";
 
 const categorySeparator = " / ";
 
-const categoryAliases = ["category", "chart", "game", "segment", "split"];
-const platformAliases = ["platform", "system"];
-const versionAliases = ["ver", "version"];
-const emulatorAliases = ["emu", "emulator"];
-const dateAliases = ["date"];
-const commentAliases = ["comment", "comments", "note", "notes"];
-
-const valueAliases = [
-	"gt",
-	"igt",
-	"rta",
-	"score",
-	"score/time",
-	"time",
-	"time/score",
-	"value",
-];
+const categoryRegExp = /^(cat|seg)\.?$|^(category|chart|game|segment|split)$/i;
+const valueRegExp = /points|score|time|value|^(gt|igt|jrta|pb|rt|rta|ta)$/i;
+const platformRegExp = /^(con|plat|sys)\.?$|^(console|platform|system)$/i;
+const versionRegExp = /^(reg|ver)\.?$|^(region|version)$/i;
+const emulatorRegExp = /^(emu)\.?$|^(emulator)$/i;
+const dateRegExp = /date/i;
+const commentRegExp = /^(detail|comment|note)s?$/i;
 
 /**
  * Parses a CSV file and outputs a hierarchy of categories.
@@ -93,28 +83,31 @@ export class CsvParser {
 
 	private parseHeader(row: string[]): void {
 		row.forEach((v, i) => {
-			const vl = v.toLowerCase();
-			if (categoryAliases.indexOf(vl) >= 0) {
-				this.categoryIndices.push(i);
-			}
-			if (valueAliases.indexOf(vl) >= 0) {
-				this.valueIndices.push(i);
-				this.valueNames.push(v);
-			}
-			if (platformAliases.indexOf(vl) >= 0) {
-				this.platformIndex = i;
-			}
-			if (versionAliases.indexOf(vl) >= 0) {
-				this.versionIndex = i;
-			}
-			if (emulatorAliases.indexOf(vl) >= 0) {
-				this.emulatorIndex = i;
-			}
-			if (dateAliases.indexOf(vl) >= 0) {
-				this.dateIndex = i;
-			}
-			if (commentAliases.indexOf(vl) >= 0) {
-				this.commentIndex = i;
+			switch (true) {
+				case categoryRegExp.test(v):
+					this.categoryIndices.push(i);
+					break;
+				case valueRegExp.test(v):
+					this.valueIndices.push(i);
+					this.valueNames.push(v);
+					break;
+				case platformRegExp.test(v):
+					this.platformIndex = i;
+					break;
+				case versionRegExp.test(v):
+					this.versionIndex = i;
+					break;
+				case emulatorRegExp.test(v):
+					this.emulatorIndex = i;
+					break;
+				case dateRegExp.test(v):
+					this.dateIndex = i;
+					break;
+				case commentRegExp.test(v):
+					this.commentIndex = i;
+					break;
+				default:
+					return; // Unrecognized column name.
 			}
 		});
 
