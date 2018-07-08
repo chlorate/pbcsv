@@ -110,8 +110,28 @@ export class ApproxDate {
 	}
 }
 
-const monthOrDay = "(?:[-\\/](\\d+))?";
-const dateRegExp = new RegExp("(\\d{4,})" + monthOrDay.repeat(2));
+const formats = [
+	{
+		regExp: /(\d{1,2})[-\/](\d{1,2})[-\/](\d{4,})/,
+		year: 3,
+		month: 1,
+		day: 2,
+		ambiguous: true,
+	},
+	{
+		regExp: /(\d{1,2})[-\/](\d{4,})/,
+		year: 2,
+		month: 1,
+		ambiguous: false,
+	},
+	{
+		regExp: /(\d{4,})(?:[-\/](\d{1,2}))?(?:[-\/](\d{1,2}))?/,
+		year: 1,
+		month: 2,
+		day: 3,
+		ambiguous: false,
+	},
+];
 
 /**
  * Parses a string and outputs an approximate date or undefined if no date was
@@ -120,23 +140,33 @@ const dateRegExp = new RegExp("(\\d{4,})" + monthOrDay.repeat(2));
 export function parseApproxDate(s: string): ApproxDate | undefined {
 	s = s.trim();
 
-	const match = s.match(dateRegExp);
-	if (!match) {
+	let match: RegExpMatchArray | null = null;
+	const format = formats.find((f) => {
+		match = s.match(f.regExp);
+		return match !== null;
+	});
+	if (!match || !format || !match[format.year]) {
 		return undefined;
 	}
 
-	const year = parseInt(match[1], 10);
+	const year = parseInt(match[format.year], 10);
 	let precision = DatePrecision.Year;
 
-	let month = parseInt(match[2], 10);
-	if (isNaN(month)) {
+	let month: number | undefined;
+	if (match[format.month] !== undefined) {
+		month = parseInt(match[format.month], 10);
+	}
+	if (month === undefined || isNaN(month)) {
 		month = 1;
 	} else {
 		precision = DatePrecision.Month;
 	}
 
-	let day = parseInt(match[3], 10);
-	if (isNaN(day)) {
+	let day: number | undefined;
+	if (format.day && match[format.day] !== undefined) {
+		day = parseInt(match[format.day], 10);
+	}
+	if (day === undefined || isNaN(day)) {
 		day = 1;
 	} else {
 		precision = DatePrecision.Day;

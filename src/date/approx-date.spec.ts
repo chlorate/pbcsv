@@ -113,53 +113,121 @@ describe("ApproxDate", () => {
 });
 
 describe("parseApproxDate", () => {
-	it("can parse YYYY format", () => {
-		const got = parseApproxDate("1987");
-		check(got, "1987", 1987, 0, 1, DatePrecision.Year);
-	});
-
-	it("can parse YYYY-MM format", () => {
-		const got = parseApproxDate("1987-12");
-		check(got, "1987-12", 1987, 11, 1, DatePrecision.Month);
-	});
-
-	it("can parse YYYY-MM-DD format", () => {
-		const got = parseApproxDate("1987-12-17");
-		check(got, "1987-12-17", 1987, 11, 17, DatePrecision.Day);
-	});
-
-	it("can parse YYYY/MM/DD format", () => {
-		const got = parseApproxDate("1987/12/17");
-		check(got, "1987/12/17", 1987, 11, 17, DatePrecision.Day);
-	});
-
-	it("ignores extra text", () => {
-		const got = parseApproxDate("? 1987-12-17 ?");
-		check(got, "? 1987-12-17 ?", 1987, 11, 17, DatePrecision.Day);
-	});
-
-	it("trims whitespace", () => {
-		const got = parseApproxDate("   1987-12-17   ");
-		check(got, "1987-12-17", 1987, 11, 17, DatePrecision.Day);
+	[
+		{
+			name: "can parse YYYY format",
+			in: "1987",
+			string: "1987",
+			year: 1987,
+			month: 0,
+			day: 1,
+			precision: DatePrecision.Year,
+		},
+		{
+			name: "can parse YYYY-MM format",
+			in: "1987-12",
+			string: "1987-12",
+			year: 1987,
+			month: 11,
+			day: 1,
+			precision: DatePrecision.Month,
+		},
+		{
+			name: "can parse YYYY/MM format",
+			in: "1987/12",
+			string: "1987/12",
+			year: 1987,
+			month: 11,
+			day: 1,
+			precision: DatePrecision.Month,
+		},
+		{
+			name: "can parse YYYY-MM-DD format",
+			in: "1987-12-17",
+			string: "1987-12-17",
+			year: 1987,
+			month: 11,
+			day: 17,
+			precision: DatePrecision.Day,
+		},
+		{
+			name: "can parse YYYY/MM/DD format",
+			in: "1987/12/17",
+			string: "1987/12/17",
+			year: 1987,
+			month: 11,
+			day: 17,
+			precision: DatePrecision.Day,
+		},
+		{
+			name: "can parse MM-DD-YYYY format",
+			in: "12-17-1987",
+			string: "12-17-1987",
+			year: 1987,
+			month: 11,
+			day: 17,
+			precision: DatePrecision.Day,
+		},
+		{
+			name: "can parse MM/DD/YYYY format",
+			in: "12/17/1987",
+			string: "12/17/1987",
+			year: 1987,
+			month: 11,
+			day: 17,
+			precision: DatePrecision.Day,
+		},
+		{
+			name: "can parse MM-YYYY format",
+			in: "12-1987",
+			string: "12-1987",
+			year: 1987,
+			month: 11,
+			day: 1,
+			precision: DatePrecision.Month,
+		},
+		{
+			name: "can parse MM/YYYY format",
+			in: "12/1987",
+			string: "12/1987",
+			year: 1987,
+			month: 11,
+			day: 1,
+			precision: DatePrecision.Month,
+		},
+		{
+			name: "ignores extra text",
+			in: "???1987-12-17???",
+			string: "???1987-12-17???",
+			year: 1987,
+			month: 11,
+			day: 17,
+			precision: DatePrecision.Day,
+		},
+		{
+			name: "trims whitespace",
+			in: "   1987-12-17   ",
+			string: "1987-12-17",
+			year: 1987,
+			month: 11,
+			day: 17,
+			precision: DatePrecision.Day,
+		},
+	].forEach((test) => {
+		it(test.name, () => {
+			const d = parseApproxDate(test.in);
+			expect(d).not.toBeUndefined();
+			if (d) {
+				expect(d.string).toBe(test.string);
+				expect(d.date).toEqual(
+					new Date(test.year, test.month, test.day),
+				);
+				expect(d.precision).toBe(test.precision);
+			}
+		});
 	});
 
 	it("returns undefined if parsing fails", () => {
 		expect(parseApproxDate("???")).toBeUndefined();
 	});
-
-	function check(
-		d: ApproxDate | undefined,
-		s: string,
-		year: number,
-		month: number,
-		day: number,
-		p: DatePrecision,
-	) {
-		expect(d).not.toBeUndefined();
-		if (d) {
-			expect(d.string).toBe(s);
-			expect(d.date).toEqual(new Date(year, month, day));
-			expect(d.precision).toBe(p);
-		}
-	}
 });
