@@ -3,6 +3,9 @@ import {Category} from "../category/category";
 import {ApproxDate, parseApproxDate} from "../date/approx-date";
 import {Run} from "../run/run";
 import {SlugGenerator} from "../slug/slug-generator";
+import {parseNumberValue} from "../value/number-value";
+import {parseTimeValue} from "../value/time-value";
+import {Value, Values} from "../value/value";
 
 const categorySeparator = " / ";
 
@@ -18,8 +21,6 @@ const commentRegExp = /^(detail|comment|note)s?$/i;
  * Parses a CSV file and outputs a hierarchy of categories.
  */
 export class CsvParser {
-	public valueNames: string[] = [];
-
 	private _warnings: string[] = [];
 	private _errors: string[] = [];
 	private hasAmbiguousDates: boolean = false;
@@ -27,6 +28,7 @@ export class CsvParser {
 	private readHeader = false;
 	private categoryIndices: number[] = [];
 	private valueIndices: number[] = [];
+	private _valueNames: string[] = [];
 	private platformIndex?: number;
 	private versionIndex?: number;
 	private emulatorIndex?: number;
@@ -47,6 +49,10 @@ export class CsvParser {
 
 	get categories(): Category[] {
 		return this._categories;
+	}
+
+	get valueNames(): string[] {
+		return this._valueNames;
 	}
 
 	/**
@@ -90,7 +96,7 @@ export class CsvParser {
 					break;
 				case valueRegExp.test(v):
 					this.valueIndices.push(i);
-					this.valueNames.push(v);
+					this._valueNames.push(v);
 					break;
 				case platformRegExp.test(v):
 					this.platformIndex = i;
@@ -128,6 +134,11 @@ export class CsvParser {
 	}
 
 	private parseRow(row: string[]): void {
+		const values = this.parseValues(row);
+		if (!Object.keys(values).length) {
+			return; // Skip row with no values.
+		}
+
 		const nameParts = this.parseCategoryName(row);
 		if (!nameParts.length) {
 			return;
@@ -142,6 +153,7 @@ export class CsvParser {
 			this.parseDate(row, this.dateIndex),
 			this.parseString(row, this.commentIndex),
 		);
+		Object.assign(run.values, values);
 		category.runs.push(run);
 	}
 
@@ -155,6 +167,28 @@ export class CsvParser {
 			.split(categorySeparator)
 			.map((p) => p.trim())
 			.filter((p) => p);
+	}
+
+	private parseValues(row: string[]): Values {
+		const values: Values = {};
+		this.valueIndices.forEach((col, i) => {
+			if (col >= row.length) {
+				return;
+			}
+
+			const s = row[col].trim();
+			let v: Value | undefined = parseTimeValue(name, s);
+			if (!v) {
+				v = parseNumberValue(name, s);
+			}
+			if (!v && s) {
+				v = new Value(name, s);
+			}
+			if (v) {
+				values[this.valueNames[i]] = v;
+			}
+		});
+		return values;
 	}
 
 	private parseString(row: string[], index?: number): string {

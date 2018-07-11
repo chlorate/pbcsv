@@ -1,5 +1,6 @@
 import {Category} from "../category/category";
 import {ApproxDate} from "../date/approx-date";
+import {Values} from "../value/value";
 
 /**
  * A run describes a current or former personal best playthrough of some
@@ -7,6 +8,7 @@ import {ApproxDate} from "../date/approx-date";
  */
 export class Run {
 	private _category: Category;
+	private _values: Values = {};
 	private _platform: string;
 	private _version: string;
 	private _emulator: string;
@@ -31,6 +33,10 @@ export class Run {
 
 	get category(): Category {
 		return this._category;
+	}
+
+	get values(): Values {
+		return this._values;
 	}
 
 	get platform(): string {

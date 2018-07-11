@@ -1,4 +1,11 @@
 /**
+ * An object containing values keyed by name.
+ */
+export interface Values {
+	[name: string]: Value;
+}
+
+/**
  * Value represents some arbitrary string value associated to a run.
  */
 export class Value {

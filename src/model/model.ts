@@ -13,9 +13,14 @@ export class Model {
 	@observable public warnings: string[] = [];
 	@observable public errors: string[] = [];
 	private _categories: Category[] = [];
+	private _valueNames: string[] = [];
 
 	get categories(): Category[] {
 		return this._categories;
+	}
+
+	get valueNames(): string[] {
+		return this._valueNames;
 	}
 
 	/**
@@ -59,6 +64,7 @@ export class Model {
 			.then(() => {
 				this.warnings.push(...parser.warnings);
 				this._categories = parser.categories;
+				this._valueNames = parser.valueNames;
 				this.loading = false;
 				this.loaded = true;
 			})
