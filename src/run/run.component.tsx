@@ -1,7 +1,11 @@
-import {Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
+import {Component} from "inferno";
+import {Badge, Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
+import {inject} from "inferno-mobx";
 import {ApproxDateComponent} from "../date/approx-date.component";
 import {MarkdownComponent} from "../markdown/markdown.component";
 import {formatNumber} from "../math/util";
+import {Model} from "../model/model";
+import {Store} from "../store";
 import {Run} from "./run";
 
 interface Props {
@@ -9,56 +13,97 @@ interface Props {
 	run: Run;
 }
 
+interface InjectedProps extends Props {
+	model: Model;
+}
+
 /**
  * A card that displays information about a run.
  */
-export function RunComponent(props: Props): JSX.Element {
-	const run = props.run;
+@inject(Store.Model)
+export class RunComponent extends Component<Props, {}> {
+	get injected(): InjectedProps {
+		return this.props as InjectedProps;
+	}
 
-	const fields: JSX.Element[] = [];
-	addField(fields, "Personal best:", `#${formatNumber(props.number)}`);
-	if (run.platform) {
-		addField(fields, "Platform:", run.platform);
-	}
-	if (run.version) {
-		addField(fields, "Version:", run.version);
-	}
-	if (run.emulator) {
+	public render(): JSX.Element {
+		const run = this.props.run;
+
+		const header: JSX.Element[] = [];
+		this.injected.model.valueNames.forEach((name, i) => {
+			if (!run.values[name]) {
+				return;
+			}
+
+			const s = run.values[name].string;
+			if (!i) {
+				header.push(
+					<span className="text-nowrap mr-2" title={name}>
+						{s}
+					</span>,
+				);
+			} else {
+				header.push(
+					<Badge className="mr-2">
+						{name}: {s}
+					</Badge>,
+				);
+			}
+		});
+		header.push(
+			<ApproxDateComponent className="float-right" date={run.date} />,
+		);
+
+		const fields: JSX.Element[] = [];
 		addField(
 			fields,
-			"Emulator:",
-			<span class="text-warning">{run.emulator}</span>,
+			"Personal best:",
+			`#${formatNumber(this.props.number)}`,
+		);
+		if (run.platform) {
+			addField(fields, "Platform:", run.platform);
+		}
+		if (run.version) {
+			addField(fields, "Version:", run.version);
+		}
+		if (run.emulator) {
+			addField(
+				fields,
+				"Emulator:",
+				<span class="text-warning">{run.emulator}</span>,
+			);
+		}
+
+		const body: JSX.Element[] = [
+			<Row
+				tag="dl"
+				className="run-fields row no-gutters float-md-right mb-0 pl-md-3 small"
+			>
+				{fields}
+			</Row>,
+		];
+		if (run.comment) {
+			body.push(
+				<hr className="d-md-none" />,
+				<MarkdownComponent markdown={run.comment} />,
+			);
+		} else {
+			body.push(
+				<span className="text-muted d-none d-md-inline">
+					No comment.
+				</span>,
+			);
+		}
+
+		return (
+			<Card className="mb-3">
+				<CardHeader tag="h3" className="h4 m-0">
+					{header}
+				</CardHeader>
+				<CardBody>{body}</CardBody>
+			</Card>
 		);
 	}
-
-	const body: Array<JSX.Element | string> = [
-		<Row
-			tag="dl"
-			className="run-fields row no-gutters float-md-right mb-0 pl-md-3 small"
-		>
-			{fields}
-		</Row>,
-	];
-	if (run.comment) {
-		body.push(
-			<hr className="d-md-none" />,
-			<MarkdownComponent markdown={run.comment} />,
-		);
-	} else {
-		body.push(
-			<span className="text-muted d-none d-md-inline">No comment.</span>,
-		);
-	}
-
-	return (
-		<Card className="mb-3">
-			<CardHeader tag="h3" className="h4 m-0">
-				{"1:23:45"}
-				<ApproxDateComponent className="float-right" date={run.date} />
-			</CardHeader>
-			<CardBody>{body}</CardBody>
-		</Card>
-	);
 }
 
 function addField(
