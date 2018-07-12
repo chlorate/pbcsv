@@ -31,7 +31,7 @@ const hoursToSeconds = 60 * minutesToSeconds;
 /**
  * Parses a string and outputs a time value or undefined if no time was found.
  */
-export function parseTimeValue(name: string, s: string): TimeValue | undefined {
+export function parseTimeValue(s: string): TimeValue | undefined {
 	s = s.trim();
 
 	let match: RegExpMatchArray | null = null;
@@ -68,5 +68,5 @@ export function parseTimeValue(name: string, s: string): TimeValue | undefined {
 		n *= -1;
 	}
 
-	return new TimeValue(name, s, n);
+	return new TimeValue(s, n);
 }

@@ -10,8 +10,8 @@ export class NumberValue extends Value {
 		return this._number;
 	}
 
-	constructor(name?: string, s?: string, n?: number) {
-		super(name, s);
+	constructor(s?: string, n?: number) {
+		super(s);
 		this._number = n || 0;
 	}
 }
@@ -23,10 +23,7 @@ const formatRegExp = /([+-]?(?:\d+(?:\.\d+)?|\.\d+))/;
  * Parses a string and outputs a numeric value or undefined if no number was
  * found.
  */
-export function parseNumberValue(
-	name: string,
-	s: string,
-): NumberValue | undefined {
+export function parseNumberValue(s: string): NumberValue | undefined {
 	s = s.trim();
 
 	const match = s.match(formatRegExp);
@@ -39,5 +36,5 @@ export function parseNumberValue(
 		n = parseFloat(match[1]) || 0;
 	}
 
-	return new NumberValue(name, s, n);
+	return new NumberValue(s, n);
 }

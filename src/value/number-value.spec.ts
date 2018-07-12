@@ -40,10 +40,9 @@ describe("parseNumberValue", () => {
 		},
 	].forEach((test) => {
 		it(test.name, () => {
-			const v = parseNumberValue("Number", test.in);
+			const v = parseNumberValue(test.in);
 			expect(v).not.toBeUndefined();
 			if (v) {
-				expect(v.name).toBe("Number");
 				expect(v.string).toBe(test.string);
 				expect(v.number).toBe(test.number);
 			}
@@ -51,6 +50,6 @@ describe("parseNumberValue", () => {
 	});
 
 	it("returns undefined if parsing fails", () => {
-		expect(parseNumberValue("Number", "???")).toBeUndefined();
+		expect(parseNumberValue("???")).toBeUndefined();
 	});
 });

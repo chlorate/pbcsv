@@ -52,10 +52,9 @@ describe("parseTimeValue", () => {
 		},
 	].forEach((test) => {
 		it(test.name, () => {
-			const v = parseTimeValue("Time", test.in);
+			const v = parseTimeValue(test.in);
 			expect(v).not.toBeUndefined();
 			if (v) {
-				expect(v.name).toBe("Time");
 				expect(v.string).toBe(test.string);
 				expect(v.number).toBe(test.number);
 			}
@@ -73,7 +72,7 @@ describe("parseTimeValue", () => {
 		},
 	].forEach((test) => {
 		it(test.name, () => {
-			expect(parseTimeValue("Time", test.in)).toBeUndefined();
+			expect(parseTimeValue(test.in)).toBeUndefined();
 		});
 	});
 });

@@ -177,12 +177,12 @@ export class CsvParser {
 			}
 
 			const s = row[col].trim();
-			let v: Value | undefined = parseTimeValue(name, s);
+			let v: Value | undefined = parseTimeValue(s);
 			if (!v) {
-				v = parseNumberValue(name, s);
+				v = parseNumberValue(s);
 			}
 			if (!v && s) {
-				v = new Value(name, s);
+				v = new Value(s);
 			}
 			if (v) {
 				values[this.valueNames[i]] = v;

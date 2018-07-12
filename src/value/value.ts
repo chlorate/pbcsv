@@ -9,12 +9,7 @@ export interface Values {
  * Value represents some arbitrary string value associated to a run.
  */
 export class Value {
-	private _name: string;
 	private _string: string;
-
-	get name(): string {
-		return this._name;
-	}
 
 	get string(): string {
 		return this._string;
@@ -24,8 +19,7 @@ export class Value {
 		return undefined;
 	}
 
-	constructor(name?: string, s?: string) {
-		this._name = name || "";
+	constructor(s?: string) {
 		this._string = s || "";
 	}
 }
