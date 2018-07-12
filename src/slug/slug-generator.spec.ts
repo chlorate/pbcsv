@@ -21,6 +21,10 @@ describe("SlugGenerator", () => {
 			expect(generator.slugify("!!!name2!!!")).toBe("name2");
 		});
 
+		it("returns 'unnamed' if trimmed slug is empty", () => {
+			expect(generator.slugify("---")).toBe("unnamed");
+		});
+
 		it("strips apostrophes", () => {
 			expect(generator.slugify("it's it's")).toBe("its-its");
 		});
@@ -33,6 +37,8 @@ describe("SlugGenerator", () => {
 			expect(generator.slugify("name")).toBe("name");
 			expect(generator.slugify("name")).toBe("name.2");
 			expect(generator.slugify("name")).toBe("name.3");
+			expect(generator.slugify("---")).toBe("unnamed");
+			expect(generator.slugify("-----")).toBe("unnamed.2");
 		});
 	});
 });

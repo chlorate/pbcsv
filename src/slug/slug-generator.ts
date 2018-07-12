@@ -17,6 +17,10 @@ export class SlugGenerator {
 			.replace(/--+/g, "-")
 			.replace(/^-+|-+$/g, "");
 
+		if (!slug) {
+			slug = "unnamed";
+		}
+
 		if (this.used[slug]) {
 			let count = 2;
 			while (this.used[`${slug}.${count}`]) {
