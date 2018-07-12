@@ -16,8 +16,19 @@ export class NumberValue extends Value {
 	}
 }
 
-// NNN or NNN.NNN or .NNN (with optional sign)
-const formatRegExp = /([+-]?(?:\d+(?:\.\d+)?|\.\d+))/;
+const formats = [
+	{
+		// NNN "string" (with optional sign, decimal, and leading zero)
+		regExp: /^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s+"(.+)"$/,
+		number: 1,
+		string: 2,
+	},
+	{
+		// NNN (with optional sign, decimal, and leading zero)
+		regExp: /([+-]?(?:\d+(?:\.\d+)?|\.\d+))/,
+		number: 1,
+	},
+];
 
 /**
  * Parses a string and returns a numeric value or undefined if no number was
@@ -26,14 +37,24 @@ const formatRegExp = /([+-]?(?:\d+(?:\.\d+)?|\.\d+))/;
 export function parseNumberValue(s: string): NumberValue | undefined {
 	s = s.trim();
 
-	const match = s.match(formatRegExp);
-	if (!match) {
+	let match: RegExpMatchArray | null = null;
+	const format = formats.find((f) => {
+		match = s.match(f.regExp);
+		return match !== null;
+	});
+	if (!match || !format) {
 		return undefined;
 	}
 
+	const matchNumber = match[format.number];
+
 	let n = 0;
-	if (match[1]) {
-		n = parseFloat(match[1]) || 0;
+	if (matchNumber) {
+		n = parseFloat(matchNumber) || 0;
+	}
+
+	if (format.string) {
+		s = match[format.string].trim();
 	}
 
 	return new NumberValue(s, n);

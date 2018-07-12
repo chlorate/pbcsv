@@ -27,6 +27,30 @@ describe("parseNumberValue", () => {
 			number: -1234,
 		},
 		{
+			name: `can parse NNN "string" format`,
+			in: `1234 "test string"`,
+			string: "test string",
+			number: 1234,
+		},
+		{
+			name: `can parse NNN.NNN "string" format`,
+			in: `123.456 "test string"`,
+			string: "test string",
+			number: 123.456,
+		},
+		{
+			name: `can parse .NNN "string" format`,
+			in: `.123 "test string"`,
+			string: "test string",
+			number: 0.123,
+		},
+		{
+			name: `can parse -NNN "string" format`,
+			in: `-1234 "test string"`,
+			string: "test string",
+			number: -1234,
+		},
+		{
 			name: "ignores prefixes and suffixes",
 			in: "???1234???",
 			string: "???1234???",
@@ -36,6 +60,12 @@ describe("parseNumberValue", () => {
 			name: "trims whitespace",
 			in: "   1234   ",
 			string: "1234",
+			number: 1234,
+		},
+		{
+			name: "trims whitespace inside arbitrary string format",
+			in: `   1234    "  test string  "   `,
+			string: "test string",
 			number: 1234,
 		},
 	].forEach((test) => {
