@@ -1,4 +1,17 @@
-import {formatNumber, pad} from ".";
+import {formatNumber, formatSeconds, getPrecision, pad} from ".";
+
+describe("getPrecision", () => {
+	[
+		{in: "0.5", out: 1},
+		{in: "1", out: 0},
+		{in: "1.100", out: 3},
+		{in: "1.123", out: 3},
+	].forEach((test) => {
+		it(`should return ${test.out} for ${test.in}`, () => {
+			expect(getPrecision(test.in)).toBe(test.out);
+		});
+	});
+});
 
 describe("formatNumber", () => {
 	[

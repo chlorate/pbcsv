@@ -9,6 +9,15 @@ export function formatNumber(n: number): string {
 }
 
 /**
+ * Returns the number of places after a number's decimal point. The number has
+ * to be a string to account for any trailing zeroes.
+ */
+export function getPrecision(s: string): number {
+	const decimal = s.replace(/[^\d.]/g, "").split(".")[1] || "";
+	return decimal.length;
+}
+
+/**
  * Zero pads a number.
  */
 export function pad(n: number, length: number): string {
