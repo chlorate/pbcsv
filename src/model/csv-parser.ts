@@ -3,9 +3,8 @@ import {Category} from "../category/category";
 import {ApproxDate, parseApproxDate} from "../date/approx-date";
 import {Run} from "../run/run";
 import {SlugGenerator} from "../slug/slug-generator";
-import {parseNumberValue} from "../value/number-value";
-import {parseTimeValue} from "../value/time-value";
-import {Value, Values} from "../value/value";
+import {Values} from "../value/value";
+import {parseValue} from "../value/value.factory";
 
 const categorySeparator = " / ";
 
@@ -176,14 +175,7 @@ export class CsvParser {
 				return;
 			}
 
-			const s = row[col].trim();
-			let v: Value | undefined = parseTimeValue(s);
-			if (!v) {
-				v = parseNumberValue(s);
-			}
-			if (!v && s) {
-				v = new Value(s);
-			}
+			const v = parseValue(row[col]);
 			if (v) {
 				values[this.valueNames[i]] = v;
 			}

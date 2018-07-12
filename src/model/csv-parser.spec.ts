@@ -1,6 +1,3 @@
-import {NumberValue} from "../value/number-value";
-import {TimeValue} from "../value/time-value";
-import {Value} from "../value/value";
 import {CsvParser} from "./csv-parser";
 
 describe("CsvParser", () => {
@@ -237,40 +234,23 @@ C1,1,2,3`;
 				requireLength(c, 1, done.fail);
 				requireLength(c[0].runs, 4, done.fail);
 
-				expect(Object.keys(c[0].runs[0].values).length).toBe(1);
-				expect(Object.keys(c[0].runs[1].values).length).toBe(1);
-				expect(Object.keys(c[0].runs[2].values).length).toBe(1);
-				expect(Object.keys(c[0].runs[3].values).length).toBe(3);
+				let v = c[0].runs[0].values;
+				expect(Object.keys(v).length).toBe(1);
+				expect(v.Score).toBeDefined();
 
-				let v = c[0].runs[0].values.Score;
-				requireDefined(v, done.fail);
-				expect(v instanceof NumberValue).toBe(true);
-				expect(v.string).toBe("1234");
+				v = c[0].runs[1].values
+				expect(Object.keys(v).length).toBe(1);
+				expect(v.Time).toBeDefined();
 
-				v = c[0].runs[1].values.Time;
-				requireDefined(v, done.fail);
-				expect(v instanceof TimeValue).toBe(true);
-				expect(v.string).toBe("1:23:45");
+				v = c[0].runs[2].values;
+				expect(Object.keys(v).length).toBe(1);
+				expect(v.Value).toBeDefined();
 
-				v = c[0].runs[2].values.Value;
-				requireDefined(v, done.fail);
-				expect(v instanceof Value).toBe(true);
-				expect(v.string).toBe("String");
-
-				v = c[0].runs[3].values.Score;
-				requireDefined(v, done.fail);
-				expect(v instanceof NumberValue).toBe(true);
-				expect(v.string).toBe("1");
-
-				v = c[0].runs[3].values.Time;
-				requireDefined(v, done.fail);
-				expect(v instanceof NumberValue).toBe(true);
-				expect(v.string).toBe("2");
-
-				v = c[0].runs[3].values.Value;
-				requireDefined(v, done.fail);
-				expect(v instanceof NumberValue).toBe(true);
-				expect(v.string).toBe("3");
+				v = c[0].runs[3].values;
+				expect(Object.keys(v).length).toBe(3);
+				expect(v.Score).toBeDefined();
+				expect(v.Time).toBeDefined();
+				expect(v.Value).toBeDefined();
 
 				done();
 			}, done.fail);

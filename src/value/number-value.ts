@@ -20,7 +20,7 @@ export class NumberValue extends Value {
 const formatRegExp = /([+-]?(?:\d+(?:\.\d+)?|\.\d+))/;
 
 /**
- * Parses a string and outputs a numeric value or undefined if no number was
+ * Parses a string and returns a numeric value or undefined if no number was
  * found.
  */
 export function parseNumberValue(s: string): NumberValue | undefined {

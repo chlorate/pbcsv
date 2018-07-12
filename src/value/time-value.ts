@@ -29,7 +29,7 @@ const minutesToSeconds = 60;
 const hoursToSeconds = 60 * minutesToSeconds;
 
 /**
- * Parses a string and outputs a time value or undefined if no time was found.
+ * Parses a string and returns a time value or undefined if no time was found.
  */
 export function parseTimeValue(s: string): TimeValue | undefined {
 	s = s.trim();
