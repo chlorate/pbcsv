@@ -1,3 +1,5 @@
+export * from "./file.component";
+
 /**
  * Reads a file. Returns a promise that is resolved with the file contents or
  * rejected with an error message.

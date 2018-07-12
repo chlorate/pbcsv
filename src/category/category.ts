@@ -1,4 +1,4 @@
-import {Run} from "../run/run";
+import {Run} from "../run";
 
 /**
  * A category contains subcategories and runs.

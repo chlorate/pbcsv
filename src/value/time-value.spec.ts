@@ -1,4 +1,4 @@
-import {parseTimeValue} from "./time-value";
+import {parseTimeValue} from ".";
 
 describe("parseTimeValue", () => {
 	[

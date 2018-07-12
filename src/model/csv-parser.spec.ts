@@ -1,4 +1,4 @@
-import {CsvParser} from "./csv-parser";
+import {CsvParser} from ".";
 
 describe("CsvParser", () => {
 	let parser;
@@ -238,7 +238,7 @@ C1,1,2,3`;
 				expect(Object.keys(v).length).toBe(1);
 				expect(v.Score).toBeDefined();
 
-				v = c[0].runs[1].values
+				v = c[0].runs[1].values;
 				expect(Object.keys(v).length).toBe(1);
 				expect(v.Time).toBeDefined();
 

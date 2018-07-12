@@ -1,4 +1,4 @@
-import {NumberValue} from "./number-value";
+import {NumberValue} from ".";
 
 /**
  * A time (or duration) value associated to a run.

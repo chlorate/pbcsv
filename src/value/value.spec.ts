@@ -1,7 +1,4 @@
-import {NumberValue} from "./number-value";
-import {TimeValue} from "./time-value";
-import {Value} from "./value";
-import {parseValue} from "./value.factory";
+import {NumberValue, parseValue, TimeValue, Value} from ".";
 
 describe("parseValue", () => {
 	[

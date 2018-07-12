@@ -1,10 +1,10 @@
 import {Component} from "inferno";
 import {Badge, Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
-import {ApproxDateComponent} from "../date/approx-date.component";
-import {MarkdownComponent} from "../markdown/markdown.component";
-import {formatNumber} from "../math/util";
-import {Model} from "../model/model";
+import {ApproxDateComponent} from "../date";
+import {MarkdownComponent} from "../markdown";
+import {formatNumber} from "../math";
+import {Model} from "../model";
 import {Store} from "../store";
 import {Run} from "./run";
 

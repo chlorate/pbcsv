@@ -1,7 +1,7 @@
 import {History} from "history";
 import {ChangeEvent, Component, linkEvent} from "inferno";
 import {inject, observer} from "inferno-mobx";
-import {Model} from "../model/model";
+import {Model} from "../model";
 import {Store} from "../store";
 
 import {

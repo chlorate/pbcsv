@@ -2,10 +2,10 @@ import {Component} from "inferno";
 import {Nav, NavItem} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
 import {NavLink, Route, Switch, withRouter} from "inferno-router";
-import {CategoriesComponent} from "../category/categories.component";
-import {FileComponent} from "../file/file.component";
-import {HelpComponent} from "../help/help.component";
-import {Model} from "../model/model";
+import {CategoriesComponent} from "../category";
+import {FileComponent} from "../file";
+import {HelpComponent} from "../help";
+import {Model} from "../model";
 import {Store} from "../store";
 
 const links = [

@@ -1,10 +1,9 @@
 import {Component} from "inferno";
 import {Card} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
-import {Model} from "../model/model";
+import {Category, CategoryTableRowComponent} from ".";
+import {Model} from "../model";
 import {Store} from "../store";
-import {Category} from "./category";
-import {CategoryTableRowComponent} from "./category-table-row.component";
 
 interface Props {
 	categories: Category[];

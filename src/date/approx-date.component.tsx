@@ -1,6 +1,5 @@
-import {formatNumber} from "../math/util";
-import {ApproxDate} from "./approx-date";
-import {DatePrecision} from "./date-precision";
+import {ApproxDate, DatePrecision} from ".";
+import {formatNumber} from "../math";
 
 const veryRecentThreshold = 30;
 const recentThreshold = 90;

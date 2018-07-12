@@ -1,4 +1,4 @@
-import {formatNumber, pad} from "./util";
+import {formatNumber, pad} from ".";
 
 describe("formatNumber", () => {
 	[

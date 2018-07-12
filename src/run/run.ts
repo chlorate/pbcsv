@@ -1,6 +1,6 @@
-import {Category} from "../category/category";
-import {ApproxDate} from "../date/approx-date";
-import {Values} from "../value/value";
+import {Category} from "../category";
+import {ApproxDate} from "../date";
+import {Values} from "../value";
 
 /**
  * A run describes a current or former personal best playthrough of some

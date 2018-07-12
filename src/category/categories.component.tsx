@@ -2,12 +2,11 @@ import {Component} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
 import {withRouter} from "inferno-router";
-import {Category} from "../category/category";
-import {Model} from "../model/model";
-import {RunComponent} from "../run/run.component";
+import {CategoryTableComponent, SubcategoryListComponent} from ".";
+import {Category} from "../category";
+import {Model} from "../model";
+import {RunComponent} from "../run";
 import {Store} from "../store";
-import {CategoryTableComponent} from "./category-table.component";
-import {SubcategoryListComponent} from "./subcategory-list.component";
 
 interface Injected {
 	match: {params: {fullSlug: string}};

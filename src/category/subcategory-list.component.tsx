@@ -1,7 +1,7 @@
 import {Badge, ListGroup} from "inferno-bootstrap";
 import {Link} from "inferno-router";
-import {formatNumber} from "../math/util";
-import {Category} from "./category";
+import {Category} from ".";
+import {formatNumber} from "../math";
 
 interface Props {
 	categories: Category[];

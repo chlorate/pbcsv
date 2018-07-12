@@ -1,4 +1,4 @@
-import {parseNumberValue} from "./number-value.ts";
+import {parseNumberValue} from ".";
 
 describe("parseNumberValue", () => {
 	[

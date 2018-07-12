@@ -1,5 +1,5 @@
-import {Category} from "../category/category";
-import {Model} from "./model";
+import {Model} from ".";
+import {Category} from "../category";
 
 describe("Model", () => {
 	let model;

@@ -1,8 +1,8 @@
 import {Component, render} from "inferno";
 import {Provider} from "inferno-mobx";
 import {HashRouter} from "inferno-router";
-import {Model} from "./model/model";
-import {NavComponent} from "./nav/nav.component";
+import {Model} from "./model";
+import {NavComponent} from "./nav";
 
 interface State {
 	model: Model;

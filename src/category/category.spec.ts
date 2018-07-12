@@ -1,7 +1,6 @@
-import {ApproxDate} from "../date/approx-date";
-import {DatePrecision} from "../date/date-precision";
-import {Run} from "../run/run";
-import {Category} from "./category";
+import {Category} from ".";
+import {ApproxDate, DatePrecision} from "../date";
+import {Run} from "../run";
 
 describe("Category", () => {
 	const parent = new Category("Parent", "parent");

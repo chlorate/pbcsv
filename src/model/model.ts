@@ -1,8 +1,8 @@
 import {action, observable} from "mobx";
-import {Category} from "../category/category";
-import {readFile} from "../file/util";
-import {request} from "../xhr/util";
-import {CsvParser} from "./csv-parser";
+import {CsvParser} from ".";
+import {Category} from "../category";
+import {readFile} from "../file";
+import {request} from "../xhr";
 
 /**
  * Stores the state of the CSV file and its parsed content.

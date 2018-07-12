@@ -1,4 +1,4 @@
-import {Value} from "./value";
+import {Value} from ".";
 
 /**
  * A numeric value associated to a run.

@@ -1,5 +1,5 @@
-import {pad} from "../math/util";
-import {DatePrecision} from "./date-precision";
+import {DatePrecision} from ".";
+import {pad} from "../math";
 
 const dayToMilliseconds = 24 * 60 * 60 * 1000;
 

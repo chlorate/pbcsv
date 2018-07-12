@@ -1,4 +1,4 @@
-import {SlugGenerator} from "./slug-generator";
+import {SlugGenerator} from ".";
 
 describe("SlugGenerator", () => {
 	let generator;

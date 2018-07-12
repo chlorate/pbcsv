@@ -2,10 +2,10 @@ import {Component} from "inferno";
 import {Badge} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {Link} from "inferno-router";
-import {ApproxDateComponent} from "../date/approx-date.component";
-import {Model} from "../model/model";
+import {Category} from ".";
+import {ApproxDateComponent} from "../date";
+import {Model} from "../model";
 import {Store} from "../store";
-import {Category} from "./category";
 
 interface Props {
 	category: Category;

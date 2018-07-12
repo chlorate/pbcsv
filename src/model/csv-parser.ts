@@ -1,10 +1,9 @@
 import parse from "csv-parse";
-import {Category} from "../category/category";
-import {ApproxDate, parseApproxDate} from "../date/approx-date";
-import {Run} from "../run/run";
-import {SlugGenerator} from "../slug/slug-generator";
-import {Values} from "../value/value";
-import {parseValue} from "../value/value.factory";
+import {Category} from "../category";
+import {ApproxDate, parseApproxDate} from "../date";
+import {Run} from "../run";
+import {SlugGenerator} from "../slug";
+import {parseValue, Values} from "../value";
 
 const categorySeparator = " / ";
 
