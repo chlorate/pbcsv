@@ -16,20 +16,14 @@ const formats = [
 		string: 5,
 	},
 	{
-		// HH:MM:SS or HH:MM:SS.SSS (with optional sign)
-		regExp: /([+-])?(\d+):(\d+):(\d+(?:\.\d+)?)/,
+		// HH:MM:SS or MM:SS (with optional sign and decimal)
+		regExp: /([+-])?(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)/,
 		sign: 1,
 		hours: 2,
 		minutes: 3,
 		seconds: 4,
 	},
-	{
-		// MM:SS or MM:SS.SSS (with optional sign)
-		regExp: /([+-])?(\d+):(\d+(?:\.\d+)?)/,
-		sign: 1,
-		minutes: 2,
-		seconds: 3,
-	},
+
 	// SS and SS.SSS are not accepted here because they are ambiguous; could be
 	// a number or a time. Assume it's a number.
 ];
