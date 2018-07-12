@@ -26,6 +26,11 @@ module.exports = function(config) {
 			externals: ["mobx"], // mobx fix
 			resolve: {
 				extensions: [".tsx", ".ts", ".js"],
+				alias: {
+					inferno:
+						__dirname +
+						"/node_modules/inferno/dist/index.dev.esm.js",
+				},
 			},
 			module: {
 				rules: [
