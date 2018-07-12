@@ -39,6 +39,30 @@ describe("parseTimeValue", () => {
 			number: -45296,
 		},
 		{
+			name: `can parse HH:MM:SS "string" format`,
+			in: `12:34:56 "test string"`,
+			string: "test string",
+			number: 45296,
+		},
+		{
+			name: `can parse HH:MM:SS.SSS "string" format`,
+			in: `12:34:56.789 "test string"`,
+			string: "test string",
+			number: 45296.789,
+		},
+		{
+			name: `can parse MM:SS "string" format`,
+			in: `12:34 "test string"`,
+			string: "test string",
+			number: 754,
+		},
+		{
+			name: `can parse -HH:MM:SS "string" format`,
+			in: `-12:34:56 "test string"`,
+			string: "test string",
+			number: -45296,
+		},
+		{
 			name: "ignores prefixes and suffixes",
 			in: "???12:34:56???",
 			string: "???12:34:56???",
@@ -48,6 +72,12 @@ describe("parseTimeValue", () => {
 			name: "trims whitespace",
 			in: "   12:34:56   ",
 			string: "12:34:56",
+			number: 45296,
+		},
+		{
+			name: "trims whitespace inside arbitrary string format",
+			in: `   12:34:56    "  test string  "   `,
+			string: "test string",
 			number: 45296,
 		},
 	].forEach((test) => {

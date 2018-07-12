@@ -7,6 +7,15 @@ export class TimeValue extends NumberValue {}
 
 const formats = [
 	{
+		// HH:MM:SS "string" or MM:SS "string" (with optional sign and decimal)
+		regExp: /^([+-])?(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)\s+"(.+)"$/,
+		sign: 1,
+		hours: 2,
+		minutes: 3,
+		seconds: 4,
+		string: 5,
+	},
+	{
 		// HH:MM:SS or HH:MM:SS.SSS (with optional sign)
 		regExp: /([+-])?(\d+):(\d+):(\d+(?:\.\d+)?)/,
 		sign: 1,
@@ -66,6 +75,10 @@ export function parseTimeValue(s: string): TimeValue | undefined {
 	let n = hours * hoursToSeconds + minutes * minutesToSeconds + seconds;
 	if (matchSign === "-") {
 		n *= -1;
+	}
+
+	if (format.string) {
+		s = match[format.string].trim();
 	}
 
 	return new TimeValue(s, n);
