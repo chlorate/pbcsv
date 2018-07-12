@@ -38,8 +38,9 @@ export function parseNumberValue(s: string): NumberValue | undefined {
 	s = s.trim();
 
 	let match: RegExpMatchArray | null = null;
+	const commaless = s.replace(/,/g, "")
 	const format = formats.find((f) => {
-		match = s.match(f.regExp);
+		match = commaless.match(f.regExp);
 		return match !== null;
 	});
 	if (!match || !format) {

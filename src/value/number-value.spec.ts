@@ -51,6 +51,12 @@ describe("parseNumberValue", () => {
 			number: -1234,
 		},
 		{
+			name: "ignores commas",
+			in: "1,234.567,8",
+			string:"1,234.567,8",
+			number: 1234.5678,
+		},
+		{
 			name: "ignores prefixes and suffixes",
 			in: "???1234???",
 			string: "???1234???",
