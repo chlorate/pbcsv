@@ -101,7 +101,7 @@ describe("parseNumberValue", () => {
 	].forEach((test) => {
 		it(test.name, () => {
 			const v = parseNumberValue(test.in);
-			expect(v).not.toBeUndefined();
+			expect(v).toBeDefined();
 			if (v) {
 				expect(v.string).toBe(test.string);
 				expect(v.number).toBe(test.number);
