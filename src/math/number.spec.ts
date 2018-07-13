@@ -1,10 +1,4 @@
-import {
-	formatDuration,
-	formatNumber,
-	formatSeconds,
-	getPrecision,
-	pad,
-} from ".";
+import {formatNumber, getPrecision, pad} from ".";
 
 describe("getPrecision", () => {
 	[
