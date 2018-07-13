@@ -1,4 +1,10 @@
-import {formatNumber, formatSeconds, getPrecision, pad} from ".";
+import {
+	formatDuration,
+	formatNumber,
+	formatSeconds,
+	getPrecision,
+	pad,
+} from ".";
 
 describe("getPrecision", () => {
 	[
@@ -60,6 +66,25 @@ describe("formatSeconds", () => {
 			`with precision ${test.precision}`;
 		it(name, () => {
 			expect(formatSeconds(test.in, test.precision)).toBe(test.out);
+		});
+	});
+});
+
+describe("formatDuration", () => {
+	[
+		{in: -3661, out: "-PT1H1M1S"},
+		{in: 0, out: "PT0S"},
+		{in: 1, out: "PT1S"},
+		{in: 59, out: "PT59S"},
+		{in: 60, out: "PT1M"},
+		{in: 3599, out: "PT59M59S"},
+		{in: 3600, out: "PT1H"},
+		{in: 3601.234, out: "PT1H1.234S"},
+		{in: 36610, out: "PT10H10M10S"},
+		{in: 3600000, out: "PT1000H"},
+	].forEach((test) => {
+		it(`should return "${test.out}" for ${test.in}`, () => {
+			expect(formatDuration(test.in)).toBe(test.out);
 		});
 	});
 });

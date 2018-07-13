@@ -7,7 +7,7 @@ export const hoursToSeconds = 60 * minutesToSeconds;
  * only shown as necessary.
  */
 export function formatNumber(n: number, precision?: number): string {
-	let s = n.toFixed(precision || 6)
+	let s = n.toFixed(precision || 6);
 	s = s.replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
 
 	switch (precision) {
@@ -29,27 +29,65 @@ export function formatNumber(n: number, precision?: number): string {
  * places. Otherwise, decimal places are only shown as necessary.
  */
 export function formatSeconds(n: number, precision?: number): string {
-	const sign = n < 0 ? -1 : 1;
-
-	n = Math.abs(n);
-	const hours = sign * Math.floor(n / hoursToSeconds);
-	const minutes = sign * Math.floor((n % hoursToSeconds) / minutesToSeconds);
-	const seconds = sign * (n % minutesToSeconds);
+	const info = parseSeconds(n);
 
 	const parts: string[] = [];
-	if (hours) {
-		const h = formatNumber(hours);
-		parts.push(`${h} hour${hours === sign ? "" : "s"}`);
+	if (info.hours) {
+		const h = formatNumber(info.sign * info.hours);
+		parts.push(`${h} hour${info.hours === 1 ? "" : "s"}`);
 	}
-	if (minutes) {
-		parts.push(`${minutes} minute${minutes === sign ? "" : "s"}`);
+	if (info.minutes) {
+		const m = info.sign * info.minutes;
+		parts.push(`${m} minute${info.minutes === 1 ? "" : "s"}`);
 	}
-	if (seconds || !n) {
-		const s = formatNumber(seconds, precision);
-		parts.push(`${s} second${s === `${sign}` ? "" : "s"}`);
+	if (info.seconds || !n) {
+		const s = formatNumber(info.sign * info.seconds, precision);
+		const plural = s === `${info.sign}`;
+		parts.push(`${s} second${plural ? "" : "s"}`);
 	}
 
 	return parts.join(", ");
+}
+
+/**
+ * Returns a number of seconds formatted as an ISO 8601 duration.
+ */
+export function formatDuration(n: number): string {
+	const info = parseSeconds(n);
+
+	let duration = "PT";
+	if (info.sign === -1) {
+		duration = "-PT";
+	}
+	if (info.hours) {
+		duration += `${info.hours}H`;
+	}
+	if (info.minutes) {
+		duration += `${info.minutes}M`;
+	}
+	if (info.seconds || !n) {
+		duration += `${formatNumber(info.seconds)}S`;
+	}
+	return duration;
+}
+
+interface SecondsInfo {
+	sign: number;
+	hours: number;
+	minutes: number;
+	seconds: number;
+}
+
+function parseSeconds(n: number): SecondsInfo {
+	const sign = n < 0 ? -1 : 1;
+
+	n = Math.abs(n);
+	return {
+		sign,
+		hours: Math.floor(n / hoursToSeconds),
+		minutes: Math.floor((n % hoursToSeconds) / minutesToSeconds),
+		seconds: n % minutesToSeconds,
+	};
 }
 
 /**
