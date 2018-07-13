@@ -36,6 +36,7 @@ export class CsvParser {
 	private _categories: Category[] = [];
 	private categorySlugs: {[name: string]: SlugGenerator} = {};
 	private categoriesByName: {[name: string]: Category} = {};
+	private lastCategories: string[] = [];
 
 	get warnings(): string[] {
 		return this._warnings;
@@ -134,11 +135,14 @@ export class CsvParser {
 	private parseRow(row: string[]): void {
 		const values = this.parseValues(row);
 		if (!Object.keys(values).length) {
-			return; // Skip row with no values.
+			// Skip row with no values. Also clears category cascade.
+			this.lastCategories = [];
+			return;
 		}
 
 		const nameParts = this.parseCategoryName(row);
 		if (!nameParts.length) {
+			// Skip row with no categories.
 			return;
 		}
 
@@ -160,6 +164,14 @@ export class CsvParser {
 		this.categoryIndices.forEach((i) => {
 			parts.push(row[i]);
 		});
+
+		// Cascade previous parent categories: copy previous categories up until
+		// the first non-empty category in this row.
+		for (let i = 0; i < this.lastCategories.length && !parts[i]; i++) {
+			parts[i] = this.lastCategories[i];
+		}
+		this.lastCategories = parts;
+
 		return parts
 			.join(categorySeparator)
 			.split(categorySeparator)

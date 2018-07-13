@@ -106,6 +106,40 @@ G2 / G3,0,C2 / C3`;
 			}, done.fail);
 		});
 
+		it("should cascade previous category columns", (done) => {
+			const csv = `Game,Category,Split,Value
+G1,C1,,0
+,C2,,0
+,C3,C4,0
+,,C5,0
+,C6,,0
+
+,,C7,0`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.errors.length).toBe(0);
+
+				const c = parser.categories;
+				requireLength(c, 2, done.fail);
+				requireLength(c[0].children, 4, done.fail);
+				requireLength(c[0].children[2].children, 2, done.fail);
+				requireLength(c[0].children[3].children, 0, done.fail);
+				requireLength(c[1].children, 0, done.fail);
+
+				expect(c[0].name).toBe("G1");
+				expect(c[0].children[0].name).toBe("C1");
+				expect(c[0].children[1].name).toBe("C2");
+				expect(c[0].children[2].name).toBe("C3");
+				expect(c[0].children[2].children[0].name).toBe("C4");
+				expect(c[0].children[2].children[1].name).toBe("C5");
+				expect(c[0].children[3].name).toBe("C6");
+				expect(c[1].name).toBe("C7");
+
+				done();
+			}, done.fail);
+		});
+
 		it("should strip categories with blank name", (done) => {
 			const csv = `Game,Value,Category
 ,0,C1
