@@ -1,7 +1,7 @@
 import {Component} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
-import {withRouter} from "inferno-router";
+import {Link, withRouter} from "inferno-router";
 import {CategoryTableComponent, SubcategoryListComponent} from ".";
 import {Category} from "../category";
 import {Model} from "../model";
@@ -50,7 +50,21 @@ export class CategoriesComponent extends Component {
 
 		const children: JSX.Element[] = [];
 		if (category) {
-			children.push(<h2 className="mb-3">{category.fullName}</h2>);
+			const crumbs: Array<JSX.Element | string> = [category.name];
+
+			let parent = category.parent;
+			while (parent) {
+				crumbs.push(
+					" - ",
+					<Link to={`/categories/${parent.fullSlug}`}>
+						{parent.name}
+					</Link>,
+				);
+				parent = parent.parent;
+			}
+			crumbs.reverse();
+
+			children.push(<h2 className="mb-3">{crumbs}</h2>);
 		}
 		children.push(
 			<SubcategoryListComponent categories={subcategories} />,
