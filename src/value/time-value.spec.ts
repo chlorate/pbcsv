@@ -1,4 +1,11 @@
-import {parseTimeValue} from ".";
+import {parseTimeValue, TimeValue} from ".";
+
+describe("TimeValue", () => {
+	it("can return a formatted string", () => {
+		const v = new TimeValue("", 3620.3, 3);
+		expect(v.formatted).toBe("1 hour, 20.300 seconds");
+	});
+});
 
 describe("parseTimeValue", () => {
 	[

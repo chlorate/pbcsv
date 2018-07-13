@@ -1,13 +1,18 @@
 import {NumberValue} from ".";
-import {formatSeconds, getPrecision, hoursToSeconds, minutesToSeconds} from "../math";
+
+import {
+	formatSeconds,
+	getPrecision,
+	hoursToSeconds,
+	minutesToSeconds,
+} from "../math";
 
 /**
  * A time (or duration) value associated to a run.
  */
-export class TimeValue extends NumberValue {}
 export class TimeValue extends NumberValue {
 	get formatted(): string {
-		return formatSeconds(this.number);
+		return formatSeconds(this.number, this.precision);
 	}
 }
 
