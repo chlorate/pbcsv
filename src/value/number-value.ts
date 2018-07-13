@@ -1,18 +1,25 @@
 import {Value} from ".";
+import {formatNumber, getPrecision} from "../math";
 
 /**
  * A numeric value associated to a run.
  */
 export class NumberValue extends Value {
 	private _number: number;
+	private _precision: number;
 
 	get number(): number {
 		return this._number;
 	}
 
-	constructor(s?: string, n?: number) {
+	get precision(): number {
+		return this._precision;
+	}
+
+	constructor(s?: string, n?: number, precision?: number) {
 		super(s);
 		this._number = n || 0;
+		this._precision = precision || 0;
 	}
 }
 
@@ -48,15 +55,12 @@ export function parseNumberValue(s: string): NumberValue | undefined {
 	}
 
 	const matchNumber = match[format.number];
-
-	let n = 0;
-	if (matchNumber) {
-		n = parseFloat(matchNumber) || 0;
-	}
+	const n = parseFloat(matchNumber) || 0;
+	const precision = getPrecision(matchNumber);
 
 	if (format.string) {
 		s = match[format.string].trim();
 	}
 
-	return new NumberValue(s, n);
+	return new NumberValue(s, n, precision);
 }

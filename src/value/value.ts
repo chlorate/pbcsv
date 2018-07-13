@@ -21,6 +21,10 @@ export class Value {
 		return undefined;
 	}
 
+	get precision(): number | undefined {
+		return undefined;
+	}
+
 	constructor(s?: string) {
 		this._string = s || "";
 	}
