@@ -81,12 +81,6 @@ export class RunComponent extends Component<Props, {}> {
 				<hr className="d-md-none" />,
 				<MarkdownComponent markdown={run.comment} />,
 			);
-		} else {
-			body.push(
-				<span className="text-muted d-none d-md-inline">
-					No comment.
-				</span>,
-			);
 		}
 
 		return (
