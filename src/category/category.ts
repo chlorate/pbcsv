@@ -59,4 +59,11 @@ export class Category {
 	get hasDates(): boolean {
 		return this.runs.some((r) => r.date !== undefined);
 	}
+
+	/**
+	 * Returns true if this category has any run with a named value.
+	 */
+	public hasValues(name: string): boolean {
+		return this.runs.some((r) => r.values[name] !== undefined);
+	}
 }

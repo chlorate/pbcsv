@@ -1,6 +1,7 @@
 import {Category} from ".";
 import {ApproxDate, DatePrecision} from "../date";
 import {Run} from "../run";
+import {Value} from "../value";
 
 describe("Category", () => {
 	const parent = new Category("Parent", "parent");
@@ -20,6 +21,7 @@ describe("Category", () => {
 			"Comment",
 		),
 	);
+	fullRuns.runs[0].values.Value = new Value("value");
 
 	it("can return full name", () => {
 		expect(parent.fullName).toBe("Parent");
@@ -49,5 +51,11 @@ describe("Category", () => {
 	it("can return if any runs have a date", () => {
 		expect(emptyRuns.hasDates).toBe(false);
 		expect(fullRuns.hasDates).toBe(true);
+	});
+
+	it("can return if any runs have a value", () => {
+		expect(emptyRuns.hasValues("Value")).toBe(false);
+		expect(fullRuns.hasValues("Value")).toBe(true);
+		expect(fullRuns.hasValues("None")).toBe(false);
 	});
 });

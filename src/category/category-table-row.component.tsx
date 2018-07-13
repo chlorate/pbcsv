@@ -10,6 +10,7 @@ import {ValueComponent} from "../value";
 
 interface Props {
 	category: Category;
+	showValues: {[name: string]: boolean};
 	showVersion: boolean;
 	showDate: boolean;
 }
@@ -42,13 +43,15 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 			</td>,
 		];
 
-		this.injected.model.valueNames.forEach((name) => {
-			cells.push(
-				<td className="text-right">
-					<ValueComponent name={name} value={pb.values[name]} />
-				</td>,
-			);
-		});
+		this.injected.model.valueNames
+			.filter((name) => this.props.showValues[name])
+			.forEach((name) => {
+				cells.push(
+					<td className="text-right">
+						<ValueComponent name={name} value={pb.values[name]} />
+					</td>,
+				);
+			});
 
 		if (this.props.showVersion) {
 			let platform: JSX.Element | undefined;

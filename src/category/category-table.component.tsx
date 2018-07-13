@@ -31,9 +31,13 @@ export class CategoryTableComponent extends Component<Props, {}> {
 
 		const header: JSX.Element[] = [<th className="w-100">Category</th>];
 
-		this.injected.model.valueNames.forEach((name) => {
-			header.push(<th className="text-nowrap text-right">{name}</th>);
-		});
+		const showValues: {[name: string]: boolean} = {};
+		this.injected.model.valueNames
+			.filter((name) => categories.some((c) => c.hasValues(name)))
+			.forEach((name) => {
+				header.push(<th className="text-nowrap text-right">{name}</th>);
+				showValues[name] = true;
+			});
 
 		let showVersion = false;
 		const hasPlatforms = categories.some((c) => c.hasPlatforms);
@@ -80,6 +84,7 @@ export class CategoryTableComponent extends Component<Props, {}> {
 		const rows = categories.map((c) => (
 			<CategoryTableRowComponent
 				category={c}
+				showValues={showValues}
 				showVersion={showVersion}
 				showDate={showDate}
 			/>
