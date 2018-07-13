@@ -6,6 +6,7 @@ import {Category} from ".";
 import {ApproxDateComponent} from "../date";
 import {Model} from "../model";
 import {Store} from "../store";
+import {ValueComponent} from "../value";
 
 interface Props {
 	category: Category;
@@ -42,9 +43,10 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 		];
 
 		this.injected.model.valueNames.forEach((name) => {
-			const v = pb.values[name];
 			cells.push(
-				<td className="text-nowrap text-right">{v ? v.string : ""}</td>,
+				<td className="text-right">
+					<ValueComponent name={name} value={pb.values[name]} />
+				</td>,
 			);
 		});
 

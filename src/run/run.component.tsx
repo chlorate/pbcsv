@@ -1,11 +1,12 @@
 import {Component} from "inferno";
-import {Badge, Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
+import {Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {ApproxDateComponent} from "../date";
 import {MarkdownComponent} from "../markdown";
 import {formatNumber} from "../math";
 import {Model} from "../model";
 import {Store} from "../store";
+import {ValueComponent} from "../value";
 import {Run} from "./run";
 
 interface Props {
@@ -31,22 +32,15 @@ export class RunComponent extends Component<Props, {}> {
 
 		const header: JSX.Element[] = [];
 		this.injected.model.valueNames.forEach((name, i) => {
-			if (!run.values[name]) {
-				return;
-			}
-
-			const s = run.values[name].string;
-			if (!i) {
+			const v = run.values[name];
+			if (v) {
 				header.push(
-					<span className="text-nowrap mr-2" title={name}>
-						{s}
-					</span>,
-				);
-			} else {
-				header.push(
-					<Badge className="mr-2">
-						{name}: {s}
-					</Badge>,
+					<ValueComponent
+						badge={i > 0}
+						className="mr-2"
+						name={name}
+						value={v}
+					/>,
 				);
 			}
 		});
