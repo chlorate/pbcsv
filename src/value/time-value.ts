@@ -1,9 +1,15 @@
 import {NumberValue} from ".";
+import {formatSeconds, getPrecision} from "../math";
 
 /**
  * A time (or duration) value associated to a run.
  */
 export class TimeValue extends NumberValue {}
+export class TimeValue extends NumberValue {
+	get formatted(): string {
+		return formatSeconds(this.number);
+	}
+}
 
 const formats = [
 	{
@@ -61,10 +67,8 @@ export function parseTimeValue(s: string): TimeValue | undefined {
 		minutes = parseInt(matchMinutes, 10) || 0;
 	}
 
-	let seconds = 0;
-	if (matchSeconds) {
-		seconds = parseFloat(matchSeconds) || 0;
-	}
+	const seconds = parseFloat(matchSeconds) || 0;
+	const precision = getPrecision(matchSeconds);
 
 	let n = hours * hoursToSeconds + minutes * minutesToSeconds + seconds;
 	if (matchSign === "-") {
@@ -75,5 +79,5 @@ export function parseTimeValue(s: string): TimeValue | undefined {
 		s = match[format.string].trim();
 	}
 
-	return new TimeValue(s, n);
+	return new TimeValue(s, n, precision);
 }
