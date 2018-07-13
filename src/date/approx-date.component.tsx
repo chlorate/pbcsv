@@ -21,9 +21,9 @@ export function ApproxDateComponent(props: Props): JSX.Element | null {
 
 	let title = date.fullString;
 
-	let colorClass = "";
-	if (date.date.getFullYear() < new Date().getFullYear()) {
-		colorClass = "text-muted";
+	let colorClass = "text-muted";
+	if (date.date && date.date.getFullYear() >= new Date().getFullYear()) {
+		colorClass = "text-body";
 	}
 
 	const ago = date.daysAgo;

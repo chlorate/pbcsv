@@ -17,7 +17,7 @@ describe("Category", () => {
 			"Platform",
 			"Version",
 			"Emulator",
-			new ApproxDate(new Date(), DatePrecision.Day),
+			new ApproxDate("", new Date(), DatePrecision.Day),
 			"Comment",
 		),
 	);
