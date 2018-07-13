@@ -363,6 +363,20 @@ Category,0`;
 			}, done.fail);
 		});
 
+		it("should ignore duplicate header rows", (done) => {
+			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment
+C1,0,,,,,
+Category,Value,Platform,Version,Emulator,Date,Comment
+C2,0,,,,,`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.errors.length).toBe(0);
+				expect(parser.categories.length).toBe(2);
+				done();
+			}, done.fail);
+		});
+
 		it("should ignore rows with no values", (done) => {
 			const csv = `Category,Value 1,Value 2
 ,,

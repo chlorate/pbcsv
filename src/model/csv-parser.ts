@@ -133,17 +133,20 @@ export class CsvParser {
 	}
 
 	private parseRow(row: string[]): void {
+		if (this.isHeaderRow(row)) {
+			return; // Skip rows that look like duplicate headers.
+		}
+
 		const values = this.parseValues(row);
 		if (!Object.keys(values).length) {
-			// Skip row with no values. Also clears category cascade.
+			// Skip row with no values. Also clear category cascade.
 			this.lastCategories = [];
 			return;
 		}
 
 		const nameParts = this.parseCategoryName(row);
 		if (!nameParts.length) {
-			// Skip row with no categories.
-			return;
+			return; // Skip row with no categories.
 		}
 
 		const category = this.ensureCategory(nameParts);
@@ -157,6 +160,23 @@ export class CsvParser {
 		);
 		Object.assign(run.values, values);
 		category.runs.push(run);
+	}
+
+	private isHeaderRow(row: string[]): boolean {
+		return (
+			this.categoryIndices.every((i) => categoryRegExp.test(row[i])) &&
+			this.valueIndices.every((i) => valueRegExp.test(row[i])) &&
+			(this.platformIndex === undefined ||
+				platformRegExp.test(row[this.platformIndex])) &&
+			(this.versionIndex === undefined ||
+				versionRegExp.test(row[this.versionIndex])) &&
+			(this.emulatorIndex === undefined ||
+				emulatorRegExp.test(row[this.emulatorIndex])) &&
+			(this.dateIndex === undefined ||
+				dateRegExp.test(row[this.dateIndex])) &&
+			(this.commentIndex === undefined ||
+				commentRegExp.test(row[this.commentIndex]))
+		);
 	}
 
 	private parseCategoryName(row: string[]): string[] {
