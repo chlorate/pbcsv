@@ -1,6 +1,7 @@
 import {NumberValue} from ".";
 
 import {
+	formatDuration,
 	formatSeconds,
 	getPrecision,
 	hoursToSeconds,
@@ -13,6 +14,10 @@ import {
 export class TimeValue extends NumberValue {
 	get formatted(): string {
 		return formatSeconds(this.number, this.precision);
+	}
+
+	get machineFormatted(): string {
+		return formatDuration(this.number);
 	}
 }
 
