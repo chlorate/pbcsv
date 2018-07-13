@@ -1,10 +1,22 @@
 /**
- * Returns a number formatted with commas.
+ * Returns a number formatted with commas. If a precision is given, the string
+ * will be fixed to that number of decimal places. Otherwise, decimal places are
+ * only shown if necessary.
  */
-export function formatNumber(n: number): string {
-	let s = n.toFixed(6).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-	s = s.replace(/0+$/, "");
-	s = s.replace(/\.$/, "");
+export function formatNumber(n: number, precision?: number): string {
+	let s = n.toFixed(precision || 6)
+	s = s.replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+
+	switch (precision) {
+		case 0:
+			s = s.split(".")[0];
+			break;
+		case undefined:
+			s = s.replace(/0+$/, "");
+			s = s.replace(/\.$/, "");
+			break;
+	}
+
 	return s;
 }
 
