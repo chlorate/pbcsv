@@ -349,20 +349,6 @@ Category,0`;
 			}, done.fail);
 		});
 
-		it("should ignore rows with blank category", (done) => {
-			const csv = `Category,Value
-,
-
-,0`;
-
-			parser.parse(csv).then(() => {
-				expect(parser.warnings.length).toBe(0);
-				expect(parser.errors.length).toBe(0);
-				expect(parser.categories.length).toBe(0);
-				done();
-			}, done.fail);
-		});
-
 		it("should ignore duplicate header rows", (done) => {
 			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment
 C1,0,,,,,
@@ -373,6 +359,44 @@ C2,0,,,,,`;
 				expect(parser.warnings.length).toBe(0);
 				expect(parser.errors.length).toBe(0);
 				expect(parser.categories.length).toBe(2);
+				done();
+			}, done.fail);
+		});
+
+		it("should use first column found for single-only columns", (done) => {
+			const csv = `Category,Value,Platform,Plat,Version,Ver,Emulator,Emu,Date 1,Date 2,Comment,Notes
+C1,0,P,,V,,E,,D,,C,`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.errors.length).toBe(0);
+
+				const c = parser.categories;
+				requireLength(c, 1, done.fail);
+				requireLength(c[0].runs, 1, done.fail);
+
+				const r = c[0].runs[0];
+				expect(r.platform).toBe("P");
+				expect(r.version).toBe("V");
+				expect(r.emulator).toBe("E");
+				requireDefined(r.date, done.fail);
+				expect(r.date.string).toBe("D");
+				expect(r.comment).toBe("C");
+
+				done();
+			});
+		});
+
+		it("should ignore rows with no categories (after cascade)", (done) => {
+			const csv = `Category,Value
+,
+
+,0`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.errors.length).toBe(0);
+				expect(parser.categories.length).toBe(0);
 				done();
 			}, done.fail);
 		});

@@ -97,19 +97,19 @@ export class CsvParser {
 					this.valueIndices.push(i);
 					this._valueNames.push(v);
 					break;
-				case platformRegExp.test(v):
+				case platformRegExp.test(v) && this.platformIndex === undefined:
 					this.platformIndex = i;
 					break;
-				case versionRegExp.test(v):
+				case versionRegExp.test(v) && this.versionIndex === undefined:
 					this.versionIndex = i;
 					break;
-				case emulatorRegExp.test(v):
+				case emulatorRegExp.test(v) && this.emulatorIndex === undefined:
 					this.emulatorIndex = i;
 					break;
-				case dateRegExp.test(v):
+				case dateRegExp.test(v) && this.dateIndex === undefined:
 					this.dateIndex = i;
 					break;
-				case commentRegExp.test(v):
+				case commentRegExp.test(v) && this.commentIndex === undefined:
 					this.commentIndex = i;
 					break;
 				default:
