@@ -25,6 +25,14 @@ export class Value {
 		return undefined;
 	}
 
+	get formatted(): string | undefined {
+		return undefined;
+	}
+
+	get machineFormatted(): string | undefined {
+		return undefined;
+	}
+
 	constructor(s?: string) {
 		this._string = s || "";
 	}
