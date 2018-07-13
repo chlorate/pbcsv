@@ -51,7 +51,7 @@ function makeElement(
 ): JSX.Element {
 	let text = value.string;
 	if (name) {
-		if (/[A-Z]+(\s|$)/.test(name)) {
+		if (/^[A-Z]+(\s|$)/.test(name)) {
 			// Looks like an acronym. Make it a suffix.
 			text += ` ${name}`;
 		} else {
