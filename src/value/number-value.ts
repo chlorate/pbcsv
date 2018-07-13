@@ -53,7 +53,7 @@ export function parseNumberValue(s: string): NumberValue | undefined {
 	s = s.trim();
 
 	let match: RegExpMatchArray | null = null;
-	const commaless = s.replace(/,/g, "")
+	const commaless = s.replace(/,/g, "");
 	const format = formats.find((f) => {
 		match = commaless.match(f.regExp);
 		return match !== null;
