@@ -20,6 +20,10 @@ export class NumberValue extends Value {
 		return formatNumber(this.number, this.precision);
 	}
 
+	get machineFormatted(): string {
+		return `${this.number}`;
+	}
+
 	constructor(s?: string, n?: number, precision?: number) {
 		super(s);
 		this._number = n || 0;

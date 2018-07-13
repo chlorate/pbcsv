@@ -1,9 +1,14 @@
 import {NumberValue, parseNumberValue} from ".";
 
 describe("NumberValue", () => {
+	const v = new NumberValue("1,234.500", 1234.5, 3);
+
 	it("can return a formatted string", () => {
-		const v = new NumberValue("", 1234.5, 3);
 		expect(v.formatted).toBe("1,234.500");
+	});
+
+	it("can return a machine-formatted string", () => {
+		expect(v.machineFormatted).toBe("1234.5");
 	});
 });
 
