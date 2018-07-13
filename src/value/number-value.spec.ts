@@ -1,4 +1,11 @@
-import {parseNumberValue} from ".";
+import {NumberValue, parseNumberValue} from ".";
+
+describe("NumberValue", () => {
+	it("can return a formatted string", () => {
+		const v = new NumberValue("", 1234.5, 3);
+		expect(v.formatted).toBe("1,234.500");
+	});
+});
 
 describe("parseNumberValue", () => {
 	[
@@ -61,7 +68,7 @@ describe("parseNumberValue", () => {
 		{
 			name: "ignores commas",
 			in: "1,234.567,8",
-			string:"1,234.567,8",
+			string: "1,234.567,8",
 			number: 1234.5678,
 			precision: 4,
 		},

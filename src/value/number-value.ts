@@ -16,6 +16,10 @@ export class NumberValue extends Value {
 		return this._precision;
 	}
 
+	get formatted(): string {
+		return formatNumber(this.number, this.precision);
+	}
+
 	constructor(s?: string, n?: number, precision?: number) {
 		super(s);
 		this._number = n || 0;
