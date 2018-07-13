@@ -1,5 +1,5 @@
 import {NumberValue} from ".";
-import {formatSeconds, getPrecision} from "../math";
+import {formatSeconds, getPrecision, hoursToSeconds, minutesToSeconds} from "../math";
 
 /**
  * A time (or duration) value associated to a run.
@@ -33,9 +33,6 @@ const formats = [
 	// SS and SS.SSS are not accepted here because they are ambiguous; could be
 	// a number or a time. Assume it's a number.
 ];
-
-const minutesToSeconds = 60;
-const hoursToSeconds = 60 * minutesToSeconds;
 
 /**
  * Parses a string and returns a time value or undefined if no time was found.

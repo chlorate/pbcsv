@@ -1,7 +1,10 @@
+export const minutesToSeconds = 60;
+export const hoursToSeconds = 60 * minutesToSeconds;
+
 /**
  * Returns a number formatted with commas. If a precision is given, the string
  * will be fixed to that number of decimal places. Otherwise, decimal places are
- * only shown if necessary.
+ * only shown as necessary.
  */
 export function formatNumber(n: number, precision?: number): string {
 	let s = n.toFixed(precision || 6)
@@ -18,6 +21,35 @@ export function formatNumber(n: number, precision?: number): string {
 	}
 
 	return s;
+}
+
+/**
+ * Returns a number of seconds formatted as a human-readable string. If
+ * a precision is given, the string will be fixed to that number of decimal
+ * places. Otherwise, decimal places are only shown as necessary.
+ */
+export function formatSeconds(n: number, precision?: number): string {
+	const sign = n < 0 ? -1 : 1;
+
+	n = Math.abs(n);
+	const hours = sign * Math.floor(n / hoursToSeconds);
+	const minutes = sign * Math.floor((n % hoursToSeconds) / minutesToSeconds);
+	const seconds = sign * (n % minutesToSeconds);
+
+	const parts: string[] = [];
+	if (hours) {
+		const h = formatNumber(hours);
+		parts.push(`${h} hour${hours === sign ? "" : "s"}`);
+	}
+	if (minutes) {
+		parts.push(`${minutes} minute${minutes === sign ? "" : "s"}`);
+	}
+	if (seconds || !n) {
+		const s = formatNumber(seconds, precision);
+		parts.push(`${s} second${s === `${sign}` ? "" : "s"}`);
+	}
+
+	return parts.join(", ");
 }
 
 /**

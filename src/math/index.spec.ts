@@ -40,6 +40,30 @@ describe("formatNumber", () => {
 	});
 });
 
+describe("formatSeconds", () => {
+	[
+		{in: -3661, out: "-1 hour, -1 minute, -1 second"},
+		{in: 0, out: "0 seconds"},
+		{in: 1, out: "1 second"},
+		{in: 59, out: "59 seconds"},
+		{in: 60, out: "1 minute"},
+		{in: 3599, out: "59 minutes, 59 seconds"},
+		{in: 3600, out: "1 hour"},
+		{in: 3601.234, out: "1 hour, 1.234 seconds"},
+		{in: 3601.234, precision: 0, out: "1 hour, 1 second"},
+		{in: 3601.234, precision: 6, out: "1 hour, 1.234000 seconds"},
+		{in: 36610, out: "10 hours, 10 minutes, 10 seconds"},
+		{in: 3600000, out: "1,000 hours"},
+	].forEach((test) => {
+		const name =
+			`should return "${test.out}" for ${test.in} ` +
+			`with precision ${test.precision}`;
+		it(name, () => {
+			expect(formatSeconds(test.in, test.precision)).toBe(test.out);
+		});
+	});
+});
+
 describe("pad", () => {
 	it("should pad if number length is less than pad length", () => {
 		expect(pad(123, 6)).toBe("000123");
