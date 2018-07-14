@@ -28,6 +28,33 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 		return this.props as InjectedProps;
 	}
 
+	private get valueCells(): JSX.Element[] {
+		const pb = this.props.category.runs[0];
+
+		const valueNames = this.injected.model.valueNames.filter(
+			(name) => this.props.showValues[name],
+		);
+
+		const linkedName = valueNames.find(
+			(name) => pb.values[name] !== undefined,
+		);
+
+		return valueNames.map((name) => {
+			let content = (
+				<ValueComponent name={name} value={pb.values[name]} />
+			);
+			if (pb.link && linkedName === name) {
+				content = (
+					<a className="td-link" href={pb.link} target="_blank">
+						{content}
+					</a>
+				);
+			}
+
+			return <td className="text-right">{content}</td>;
+		});
+	}
+
 	public render(): JSX.Element {
 		const category = this.props.category;
 		const pb = category.runs[0];
@@ -42,16 +69,7 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 				</Link>
 			</td>,
 		];
-
-		this.injected.model.valueNames
-			.filter((name) => this.props.showValues[name])
-			.forEach((name) => {
-				cells.push(
-					<td className="text-right">
-						<ValueComponent name={name} value={pb.values[name]} />
-					</td>,
-				);
-			});
+		cells.push(...this.valueCells);
 
 		if (this.props.showVersion) {
 			let platform: JSX.Element | undefined;
