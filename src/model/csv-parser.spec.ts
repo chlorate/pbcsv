@@ -209,10 +209,10 @@ C1? / C1,0`;
 		});
 
 		it("should add runs to categories", (done) => {
-			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment
-Empty,0,,,,,
-Category,0,NES,1.1,FCEU,1987-12-17,Run 1...
-Category,1:00,NES,1.0,FCEU,2010-03-01,Run 2...`;
+			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment,Link
+Empty,0,,,,,,
+Category,0,NES,1.1,FCEU,1987-12-17,Run 1...,http://L1
+Category,1:00,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 
 			parser.parse(csv).then(() => {
 				expect(parser.warnings.length).toBe(0);
@@ -230,6 +230,7 @@ Category,1:00,NES,1.0,FCEU,2010-03-01,Run 2...`;
 				expect(r.emulator).toBe("");
 				expect(r.date).toBeUndefined();
 				expect(r.comment).toBe("");
+				expect(r.link).toBe("");
 
 				r = c[1].runs[0];
 				expect(r.category).toBe(c[1]);
@@ -239,6 +240,7 @@ Category,1:00,NES,1.0,FCEU,2010-03-01,Run 2...`;
 				requireDefined(r.date, done.fail);
 				expect(r.date.string).toBe("1987-12-17");
 				expect(r.comment).toBe("Run 1...");
+				expect(r.link).toBe("http://L1");
 
 				r = c[1].runs[1];
 				expect(r.category).toBe(c[1]);
@@ -248,6 +250,7 @@ Category,1:00,NES,1.0,FCEU,2010-03-01,Run 2...`;
 				requireDefined(r.date, done.fail);
 				expect(r.date.string).toBe("2010-03-01");
 				expect(r.comment).toBe("Run 2...");
+				expect(r.link).toBe("https://L2");
 
 				done();
 			}, done.fail);
@@ -290,27 +293,9 @@ C1,1,2,3`;
 			}, done.fail);
 		});
 
-		it("should warn about any date issues", (done) => {
-			const csv = `Category,Value,Date
-Category,0,unknown
-Category,0,1/2/2003
-Category,0,1/2/2003`;
-
-			parser.parse(csv).then(() => {
-				expect(parser.errors.length).toBe(0);
-				expect(parser.warnings).toEqual([
-					"Row 2: Unrecognized date: unknown",
-					"Row 3: Assuming date format is MM/DD/YYYY, not DD/MM/YYYY.",
-				]);
-				requireLength(parser.categories, 1, done.fail);
-				requireLength(parser.categories[0].runs, 3, done.fail);
-				done();
-			}, done.fail);
-		});
-
 		it("should trim whitespace", (done) => {
-			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment
- C1  /  C2 , V , P , V , E , 1987-11-17 , C `;
+			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment,Link
+ C1  /  C2 , V , P , V , E , 1987-11-17 , C , http://L `;
 
 			parser.parse(csv).then(() => {
 				expect(parser.warnings.length).toBe(0);
@@ -331,6 +316,7 @@ Category,0,1/2/2003`;
 				requireDefined(r.date, done.fail);
 				expect(r.date.string).toBe("1987-11-17");
 				expect(r.comment).toBe("C");
+				expect(r.link).toBe("http://L");
 
 				done();
 			}, done.fail);
@@ -354,10 +340,10 @@ Category,0`;
 		});
 
 		it("should ignore duplicate header rows", (done) => {
-			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment
-C1,0,,,,,
-Category,Value,Platform,Version,Emulator,Date,Comment
-C2,0,,,,,`;
+			const csv = `Category,Value,Platform,Version,Emulator,Date,Comment,Link
+C1,0,,,,,,
+Category,Value,Platform,Version,Emulator,Date,Comment,Link
+C2,0,,,,,,`;
 
 			parser.parse(csv).then(() => {
 				expect(parser.warnings.length).toBe(0);
@@ -414,6 +400,43 @@ Category,,`;
 			parser.parse(csv).then(() => {
 				const c = parser.categories;
 				requireLength(c, 0, done.fail);
+				done();
+			}, done.fail);
+		});
+
+		it("should warn about any date issues", (done) => {
+			const csv = `Category,Value,Date
+Category,0,unknown
+Category,0,1/2/2003
+Category,0,1/2/2003`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.errors.length).toBe(0);
+				expect(parser.warnings).toEqual([
+					"Row 2: Unrecognized date: unknown",
+					"Row 3: Assuming date format is MM/DD/YYYY, not DD/MM/YYYY.",
+				]);
+				requireLength(parser.categories, 1, done.fail);
+				requireLength(parser.categories[0].runs, 3, done.fail);
+				done();
+			}, done.fail);
+		});
+
+		it("should warn about invalid URLs", (done) => {
+			const csv = `Category,Value,Link
+Category,0,bad`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.errors.length).toBe(0);
+				expect(parser.warnings).toEqual([
+					"Row 2: Invalid link URL: bad",
+				]);
+
+				const c = parser.categories;
+				requireLength(c, 1, done.fail);
+				requireLength(c[0].runs, 1, done.fail);
+				expect(c[0].runs[0].link).toBe("");
+
 				done();
 			}, done.fail);
 		});

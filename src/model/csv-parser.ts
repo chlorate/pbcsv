@@ -14,6 +14,9 @@ const versionRegExp = /^(reg|ver)\.?$|^(region|version)$/i;
 const emulatorRegExp = /^(emu)\.?$|^(emulator)$/i;
 const dateRegExp = /date/i;
 const commentRegExp = /^(detail|comment|note)s?$/i;
+const linkRegExp = /^(img|vid)\.?$|^(image|link|proof|url|video|vod)$/i;
+
+const urlRegExp = /^https?:\/\/.+/;
 
 /**
  * Parses a CSV file and outputs a hierarchy of categories.
@@ -34,6 +37,7 @@ export class CsvParser {
 	private emulatorIndex?: number;
 	private dateIndex?: number;
 	private commentIndex?: number;
+	private linkIndex?: number;
 
 	private _categories: Category[] = [];
 	private categorySlugs: {[name: string]: SlugGenerator} = {};
@@ -117,6 +121,9 @@ export class CsvParser {
 				case commentRegExp.test(v) && this.commentIndex === undefined:
 					this.commentIndex = i;
 					break;
+				case linkRegExp.test(v) && this.linkIndex === undefined:
+					this.linkIndex = i;
+					break;
 				default:
 					return; // Unrecognized column name.
 			}
@@ -162,6 +169,7 @@ export class CsvParser {
 			this.parseString(row, this.emulatorIndex),
 			this.parseDate(row),
 			this.parseString(row, this.commentIndex),
+			this.parseLink(row),
 		);
 		Object.assign(run.values, values);
 		category.runs.push(run);
@@ -180,7 +188,9 @@ export class CsvParser {
 			(this.dateIndex === undefined ||
 				dateRegExp.test(row[this.dateIndex])) &&
 			(this.commentIndex === undefined ||
-				commentRegExp.test(row[this.commentIndex]))
+				commentRegExp.test(row[this.commentIndex])) &&
+			(this.linkIndex === undefined ||
+				linkRegExp.test(row[this.linkIndex]))
 		);
 	}
 
@@ -245,6 +255,19 @@ export class CsvParser {
 			}
 		}
 		return date;
+	}
+
+	private parseLink(row: string[]): string {
+		if (this.linkIndex === undefined) {
+			return "";
+		}
+
+		const s = row[this.linkIndex].trim();
+		if (s && !urlRegExp.test(s)) {
+			this.warn(`Invalid link URL: ${s}`);
+			return "";
+		}
+		return s;
 	}
 
 	private ensureCategory(nameParts: string[]): Category {
