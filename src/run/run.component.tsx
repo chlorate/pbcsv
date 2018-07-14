@@ -6,7 +6,7 @@ import {MarkdownComponent} from "../markdown";
 import {formatNumber} from "../math";
 import {Model} from "../model";
 import {Store} from "../store";
-import {Value, ValueComponent} from "../value";
+import {ValueComponent} from "../value";
 import {Run} from "./run";
 
 interface Props {
@@ -30,25 +30,28 @@ export class RunComponent extends Component<Props, {}> {
 	private get header(): JSX.Element | JSX.Element[] {
 		const run = this.props.run;
 
-		const valueNames = this.injected.model.valueNames.filter(
-			(name) => this.props.run.values[name],
-		);
+		// Value order is the same as the spreadsheet's header. If the run
+		// specifies a main value, pull it to the front.
+		const valueNames = this.injected.model.valueNames
+			.filter((name) => run.values[name])
+			.sort((x, y) => {
+				if (x === run.main) {
+					return -1;
+				}
+				if (y === run.main) {
+					return 1;
+				}
+				return 0;
+			});
 
-		const header: JSX.Element[] = valueNames.map((name, i) => {
-			let v = run.values[name];
-			if (!v) {
-				v = new Value("Unknown");
-			}
-
-			return (
-				<ValueComponent
-					badge={i > 0}
-					className="mr-2"
-					name={name}
-					value={v}
-				/>
-			);
-		});
+		const header: JSX.Element[] = valueNames.map((name, i) => (
+			<ValueComponent
+				badge={i > 0}
+				className="mr-2"
+				name={name}
+				value={run.values[name]}
+			/>
+		));
 		header.push(
 			<ApproxDateComponent className="float-right" date={run.date} />,
 		);
