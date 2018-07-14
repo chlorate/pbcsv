@@ -9,6 +9,7 @@ const categorySeparator = " / ";
 
 const categoryRegExp = /^(cat|seg)\.?$|^(category|chart|game|segment|split)$/i;
 const valueRegExp = /points|score|time|value|^(gt|igt|jrta|pb|rt|rta|ta)$/i;
+const mainRegExp = /^main$/i;
 const platformRegExp = /^(con|plat|sys)\.?$|^(console|platform|system)$/i;
 const versionRegExp = /^(reg|ver)\.?$|^(region|version)$/i;
 const emulatorRegExp = /^(emu)\.?$|^(emulator)$/i;
@@ -32,6 +33,7 @@ export class CsvParser {
 	private categoryIndices: number[] = [];
 	private valueIndices: number[] = [];
 	private _valueNames: string[] = [];
+	private mainIndex?: number;
 	private platformIndex?: number;
 	private versionIndex?: number;
 	private emulatorIndex?: number;
@@ -106,6 +108,9 @@ export class CsvParser {
 					this.valueIndices.push(i);
 					this._valueNames.push(v);
 					break;
+				case mainRegExp.test(v) && this.mainIndex === undefined:
+					this.mainIndex = i;
+					break;
 				case platformRegExp.test(v) && this.platformIndex === undefined:
 					this.platformIndex = i;
 					break;
@@ -164,7 +169,7 @@ export class CsvParser {
 		const category = this.ensureCategory(nameParts);
 		const run = new Run(
 			category,
-			undefined,
+			this.parseMain(row),
 			this.parseString(row, this.platformIndex),
 			this.parseString(row, this.versionIndex),
 			this.parseString(row, this.emulatorIndex),
@@ -180,6 +185,8 @@ export class CsvParser {
 		return (
 			this.categoryIndices.every((i) => categoryRegExp.test(row[i])) &&
 			this.valueIndices.every((i) => valueRegExp.test(row[i])) &&
+			(this.mainIndex === undefined ||
+				mainRegExp.test(row[this.mainIndex])) &&
 			(this.platformIndex === undefined ||
 				platformRegExp.test(row[this.platformIndex])) &&
 			(this.versionIndex === undefined ||
@@ -228,6 +235,15 @@ export class CsvParser {
 			}
 		});
 		return values;
+	}
+
+	private parseMain(row: string[]): string {
+		let main = this.parseString(row, this.mainIndex);
+		if (main && !this.valueNames.some((name) => name === main)) {
+			this.warn(`Main is not a name of a value column: ${main}`);
+			main = "";
+		}
+		return main;
 	}
 
 	private parseString(row: string[], index?: number): string {
