@@ -290,16 +290,20 @@ C1,1,2,3`;
 			}, done.fail);
 		});
 
-		it("should warn if any date is ambiguous", (done) => {
+		it("should warn about any date issues", (done) => {
 			const csv = `Category,Value,Date
+Category,0,unknown
+Category,0,1/2/2003
 Category,0,1/2/2003`;
 
 			parser.parse(csv).then(() => {
 				expect(parser.errors.length).toBe(0);
 				expect(parser.warnings).toEqual([
-					"Ambiguous date found: assuming format is MM/DD/YYYY, not DD/MM/YYYY.",
+					"Row 2: Unrecognized date: unknown",
+					"Row 3: Assuming date format is MM/DD/YYYY, not DD/MM/YYYY.",
 				]);
-				expect(parser.categories.length).toBe(1);
+				requireLength(parser.categories, 1, done.fail);
+				requireLength(parser.categories[0].runs, 3, done.fail);
 				done();
 			}, done.fail);
 		});
@@ -368,7 +372,7 @@ C2,0,,,,,`;
 C1,0,P,,V,,E,,D,,C,`;
 
 			parser.parse(csv).then(() => {
-				expect(parser.warnings.length).toBe(0);
+				expect(parser.warnings.length).toBe(1);
 				expect(parser.errors.length).toBe(0);
 
 				const c = parser.categories;

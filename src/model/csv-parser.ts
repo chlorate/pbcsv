@@ -21,6 +21,8 @@ const commentRegExp = /^(detail|comment|note)s?$/i;
 export class CsvParser {
 	private _warnings: string[] = [];
 	private _errors: string[] = [];
+
+	private rowNumber: number = 0;
 	private hasAmbiguousDates: boolean = false;
 
 	private readHeader = false;
@@ -63,10 +65,13 @@ export class CsvParser {
 			const parser = parse();
 			parser.on("readable", () => {
 				for (let row = parser.read(); row; row = parser.read()) {
+					this.rowNumber++;
+
 					if (!this.readHeader) {
 						this.parseHeader(row);
 						continue;
 					}
+
 					this.parseRow(row);
 				}
 			});
@@ -155,7 +160,7 @@ export class CsvParser {
 			this.parseString(row, this.platformIndex),
 			this.parseString(row, this.versionIndex),
 			this.parseString(row, this.emulatorIndex),
-			this.parseDate(row, this.dateIndex),
+			this.parseDate(row),
 			this.parseString(row, this.commentIndex),
 		);
 		Object.assign(run.values, values);
@@ -221,19 +226,23 @@ export class CsvParser {
 		return row[index].trim();
 	}
 
-	private parseDate(row: string[], index?: number): ApproxDate | undefined {
-		if (index === undefined || !row[index]) {
+	private parseDate(row: string[]): ApproxDate | undefined {
+		if (this.dateIndex === undefined) {
 			return undefined;
 		}
 
-		const date = parseApproxDate(row[index]);
-		if (!date) {
-			this.warnings.push(`Unrecognized date: ${row[index]}`);
-		} else if (date.ambiguous && !this.hasAmbiguousDates) {
-			this.warnings.push(
-				"Ambiguous date found: assuming format is MM/DD/YYYY, not DD/MM/YYYY.",
-			);
-			this.hasAmbiguousDates = true;
+		const s = row[this.dateIndex];
+		const date = parseApproxDate(s);
+		if (date) {
+			if (!date.date) {
+				this.warn(`Unrecognized date: ${s}`);
+			}
+			if (date.ambiguous && !this.hasAmbiguousDates) {
+				this.warn(
+					"Assuming date format is MM/DD/YYYY, not DD/MM/YYYY.",
+				);
+				this.hasAmbiguousDates = true;
+			}
 		}
 		return date;
 	}
@@ -269,5 +278,9 @@ export class CsvParser {
 
 		this.categoriesByName[joinedName] = category;
 		return category;
+	}
+
+	private warn(message: string): void {
+		this.warnings.push(`Row ${this.rowNumber}: ${message}`);
 	}
 }
