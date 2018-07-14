@@ -30,7 +30,11 @@ export class RunComponent extends Component<Props, {}> {
 	private get header(): JSX.Element | JSX.Element[] {
 		const run = this.props.run;
 
-		const header: JSX.Element[] = this.valueNames.map((name, i) => {
+		const valueNames = this.injected.model.valueNames.filter(
+			(name) => this.props.run.values[name],
+		);
+
+		const header: JSX.Element[] = valueNames.map((name, i) => {
 			let v = run.values[name];
 			if (!v) {
 				v = new Value("Unknown");
@@ -64,41 +68,15 @@ export class RunComponent extends Component<Props, {}> {
 		return header;
 	}
 
-	private get valueNames(): string[] {
-		return this.injected.model.valueNames.filter(
-			(name) => this.props.run.values[name],
-		);
-	}
-
-	public render(): JSX.Element {
+	private get body(): JSX.Element[] {
 		const run = this.props.run;
-
-		const fields: JSX.Element[] = [];
-		addField(
-			fields,
-			"Personal best:",
-			`#${formatNumber(this.props.number)}`,
-		);
-		if (run.platform) {
-			addField(fields, "Platform:", run.platform);
-		}
-		if (run.version) {
-			addField(fields, "Version:", run.version);
-		}
-		if (run.emulator) {
-			addField(
-				fields,
-				"Emulator:",
-				<span class="text-warning">{run.emulator}</span>,
-			);
-		}
 
 		const body: JSX.Element[] = [
 			<Row
 				tag="dl"
-				className="run-fields row no-gutters float-md-right mb-0 pl-md-3 small"
+				className="run-metadata row no-gutters float-md-right mb-0 pl-md-3 small"
 			>
-				{fields}
+				{this.metadata}
 			</Row>,
 		];
 		if (run.comment) {
@@ -107,19 +85,47 @@ export class RunComponent extends Component<Props, {}> {
 				<MarkdownComponent markdown={run.comment} />,
 			);
 		}
+		return body;
+	}
 
+	private get metadata(): JSX.Element[] {
+		const run = this.props.run;
+
+		const metadata: JSX.Element[] = [];
+		addMetadata(
+			metadata,
+			"Personal best:",
+			`#${formatNumber(this.props.number)}`,
+		);
+		if (run.platform) {
+			addMetadata(metadata, "Platform:", run.platform);
+		}
+		if (run.version) {
+			addMetadata(metadata, "Version:", run.version);
+		}
+		if (run.emulator) {
+			addMetadata(
+				metadata,
+				"Emulator:",
+				<span class="text-warning">{run.emulator}</span>,
+			);
+		}
+		return metadata;
+	}
+
+	public render(): JSX.Element {
 		return (
 			<Card className="mb-3">
 				<CardHeader tag="h3" className="h4 m-0">
 					{this.header}
 				</CardHeader>
-				<CardBody>{body}</CardBody>
+				<CardBody>{this.body}</CardBody>
 			</Card>
 		);
 	}
 }
 
-function addField(
+function addMetadata(
 	children: JSX.Element[],
 	dt: string,
 	dd: JSX.Element | string,
