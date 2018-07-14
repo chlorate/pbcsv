@@ -19,6 +19,8 @@ const linkRegExp = /^(img|vid)\.?$|^(image|link|proof|url|video|vod)$/i;
 
 const urlRegExp = /^https?:\/\/.+/;
 
+const unknownYear = "Unknown";
+
 /**
  * Parses a CSV file and outputs a hierarchy of categories.
  */
@@ -46,6 +48,9 @@ export class CsvParser {
 	private categoriesByName: {[name: string]: Category} = {};
 	private lastCategories: string[] = [];
 
+	private _years: Category[] = [];
+	private yearsByName: {[name: string]: Category} = {};
+
 	get warnings(): string[] {
 		return this._warnings;
 	}
@@ -54,12 +59,16 @@ export class CsvParser {
 		return this._errors;
 	}
 
+	get valueNames(): string[] {
+		return this._valueNames;
+	}
+
 	get categories(): Category[] {
 		return this._categories;
 	}
 
-	get valueNames(): string[] {
-		return this._valueNames;
+	get years(): Category[] {
+		return this._years;
 	}
 
 	/**
@@ -86,6 +95,8 @@ export class CsvParser {
 					reject();
 					return;
 				}
+
+				this.sortYears();
 				resolve();
 			});
 			parser.on("error", (error) => {
@@ -179,6 +190,8 @@ export class CsvParser {
 		);
 		Object.assign(run.values, values);
 		category.runs.push(run);
+
+		this.addRunToYear(run);
 	}
 
 	private isHeaderRow(row: string[]): boolean {
@@ -318,6 +331,52 @@ export class CsvParser {
 
 		this.categoriesByName[joinedName] = category;
 		return category;
+	}
+
+	private addRunToYear(run: Run): void {
+		let name = unknownYear;
+		if (run.date && run.date.date) {
+			name = `${run.date.date.getFullYear()}`;
+		}
+
+		let year = this.yearsByName[name];
+		if (!year) {
+			year = new Category(name, name.toLowerCase());
+			this._years.push(year);
+			this.yearsByName[name] = year;
+		}
+
+		year.runs.push(run);
+	}
+
+	private sortYears(): void {
+		// Sort years in descending order, unknown last.
+		this.years.sort((x, y) => {
+			if (x.name === unknownYear) {
+				return 1;
+			}
+			if (y.name === unknownYear) {
+				return 0;
+			}
+			return parseInt(y.name, 10) - parseInt(x.name, 10);
+		});
+
+		// Sort each years' runs in descending order.
+		this.years.forEach((year) => {
+			year.runs.sort((x, y) => {
+				let xTime = 0;
+				if (x.date && x.date.date) {
+					xTime = x.date.date.getTime();
+				}
+
+				let yTime = 0;
+				if (y.date && y.date.date) {
+					yTime = y.date.date.getTime();
+				}
+
+				return yTime - xTime;
+			});
+		});
 	}
 
 	private warn(message: string): void {

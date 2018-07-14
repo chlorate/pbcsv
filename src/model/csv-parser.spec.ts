@@ -259,6 +259,40 @@ Category,1:00,Value,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 			}, done.fail);
 		});
 
+		it("should add runs to years", (done) => {
+			const csv = `Category,Value,Date
+C1,0,2017
+C1,0,
+C1,0,2018
+C1,0,2018-10-02`;
+
+			parser.parse(csv).then(() => {
+				expect(parser.warnings.length).toBe(0);
+				expect(parser.errors.length).toBe(0);
+
+				const y = parser.years;
+				requireLength(y, 3, done.fail);
+
+				expect(y[0].name).toBe("2018");
+				requireLength(y[0].runs, 2, done.fail);
+				requireDefined(y[0].runs[0].date, done.fail);
+				expect(y[0].runs[0].date.string).toBe("2018-10-02");
+				requireDefined(y[0].runs[1].date, done.fail);
+				expect(y[0].runs[1].date.string).toBe("2018");
+
+				expect(y[1].name).toBe("2017");
+				requireLength(y[1].runs, 1, done.fail);
+				requireDefined(y[1].runs[0].date, done.fail);
+				expect(y[1].runs[0].date.string).toBe("2017");
+
+				expect(y[2].name).toBe("Unknown");
+				requireLength(y[2].runs, 1, done.fail);
+				expect(y[2].runs[0].date).toBeUndefined();
+
+				done();
+			}, done.fail);
+		});
+
 		it("should add values to runs", (done) => {
 			const csv = `Category,Score,Time,Value
 C1,1234,,

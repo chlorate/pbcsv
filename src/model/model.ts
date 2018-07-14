@@ -12,15 +12,20 @@ export class Model {
 	@observable public loaded = false;
 	@observable public warnings: string[] = [];
 	@observable public errors: string[] = [];
-	private _categories: Category[] = [];
 	private _valueNames: string[] = [];
+	private _categories: Category[] = [];
+	private _years: Category[] = [];
+
+	get valueNames(): string[] {
+		return this._valueNames;
+	}
 
 	get categories(): Category[] {
 		return this._categories;
 	}
 
-	get valueNames(): string[] {
-		return this._valueNames;
+	get years(): Category[] {
+		return this._years;
 	}
 
 	/**
@@ -63,8 +68,9 @@ export class Model {
 			)
 			.then(() => {
 				this.warnings.push(...parser.warnings);
-				this._categories = parser.categories;
 				this._valueNames = parser.valueNames;
+				this._categories = parser.categories;
+				this._years = parser.years;
 				this.loading = false;
 				this.loaded = true;
 			})
