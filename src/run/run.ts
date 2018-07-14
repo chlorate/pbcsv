@@ -14,21 +14,24 @@ export class Run {
 	private _emulator: string;
 	private _date?: ApproxDate;
 	private _comment: string;
+	private _link: string;
 
 	constructor(
-		c: Category,
-		platform: string,
-		version: string,
-		emulator: string,
-		d: ApproxDate | undefined,
-		comment: string,
+		category: Category,
+		platform?: string,
+		version?: string,
+		emulator?: string,
+		date?: ApproxDate,
+		comment?: string,
+		link?: string,
 	) {
-		this._category = c;
-		this._platform = platform;
-		this._version = version;
-		this._emulator = emulator;
-		this._date = d;
-		this._comment = comment;
+		this._category = category;
+		this._platform = platform || "";
+		this._version = version || "";
+		this._emulator = emulator || "";
+		this._date = date;
+		this._comment = comment || "";
+		this._link = link || "";
 	}
 
 	get category(): Category {
@@ -57,5 +60,9 @@ export class Run {
 
 	get comment(): string {
 		return this._comment;
+	}
+
+	get link(): string {
+		return this._link;
 	}
 }
