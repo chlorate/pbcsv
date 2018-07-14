@@ -35,15 +35,21 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 			(name) => this.props.showValues[name],
 		);
 
-		const linkedName = valueNames.find(
+		// Link the cell that is either:
+		// 1. The run's main value if it's not empty
+		// 2. The first non-empty value
+		let linkedName = valueNames.find(
 			(name) => pb.values[name] !== undefined,
 		);
+		if (pb.main && pb.values[pb.main]) {
+			linkedName = pb.main;
+		}
 
 		return valueNames.map((name) => {
 			let content = (
 				<ValueComponent name={name} value={pb.values[name]} />
 			);
-			if (pb.link && linkedName === name) {
+			if (pb.link && name === linkedName) {
 				content = (
 					<a className="td-link" href={pb.link} target="_blank">
 						{content}
