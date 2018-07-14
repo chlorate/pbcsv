@@ -9,6 +9,7 @@ import {Values} from "../value";
 export class Run {
 	private _category: Category;
 	private _values: Values = {};
+	private _primary: string;
 	private _platform: string;
 	private _version: string;
 	private _emulator: string;
@@ -18,6 +19,7 @@ export class Run {
 
 	constructor(
 		category: Category,
+		primary?: string,
 		platform?: string,
 		version?: string,
 		emulator?: string,
@@ -26,6 +28,7 @@ export class Run {
 		link?: string,
 	) {
 		this._category = category;
+		this._primary = primary || "";
 		this._platform = platform || "";
 		this._version = version || "";
 		this._emulator = emulator || "";
@@ -40,6 +43,10 @@ export class Run {
 
 	get values(): Values {
 		return this._values;
+	}
+
+	get primary(): string {
+		return this._primary;
 	}
 
 	get platform(): string {

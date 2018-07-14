@@ -164,6 +164,7 @@ export class CsvParser {
 		const category = this.ensureCategory(nameParts);
 		const run = new Run(
 			category,
+			undefined,
 			this.parseString(row, this.platformIndex),
 			this.parseString(row, this.versionIndex),
 			this.parseString(row, this.emulatorIndex),

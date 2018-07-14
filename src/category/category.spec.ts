@@ -8,12 +8,13 @@ describe("Category", () => {
 	const child = new Category("Child", "child", parent);
 
 	const emptyRuns = new Category("", "");
-	emptyRuns.runs.push(new Run(emptyRuns, "", "", "", undefined, ""));
+	emptyRuns.runs.push(new Run(emptyRuns));
 
 	const fullRuns = new Category("", "");
 	fullRuns.runs.push(
 		new Run(
 			fullRuns,
+			"Primary",
 			"Platform",
 			"Version",
 			"Emulator",
