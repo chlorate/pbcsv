@@ -25,6 +25,10 @@ export class Value {
 		return undefined;
 	}
 
+	get approximate(): boolean {
+		return false;
+	}
+
 	get formatted(): string | undefined {
 		return undefined;
 	}

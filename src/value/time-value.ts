@@ -1,4 +1,4 @@
-import {NumberValue} from ".";
+import {approximateRegExp, NumberValue} from ".";
 
 import {
 	formatDuration,
@@ -13,7 +13,10 @@ import {
  */
 export class TimeValue extends NumberValue {
 	get formatted(): string {
-		return formatSeconds(this.number, this.precision);
+		return (
+			(this.approximate ? "~" : "") +
+			formatSeconds(this.number, this.precision)
+		);
 	}
 
 	get machineFormatted(): string {
@@ -32,8 +35,9 @@ const formats = [
 		string: 5,
 	},
 	{
-		// HH:MM:SS or MM:SS (with optional sign and decimal)
-		regExp: /([+-])?(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)/,
+		// HH:MM:SS or MM:SS (with optional sign and decimal, "x" or "?" can
+		// be used in minutes or seconds to indicate an approximate time)
+		regExp: /([+-])?(?:(\d+):)?([\dx?]+):([\dx?]+(?:\.[\dx?]+)?)/i,
 		sign: 1,
 		hours: 2,
 		minutes: 3,
@@ -61,8 +65,16 @@ export function parseTimeValue(s: string): TimeValue | undefined {
 
 	const matchSign = match[format.sign];
 	const matchHours = format.hours ? match[format.hours] : undefined;
-	const matchMinutes = match[format.minutes];
-	const matchSeconds = match[format.seconds];
+	let matchMinutes = match[format.minutes];
+	let matchSeconds = match[format.seconds];
+
+	// Approximate times: substitute "x" or "?" for zero.
+	let approximate = false;
+	if (approximateRegExp.test(matchMinutes + matchSeconds)) {
+		matchMinutes = matchMinutes.replace(approximateRegExp, 0);
+		matchSeconds = matchSeconds.replace(approximateRegExp, 0);
+		approximate = true;
+	}
 
 	let hours = 0;
 	if (matchHours) {
@@ -86,5 +98,5 @@ export function parseTimeValue(s: string): TimeValue | undefined {
 		s = match[format.string].trim();
 	}
 
-	return new TimeValue(s, n, precision);
+	return new TimeValue(s, n, precision, approximate);
 }

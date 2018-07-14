@@ -7,6 +7,7 @@ import {formatNumber, getPrecision} from "../math";
 export class NumberValue extends Value {
 	private _number: number;
 	private _precision: number;
+	private _approximate: boolean;
 
 	get number(): number {
 		return this._number;
@@ -16,18 +17,31 @@ export class NumberValue extends Value {
 		return this._precision;
 	}
 
+	get approximate(): boolean {
+		return this._approximate;
+	}
+
 	get formatted(): string {
-		return formatNumber(this.number, this.precision);
+		return (
+			(this.approximate ? "~" : "") +
+			formatNumber(this.number, this.precision)
+		);
 	}
 
 	get machineFormatted(): string {
 		return `${this.number}`;
 	}
 
-	constructor(s?: string, n?: number, precision?: number) {
+	constructor(
+		s?: string,
+		n?: number,
+		precision?: number,
+		approximate?: boolean,
+	) {
 		super(s);
 		this._number = n || 0;
 		this._precision = precision || 0;
+		this._approximate = approximate || false;
 	}
 }
 
@@ -39,11 +53,14 @@ const formats = [
 		string: 2,
 	},
 	{
-		// NNN (with optional sign, decimal, and leading zero)
-		regExp: /([+-]?(?:\d+(?:\.\d+)?|\.\d+))/,
+		// NNN (with optional sign, decimal, and leading zero, "x" or "?" can be
+		// used to indicate an approximate number)
+		regExp: /([+-]?(?:[\dx?]+(?:\.[\dx?]+)?|\.[\dx?]+))/i,
 		number: 1,
 	},
 ];
+
+export const approximateRegExp = /[x?]/gi;
 
 /**
  * Parses a string and returns a numeric value or undefined if no number was
@@ -62,7 +79,15 @@ export function parseNumberValue(s: string): NumberValue | undefined {
 		return undefined;
 	}
 
-	const matchNumber = match[format.number];
+	let matchNumber = match[format.number];
+
+	// Approximate numbers: substitute "x" or "?" for zero.
+	let approximate = false;
+	if (approximateRegExp.test(matchNumber)) {
+		matchNumber = matchNumber.replace(approximateRegExp, 0);
+		approximate = true;
+	}
+
 	const n = parseFloat(matchNumber) || 0;
 	const precision = getPrecision(matchNumber);
 
@@ -70,5 +95,5 @@ export function parseNumberValue(s: string): NumberValue | undefined {
 		s = match[format.string].trim();
 	}
 
-	return new NumberValue(s, n, precision);
+	return new NumberValue(s, n, precision, approximate);
 }
