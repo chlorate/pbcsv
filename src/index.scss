@@ -53,7 +53,7 @@
 	/* stylelint-enable */
 }
 
-// Link that fits its entire parent table cell.
+// Links that fit their entire parent element.
 .td-link {
 	display: block;
 	margin: -$table-cell-padding;
@@ -62,6 +62,12 @@
 	&:hover {
 		text-decoration: none;
 	}
+}
+
+.panel-header-link {
+	display: block;
+	margin: (-$card-spacer-y) (-$card-spacer-x);
+	padding: $card-spacer-y $card-spacer-x;
 }
 
 // List group padding is noticeably inconsistent with cards and tables.

@@ -6,7 +6,7 @@ import {MarkdownComponent} from "../markdown";
 import {formatNumber} from "../math";
 import {Model} from "../model";
 import {Store} from "../store";
-import {ValueComponent} from "../value";
+import {Value, ValueComponent} from "../value";
 import {Run} from "./run";
 
 interface Props {
@@ -27,26 +27,51 @@ export class RunComponent extends Component<Props, {}> {
 		return this.props as InjectedProps;
 	}
 
-	public render(): JSX.Element {
+	private get header(): JSX.Element | JSX.Element[] {
 		const run = this.props.run;
 
-		const header: JSX.Element[] = [];
-		this.injected.model.valueNames.forEach((name, i) => {
-			const v = run.values[name];
-			if (v) {
-				header.push(
-					<ValueComponent
-						badge={i > 0}
-						className="mr-2"
-						name={name}
-						value={v}
-					/>,
-				);
+		const header: JSX.Element[] = this.valueNames.map((name, i) => {
+			let v = run.values[name];
+			if (!v) {
+				v = new Value("Unknown");
 			}
+
+			return (
+				<ValueComponent
+					badge={i > 0}
+					className="mr-2"
+					name={name}
+					value={v}
+				/>
+			);
 		});
 		header.push(
 			<ApproxDateComponent className="float-right" date={run.date} />,
 		);
+
+		if (run.link) {
+			return (
+				<a
+					className="panel-header-link"
+					href={run.link}
+					target="_blank"
+				>
+					{header}
+				</a>
+			);
+		}
+
+		return header;
+	}
+
+	private get valueNames(): string[] {
+		return this.injected.model.valueNames.filter(
+			(name) => this.props.run.values[name],
+		);
+	}
+
+	public render(): JSX.Element {
+		const run = this.props.run;
 
 		const fields: JSX.Element[] = [];
 		addField(
@@ -86,7 +111,7 @@ export class RunComponent extends Component<Props, {}> {
 		return (
 			<Card className="mb-3">
 				<CardHeader tag="h3" className="h4 m-0">
-					{header}
+					{this.header}
 				</CardHeader>
 				<CardBody>{body}</CardBody>
 			</Card>
