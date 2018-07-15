@@ -10,6 +10,7 @@ export class Run {
 	private _category: Category;
 	private _values: Values = {};
 	private _main: string;
+	private _sums: string[] = [];
 	private _platform: string;
 	private _version: string;
 	private _emulator: string;
@@ -47,6 +48,10 @@ export class Run {
 
 	get main(): string {
 		return this._main;
+	}
+
+	get sums(): string[] {
+		return this._sums;
 	}
 
 	get platform(): string {
