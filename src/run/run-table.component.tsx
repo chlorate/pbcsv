@@ -7,6 +7,7 @@ import {Store} from "../store";
 
 interface Props {
 	runs: Run[];
+	fullCategoryName?: boolean;
 }
 
 interface InjectedProps extends Props {
@@ -86,6 +87,7 @@ export class RunTableComponent extends Component<Props, {}> {
 		const rows = runs.map((r) => (
 			<RunTableRowComponent
 				run={r}
+				fullCategoryName={this.props.fullCategoryName}
 				showValues={showValues}
 				showVersion={showVersion}
 				showDate={showDate}

@@ -10,6 +10,7 @@ import {ValueComponent} from "../value";
 
 interface Props {
 	run: Run;
+	fullCategoryName?: boolean;
 	showValues: {[name: string]: boolean};
 	showVersion: boolean;
 	showDate: boolean;
@@ -64,13 +65,17 @@ export class RunTableRowComponent extends Component<Props, {}> {
 	public render(): JSX.Element {
 		const run = this.props.run;
 
+		const categoryName = this.props.fullCategoryName
+			? run.category.fullName
+			: run.category.name;
+
 		const cells: JSX.Element[] = [
 			<td>
 				<Link
 					className="td-link"
 					to={`/categories/${run.category.fullSlug}`}
 				>
-					{run.category.name}
+					{categoryName}
 				</Link>
 			</td>,
 		];
@@ -89,7 +94,9 @@ export class RunTableRowComponent extends Component<Props, {}> {
 			let version: JSX.Element | undefined;
 			if (run.version) {
 				version = (
-					<Badge title={`Version: ${run.version}`}>{run.version}</Badge>
+					<Badge title={`Version: ${run.version}`}>
+						{run.version}
+					</Badge>
 				);
 			}
 
