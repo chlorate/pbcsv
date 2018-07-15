@@ -71,7 +71,7 @@ export class CategoriesComponent extends Component {
 		const subcategoryRuns = subcategories
 			.filter((c) => c.runs.length)
 			.map((c) => c.runs[0]);
-		children.push(<RunTableComponent runs={subcategoryRuns} />);
+		children.push(<RunTableComponent runs={subcategoryRuns} sums={true} />);
 
 		if (category) {
 			const runCount = category.runs.length;

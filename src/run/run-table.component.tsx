@@ -8,6 +8,7 @@ import {Store} from "../store";
 interface Props {
 	runs: Run[];
 	fullCategoryName?: boolean;
+	sums?: boolean;
 }
 
 interface InjectedProps extends Props {
@@ -94,14 +95,17 @@ export class RunTableComponent extends Component<Props, {}> {
 			/>
 		));
 
-		const sums = (
-			<RunTableSumsComponent
-				runs={runs}
-				showValues={showValues}
-				showVersion={showVersion}
-				showDate={showDate}
-			/>
-		);
+		let sums: JSX.Element | undefined;
+		if (this.props.sums) {
+			sums = (
+				<RunTableSumsComponent
+					runs={runs}
+					showValues={showValues}
+					showVersion={showVersion}
+					showDate={showDate}
+				/>
+			);
+		}
 
 		return (
 			<Card>
