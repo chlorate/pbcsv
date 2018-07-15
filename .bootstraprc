@@ -12,14 +12,11 @@ styles:
 
   alert: true
   badge: true
-  button-group: true
   buttons: true
   card: true
-  close: true
   code: true
   forms: true
   grid: true
-  input-group: true
   list-group: true
   mixins: true
   print: true
