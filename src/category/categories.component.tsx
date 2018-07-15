@@ -2,10 +2,10 @@ import {Component} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
 import {Link, withRouter} from "inferno-router";
-import {CategoryTableComponent, SubcategoryListComponent} from ".";
+import {SubcategoryListComponent} from ".";
 import {Category} from "../category";
 import {Model} from "../model";
-import {RunComponent} from "../run";
+import {RunComponent, RunTableComponent} from "../run";
 import {Store} from "../store";
 
 interface Injected {
@@ -66,10 +66,13 @@ export class CategoriesComponent extends Component {
 
 			children.push(<h2 className="mb-3">{crumbs}</h2>);
 		}
-		children.push(
-			<SubcategoryListComponent categories={subcategories} />,
-			<CategoryTableComponent categories={subcategories} />,
-		);
+		children.push(<SubcategoryListComponent categories={subcategories} />);
+
+		const subcategoryRuns = subcategories
+			.filter((c) => c.runs.length)
+			.map((c) => c.runs[0]);
+		children.push(<RunTableComponent runs={subcategoryRuns} />);
+
 		if (category) {
 			const runCount = category.runs.length;
 			category.runs.forEach((r, i) => {

@@ -1,12 +1,12 @@
 import {Component} from "inferno";
 import {Card} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
-import {Category, CategoryTableRowComponent} from ".";
+import {Run, RunTableRowComponent} from ".";
 import {Model} from "../model";
 import {Store} from "../store";
 
 interface Props {
-	categories: Category[];
+	runs: Run[];
 }
 
 interface InjectedProps extends Props {
@@ -14,35 +14,36 @@ interface InjectedProps extends Props {
 }
 
 /**
- * A table that displays information about categories and their latest runs.
- * Categories not having any runs are not included.
+ * A table that displays information about runs.
  */
 @inject(Store.Model)
-export class CategoryTableComponent extends Component<Props, {}> {
+export class RunTableComponent extends Component<Props, {}> {
 	get injected(): InjectedProps {
 		return this.props as InjectedProps;
 	}
 
 	public render(): JSX.Element | null {
-		const categories = this.props.categories.filter((c) => c.runs.length);
-		if (!categories.length) {
+		const runs = this.props.runs;
+		if (!runs.length) {
 			return null;
 		}
 
 		const header: JSX.Element[] = [<th className="w-100">Category</th>];
 
+		// Value columns: only show if not empty.
 		const showValues: {[name: string]: boolean} = {};
 		this.injected.model.valueNames
-			.filter((name) => categories.some((c) => c.hasValues(name)))
+			.filter((name) => runs.some((r) => r.values[name] !== undefined))
 			.forEach((name) => {
 				header.push(<th className="text-nowrap text-right">{name}</th>);
 				showValues[name] = true;
 			});
 
+		// Version column: only show if not empty.
 		let showVersion = false;
-		const hasPlatforms = categories.some((c) => c.hasPlatforms);
-		const hasVersions = categories.some((c) => c.hasVersions);
-		const hasEmulators = categories.some((c) => c.hasEmulators);
+		const hasPlatforms = runs.some((r) => r.platform !== "");
+		const hasVersions = runs.some((r) => r.version !== "");
+		const hasEmulators = runs.some((r) => r.emulator !== "");
 		if (hasPlatforms || hasVersions || hasEmulators) {
 			// These fields are combined into a single column to keep it
 			// compact. A full header is too long and abbreviating is ugly, so
@@ -75,15 +76,16 @@ export class CategoryTableComponent extends Component<Props, {}> {
 			showVersion = true;
 		}
 
+		// Date column: only show if not empty.
 		let showDate = false;
-		if (categories.some((c) => c.hasDates)) {
+		if (runs.some((r) => r.date !== undefined)) {
 			header.push(<th>Date</th>);
 			showDate = true;
 		}
 
-		const rows = categories.map((c) => (
-			<CategoryTableRowComponent
-				category={c}
+		const rows = runs.map((r) => (
+			<RunTableRowComponent
+				run={r}
 				showValues={showValues}
 				showVersion={showVersion}
 				showDate={showDate}

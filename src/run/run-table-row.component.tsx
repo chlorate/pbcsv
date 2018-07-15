@@ -2,14 +2,14 @@ import {Component} from "inferno";
 import {Badge} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {Link} from "inferno-router";
-import {Category} from ".";
+import {Run} from ".";
 import {ApproxDateComponent} from "../date";
 import {Model} from "../model";
 import {Store} from "../store";
 import {ValueComponent} from "../value";
 
 interface Props {
-	category: Category;
+	run: Run;
 	showValues: {[name: string]: boolean};
 	showVersion: boolean;
 	showDate: boolean;
@@ -20,16 +20,16 @@ interface InjectedProps extends Props {
 }
 
 /**
- * A table row that displays information about a category and its latest run.
+ * A table row that displays information about a run.
  */
 @inject(Store.Model)
-export class CategoryTableRowComponent extends Component<Props, {}> {
+export class RunTableRowComponent extends Component<Props, {}> {
 	get injected(): InjectedProps {
 		return this.props as InjectedProps;
 	}
 
 	private get valueCells(): JSX.Element[] {
-		const pb = this.props.category.runs[0];
+		const run = this.props.run;
 
 		const valueNames = this.injected.model.valueNames.filter(
 			(name) => this.props.showValues[name],
@@ -39,19 +39,19 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 		// 1. The run's main value if it's not empty
 		// 2. The first non-empty value
 		let linkedName = valueNames.find(
-			(name) => pb.values[name] !== undefined,
+			(name) => run.values[name] !== undefined,
 		);
-		if (pb.main && pb.values[pb.main]) {
-			linkedName = pb.main;
+		if (run.main && run.values[run.main]) {
+			linkedName = run.main;
 		}
 
 		return valueNames.map((name) => {
 			let content = (
-				<ValueComponent name={name} value={pb.values[name]} />
+				<ValueComponent name={name} value={run.values[name]} />
 			);
-			if (pb.link && name === linkedName) {
+			if (run.link && name === linkedName) {
 				content = (
-					<a className="td-link" href={pb.link} target="_blank">
+					<a className="td-link" href={run.link} target="_blank">
 						{content}
 					</a>
 				);
@@ -62,16 +62,15 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 	}
 
 	public render(): JSX.Element {
-		const category = this.props.category;
-		const pb = category.runs[0];
+		const run = this.props.run;
 
 		const cells: JSX.Element[] = [
 			<td>
 				<Link
 					className="td-link"
-					to={`/categories/${category.fullSlug}`}
+					to={`/categories/${run.category.fullSlug}`}
 				>
-					{category.name}
+					{run.category.name}
 				</Link>
 			</td>,
 		];
@@ -79,26 +78,26 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 
 		if (this.props.showVersion) {
 			let platform: JSX.Element | undefined;
-			if (pb.platform) {
+			if (run.platform) {
 				platform = (
-					<span title={`Platform: ${pb.platform}`}>
-						{pb.platform}
+					<span title={`Platform: ${run.platform}`}>
+						{run.platform}
 					</span>
 				);
 			}
 
 			let version: JSX.Element | undefined;
-			if (pb.version) {
+			if (run.version) {
 				version = (
-					<Badge title={`Version: ${pb.version}`}>{pb.version}</Badge>
+					<Badge title={`Version: ${run.version}`}>{run.version}</Badge>
 				);
 			}
 
 			let emulator: JSX.Element | undefined;
-			if (pb.emulator) {
+			if (run.emulator) {
 				emulator = (
-					<Badge color="warning" title={`Emulator: ${pb.emulator}`}>
-						{pb.emulator}
+					<Badge color="warning" title={`Emulator: ${run.emulator}`}>
+						{run.emulator}
 					</Badge>
 				);
 			}
@@ -113,7 +112,7 @@ export class CategoryTableRowComponent extends Component<Props, {}> {
 		if (this.props.showDate) {
 			cells.push(
 				<td>
-					<ApproxDateComponent date={pb.date} />
+					<ApproxDateComponent date={run.date} />
 				</td>,
 			);
 		}
