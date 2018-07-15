@@ -209,10 +209,10 @@ C1? / C1,0`;
 		});
 
 		it("should add runs to categories", (done) => {
-			const csv = `Category,Value,Main,Platform,Version,Emulator,Date,Comment,Link
-Empty,0,,,,,,,
-Category,0,Value,NES,1.1,FCEU,1987-12-17,Run 1...,http://L1
-Category,1:00,Value,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
+			const csv = `Category,Value,Main,Sum,Platform,Version,Emulator,Date,Comment,Link
+Empty,0,,,,,,,,
+Category,0,Value,"A,B",NES,1.1,FCEU,1987-12-17,Run 1...,http://L1
+Category,1:00,Value,A,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 
 			parser.parse(csv).then(() => {
 				expect(parser.warnings.length).toBe(0);
@@ -226,6 +226,7 @@ Category,1:00,Value,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 				let r = c[0].runs[0];
 				expect(r.category).toBe(c[0]);
 				expect(r.main).toBe("");
+				expect(r.sums.length).toBe(0);
 				expect(r.platform).toBe("");
 				expect(r.version).toBe("");
 				expect(r.emulator).toBe("");
@@ -236,6 +237,7 @@ Category,1:00,Value,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 				r = c[1].runs[0];
 				expect(r.category).toBe(c[1]);
 				expect(r.main).toBe("Value");
+				expect(r.sums).toEqual(["A", "B"]);
 				expect(r.platform).toBe("NES");
 				expect(r.version).toBe("1.1");
 				expect(r.emulator).toBe("FCEU");
@@ -247,6 +249,7 @@ Category,1:00,Value,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 				r = c[1].runs[1];
 				expect(r.category).toBe(c[1]);
 				expect(r.main).toBe("Value");
+				expect(r.sums).toEqual(["A"]);
 				expect(r.platform).toBe("NES");
 				expect(r.version).toBe("1.0");
 				expect(r.emulator).toBe("FCEU");
@@ -331,8 +334,8 @@ C1,1,2,3`;
 		});
 
 		it("should trim whitespace", (done) => {
-			const csv = `Category,Value,Main,Platform,Version,Emulator,Date,Comment,Link
- C1  /  C2 , V , Value , P , V , E , 1987-11-17 , C , http://L `;
+			const csv = `Category,Value,Main,Sum,Platform,Version,Emulator,Date,Comment,Link
+ C1  /  C2 , V , Value ," A , , B ", P , V , E , 1987-11-17 , C , http://L `;
 
 			parser.parse(csv).then(() => {
 				expect(parser.warnings.length).toBe(0);
@@ -348,6 +351,7 @@ C1,1,2,3`;
 				const r = c[0].children[0].runs[0];
 				expect(r.values.Value.string).toBe("V");
 				expect(r.main).toBe("Value");
+				expect(r.sums).toEqual(["A", "B"]);
 				expect(r.platform).toBe("P");
 				expect(r.version).toBe("V");
 				expect(r.emulator).toBe("E");
@@ -378,10 +382,10 @@ Category,0`;
 		});
 
 		it("should ignore duplicate header rows", (done) => {
-			const csv = `Category,Value,Main,Platform,Version,Emulator,Date,Comment,Link
-C1,0,,,,,,,
-Category,Value,Main,Platform,Version,Emulator,Date,Comment,Link
-C2,0,,,,,,,`;
+			const csv = `Category,Value,Main,Sum,Platform,Version,Emulator,Date,Comment,Link
+C1,0,,,,,,,,
+Category,Value,Main,Sum,Platform,Version,Emulator,Date,Comment,Link
+C2,0,,,,,,,,`;
 
 			parser.parse(csv).then(() => {
 				expect(parser.warnings.length).toBe(0);

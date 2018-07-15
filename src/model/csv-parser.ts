@@ -10,6 +10,7 @@ const categorySeparator = " / ";
 const categoryRegExp = /^(cat|seg)\.?$|^(category|chart|game|segment|split)$/i;
 const valueRegExp = /points|score|time|value|^(gt|igt|jrta|pb|rt|rta|ta)$/i;
 const mainRegExp = /^main$/i;
+const sumRegExp = /^sum$/i;
 const platformRegExp = /^(con|plat|sys)\.?$|^(console|platform|system)$/i;
 const versionRegExp = /^(reg|ver)\.?$|^(region|version)$/i;
 const emulatorRegExp = /^(emu)\.?$|^(emulator)$/i;
@@ -36,6 +37,7 @@ export class CsvParser {
 	private valueIndices: number[] = [];
 	private _valueNames: string[] = [];
 	private mainIndex?: number;
+	private sumIndex?: number;
 	private platformIndex?: number;
 	private versionIndex?: number;
 	private emulatorIndex?: number;
@@ -122,6 +124,9 @@ export class CsvParser {
 				case mainRegExp.test(v) && this.mainIndex === undefined:
 					this.mainIndex = i;
 					break;
+				case sumRegExp.test(v) && this.sumIndex === undefined:
+					this.sumIndex = i;
+					break;
 				case platformRegExp.test(v) && this.platformIndex === undefined:
 					this.platformIndex = i;
 					break;
@@ -189,6 +194,7 @@ export class CsvParser {
 			this.parseLink(row),
 		);
 		Object.assign(run.values, values);
+		run.sums.push(...this.parseSum(row));
 		category.runs.push(run);
 
 		this.addRunToYear(run);
@@ -200,6 +206,8 @@ export class CsvParser {
 			this.valueIndices.every((i) => valueRegExp.test(row[i])) &&
 			(this.mainIndex === undefined ||
 				mainRegExp.test(row[this.mainIndex])) &&
+			(this.sumIndex === undefined ||
+				sumRegExp.test(row[this.sumIndex])) &&
 			(this.platformIndex === undefined ||
 				platformRegExp.test(row[this.platformIndex])) &&
 			(this.versionIndex === undefined ||
@@ -264,6 +272,16 @@ export class CsvParser {
 			return "";
 		}
 		return row[index].trim();
+	}
+
+	private parseSum(row: string[]): string[] {
+		if (this.sumIndex === undefined) {
+			return [];
+		}
+		return row[this.sumIndex]
+			.split(",")
+			.map((s) => s.trim())
+			.filter((s) => s);
 	}
 
 	private parseDate(row: string[]): ApproxDate | undefined {
