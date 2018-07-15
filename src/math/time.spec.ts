@@ -1,4 +1,4 @@
-import {formatDuration, formatSeconds, formatTime} from ".";
+import {formatDuration, formatLongTime, formatTime} from ".";
 
 describe("formatTime", () => {
 	[
@@ -25,7 +25,7 @@ describe("formatTime", () => {
 	});
 })
 
-describe("formatSeconds", () => {
+describe("formatLongTime", () => {
 	[
 		{in: -3661, out: "-1 hour, -1 minute, -1 second"},
 		{in: 0, out: "0 seconds"},
@@ -44,7 +44,7 @@ describe("formatSeconds", () => {
 			`should return "${test.out}" for ${test.in} ` +
 			`with precision ${test.precision}`;
 		it(name, () => {
-			expect(formatSeconds(test.in, test.precision)).toBe(test.out);
+			expect(formatLongTime(test.in, test.precision)).toBe(test.out);
 		});
 	});
 });

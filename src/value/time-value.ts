@@ -2,7 +2,7 @@ import {approximateRegExp, NumberValue} from ".";
 
 import {
 	formatDuration,
-	formatSeconds,
+	formatLongTime,
 	getPrecision,
 	hoursToSeconds,
 	minutesToSeconds,
@@ -15,7 +15,7 @@ export class TimeValue extends NumberValue {
 	get formatted(): string {
 		return (
 			(this.approximate ? "~" : "") +
-			formatSeconds(this.number, this.precision)
+			formatLongTime(this.number, this.precision)
 		);
 	}
 
