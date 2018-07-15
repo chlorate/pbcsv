@@ -7,7 +7,7 @@ import {FileComponent} from "../file";
 import {HelpComponent} from "../help";
 import {Model} from "../model";
 import {Store} from "../store";
-import {YearsComponent} from "../year";
+import {YearComponent, YearsComponent} from "../year";
 
 const links = [
 	{
@@ -76,8 +76,9 @@ export class NavComponent extends Component {
 						path="/categories/:fullSlug*"
 						component={CategoriesComponent}
 					/>
-					<Route path="/years" component={YearsComponent} />
-					<Route path="/help" component={HelpComponent} />
+					<Route exact path="/years" component={YearsComponent} />
+					<Route exact path="/years/:slug" component={YearComponent} />
+					<Route exact path="/help" component={HelpComponent} />
 				</Switch>
 			</div>
 		);
