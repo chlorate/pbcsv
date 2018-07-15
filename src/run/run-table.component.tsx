@@ -1,7 +1,7 @@
 import {Component} from "inferno";
 import {Card} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
-import {Run, RunTableRowComponent} from ".";
+import {Run, RunTableRowComponent, RunTableSumsComponent} from ".";
 import {Model} from "../model";
 import {Store} from "../store";
 
@@ -19,7 +19,7 @@ interface InjectedProps extends Props {
  */
 @inject(Store.Model)
 export class RunTableComponent extends Component<Props, {}> {
-	get injected(): InjectedProps {
+	private get injected(): InjectedProps {
 		return this.props as InjectedProps;
 	}
 
@@ -94,6 +94,15 @@ export class RunTableComponent extends Component<Props, {}> {
 			/>
 		));
 
+		const sums = (
+			<RunTableSumsComponent
+				runs={runs}
+				showValues={showValues}
+				showVersion={showVersion}
+				showDate={showDate}
+			/>
+		);
+
 		return (
 			<Card>
 				<table class="table table-bordered table-hover table-responsive card-table">
@@ -101,6 +110,7 @@ export class RunTableComponent extends Component<Props, {}> {
 						<tr>{header}</tr>
 					</thead>
 					<tbody>{rows}</tbody>
+					{sums}
 				</table>
 			</Card>
 		);
