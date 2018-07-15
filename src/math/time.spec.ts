@@ -23,7 +23,7 @@ describe("formatTime", () => {
 			expect(formatTime(test.in, test.precision)).toBe(test.out);
 		});
 	});
-})
+});
 
 describe("formatLongTime", () => {
 	[

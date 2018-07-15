@@ -77,7 +77,11 @@ export class NavComponent extends Component {
 						component={CategoriesComponent}
 					/>
 					<Route exact path="/years" component={YearsComponent} />
-					<Route exact path="/years/:slug" component={YearComponent} />
+					<Route
+						exact
+						path="/years/:slug"
+						component={YearComponent}
+					/>
 					<Route exact path="/help" component={HelpComponent} />
 				</Switch>
 			</div>

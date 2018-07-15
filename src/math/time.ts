@@ -16,9 +16,9 @@ export function formatTime(seconds: number, precision?: number): string {
 		parts.push(`${units.hours}`);
 	}
 	if (units.hours || units.minutes) {
-		parts.push(`${units.minutes}`)
+		parts.push(`${units.minutes}`);
 	}
-	parts.push(`${formatNumber(units.seconds, precision)}`)
+	parts.push(`${formatNumber(units.seconds, precision)}`);
 
 	if (units.sign < 0) {
 		parts[0] = `-${parts[0]}`;

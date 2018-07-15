@@ -29,7 +29,7 @@ export class Run {
 		link?: string,
 	) {
 		this._category = category;
-		this._main  = main || "";
+		this._main = main || "";
 		this._platform = platform || "";
 		this._version = version || "";
 		this._emulator = emulator || "";
