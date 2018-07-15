@@ -30,12 +30,12 @@ export function getPrecision(s: string): number {
 }
 
 /**
- * Zero pads a number.
+ * Zero pads a number to some number of digits before the decimal.
  */
-export function pad(n: number, length: number): string {
-	const s = `${n}`;
-	if (s.length >= length) {
-		return s;
+export function pad(n: number | string, digits: number): string {
+	const parts = `${n}`.split(".");
+	while (parts[0].length < digits) {
+		parts[0] = `0${parts[0]}`;
 	}
-	return new Array(length - s.length + 1).join("0") + s;
+	return parts.join(".");
 }

@@ -41,15 +41,18 @@ describe("formatNumber", () => {
 });
 
 describe("pad", () => {
-	it("should pad if number length is less than pad length", () => {
-		expect(pad(123, 6)).toBe("000123");
-	});
-
-	it("should return as-is if number and pad length are equal", () => {
-		expect(pad(123, 3)).toBe("123");
-	});
-
-	it("should return as-is if number length exceeds pad length", () => {
-		expect(pad(123, 2)).toBe("123");
+	[
+		{in: 123, digits: 6, out: "000123"},
+		{in: 123, digits: 3, out: "123"},
+		{in: 123, digits: 2, out: "123"},
+		{in: 123.456, digits: 6, out: "000123.456"},
+		{in: "123.400", digits: 6, out: "000123.400"},
+	].forEach((test) => {
+		const name =
+			`should return ${test.out} for ${test.in} ` +
+			`with ${test.digits} digits`;
+		it(name, () => {
+			expect(pad(test.in, test.digits)).toBe(test.out);
+		});
 	});
 });
