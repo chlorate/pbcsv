@@ -30,7 +30,9 @@ export class RunTableComponent extends Component<Props, {}> {
 			return null;
 		}
 
-		const header: JSX.Element[] = [<th className="w-100">Category</th>];
+		const header: JSX.Element[] = [
+			<th className="th-category w-100">Category</th>,
+		];
 
 		// Value columns: only show if not empty.
 		const showValues: {[name: string]: boolean} = {};
