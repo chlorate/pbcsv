@@ -1,7 +1,34 @@
-import {formatNumber} from ".";
+import {formatNumber, pad} from ".";
 
 export const minutesToSeconds = 60;
 export const hoursToSeconds = 60 * minutesToSeconds;
+
+/**
+ * Returns a number of seconds in HH:MM:SS format. If a precision is given, the
+ * string will be fixed to that number of decimal places. Otherwise, decimal
+ * places are only shown as necessary.
+ */
+export function formatTime(n: number, precision?: number): string {
+	const info = parseSeconds(n);
+
+	const parts: string[] = [];
+	if (info.hours) {
+		parts.push(`${info.hours}`);
+	}
+	if (info.hours || info.minutes) {
+		parts.push(`${info.minutes}`)
+	}
+	parts.push(`${formatNumber(info.seconds, precision)}`)
+
+	if (info.sign < 0) {
+		parts[0] = `-${parts[0]}`;
+	}
+	for (let i = 1; i < parts.length; i++) {
+		parts[i] = pad(parts[i], 2);
+	}
+
+	return parts.join(":");
+}
 
 /**
  * Returns a number of seconds formatted as a human-readable string. If

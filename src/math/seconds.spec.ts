@@ -1,4 +1,29 @@
-import {formatDuration, formatSeconds} from ".";
+import {formatDuration, formatSeconds, formatTime} from ".";
+
+describe("formatTime", () => {
+	[
+		{in: -3661, out: "-1:01:01"},
+		{in: 0, out: "0"},
+		{in: 1, out: "1"},
+		{in: 59, out: "59"},
+		{in: 60, out: "1:00"},
+		{in: 61, out: "1:01"},
+		{in: 3599, out: "59:59"},
+		{in: 3600, out: "1:00:00"},
+		{in: 3601.234, out: "1:00:01.234"},
+		{in: 3601.234, precision: 0, out: "1:00:01"},
+		{in: 3601.234, precision: 6, out: "1:00:01.234000"},
+		{in: 36610, out: "10:10:10"},
+		{in: 3600000, out: "1000:00:00"},
+	].forEach((test) => {
+		const name =
+			`should return "${test.out}" for ${test.in} ` +
+			`with precision ${test.precision}`;
+		it(name, () => {
+			expect(formatTime(test.in, test.precision)).toBe(test.out);
+		});
+	});
+})
 
 describe("formatSeconds", () => {
 	[
