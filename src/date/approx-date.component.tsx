@@ -22,7 +22,7 @@ export class ApproxDateComponent extends Component<Props, {}> {
 		}
 
 		const ago = date.daysAgo;
-		if (ago) {
+		if (ago !== undefined) {
 			if (ago <= veryRecentThreshold) {
 				return "text-success";
 			} else if (ago <= recentThreshold) {
