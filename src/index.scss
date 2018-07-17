@@ -35,19 +35,19 @@
 	}
 
 	/* stylelint-disable selector-max-compound-selectors */
-	thead tr:first-child :first-child {
+	:first-child tr:first-child :first-child {
 		border-top-left-radius: $card-border-radius;
 	}
 
-	thead tr:first-child :last-child {
+	:first-child tr:first-child :last-child {
 		border-top-right-radius: $card-border-radius;
 	}
 
-	tbody:last-child tr:last-child :first-child {
+	:last-child tr:last-child :first-child {
 		border-bottom-left-radius: $card-border-radius;
 	}
 
-	tbody:last-child tr:last-child :last-child {
+	:last-child tr:last-child :last-child {
 		border-bottom-right-radius: $card-border-radius;
 	}
 	/* stylelint-enable */

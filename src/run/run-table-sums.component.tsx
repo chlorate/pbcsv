@@ -125,7 +125,7 @@ export class RunTableSumsComponent extends Component<Props, {}> {
 
 	public render(): JSX.Element | null {
 		const rows = this.rows;
-		if (!rows) {
+		if (!rows.length) {
 			return null;
 		}
 
