@@ -2,39 +2,29 @@ import {Badge, ListGroup} from "inferno-bootstrap";
 import {Link} from "inferno-router";
 import {Category} from ".";
 import {formatNumber} from "../math";
+import {listGroupItemClassName} from "../ui";
 
 interface Props {
 	categories: Category[];
 }
 
 /**
- * A list linking to categories that have subcategories.
+ * A list linking to categories. Shows the number of subcategories each category
+ * has.
  */
-export function SubcategoryListComponent(props: Props): JSX.Element | null {
-	const items = props.categories.filter((c) => c.children.length).map((c) => {
-		const count = c.children.length;
+export function CategoryListComponent(props: Props): JSX.Element | null {
+	const items = props.categories.map((c) => {
+		const count = formatNumber(c.children.length);
+		const title = `${count} subcategor${count === "1" ? "y" : "ies"}`;
 
-		let title = "1 subcategory";
-		if (count > 1) {
-			title = `${formatNumber(count)} subcategories`;
-		}
-
-		const classes = [
-			"list-group-item",
-			"list-group-item-card-padding",
-			"list-group-item-action",
-			"d-flex",
-			"justify-content-between",
-			"align-items-center",
-		];
 		return (
 			<Link
-				className={classes.join(" ")}
+				className={listGroupItemClassName}
 				to={`/categories/${c.fullSlug}`}
 			>
 				{c.name}
 				<Badge pill title={title}>
-					{formatNumber(count)}
+					{count}
 				</Badge>
 			</Link>
 		);

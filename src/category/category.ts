@@ -4,66 +4,23 @@ import {Run} from "../run";
  * A category contains subcategories and runs.
  */
 export class Category {
-	private _name: string;
-	private _slug: string;
-	private _parent?: Category;
-	private _children: Category[] = [];
-	private _runs: Run[] = [];
+	public name: string;
+	public slug: string;
+	public parent?: Category;
+	public children: Category[] = [];
+	public runs: Run[] = [];
 
-	constructor(name: string, slug: string, parent?: Category) {
-		this._name = name;
-		this._slug = slug;
-		this._parent = parent;
-	}
-
-	get name(): string {
-		return this._name;
+	constructor(name?: string, slug?: string, parent?: Category) {
+		this.name = name || "";
+		this.slug = slug || "";
+		this.parent = parent;
 	}
 
 	get fullName(): string {
-		return (this._parent ? `${this._parent.fullName} - ` : "") + this._name;
-	}
-
-	get slug(): string {
-		return this._slug;
+		return (this.parent ? `${this.parent.fullName} - ` : "") + this.name;
 	}
 
 	get fullSlug(): string {
-		return (this._parent ? `${this._parent.fullSlug}/` : "") + this._slug;
-	}
-
-	get parent(): Category | undefined {
-		return this._parent;
-	}
-
-	get children(): Category[] {
-		return this._children;
-	}
-
-	get runs(): Run[] {
-		return this._runs;
-	}
-
-	get hasPlatforms(): boolean {
-		return this.runs.some((r) => r.platform !== "");
-	}
-
-	get hasVersions(): boolean {
-		return this.runs.some((r) => r.version !== "");
-	}
-
-	get hasEmulators(): boolean {
-		return this.runs.some((r) => r.emulator !== "");
-	}
-
-	get hasDates(): boolean {
-		return this.runs.some((r) => r.date !== undefined);
-	}
-
-	/**
-	 * Returns true if this category has any run with a named value.
-	 */
-	public hasValues(name: string): boolean {
-		return this.runs.some((r) => r.values[name] !== undefined);
+		return (this.parent ? `${this.parent.fullSlug}/` : "") + this.slug;
 	}
 }

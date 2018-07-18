@@ -5,15 +5,7 @@ import {Link} from "inferno-router";
 import {formatNumber} from "../math";
 import {Model} from "../model";
 import {Store} from "../store";
-
-const itemClassName = [
-	"list-group-item",
-	"list-group-item-card-padding",
-	"list-group-item-action",
-	"d-flex",
-	"justify-content-between",
-	"align-items-center",
-].join(" ");
+import {listGroupItemClassName} from "../ui";
 
 interface InjectedProps {
 	model: Model;
@@ -35,14 +27,17 @@ export class YearsComponent extends Component {
 		}
 
 		const items: JSX.Element[] = years.map((y) => {
-			const count = y.runs.length;
-			const title = `${formatNumber(count)} run${count === 1 ? "" : "s"}`;
+			const count = formatNumber(y.runs.length);
+			const title = `${count} run${count === "1" ? "" : "s"}`;
 
 			return (
-				<Link className={itemClassName} to={`/years/${y.slug}`}>
+				<Link
+					className={listGroupItemClassName}
+					to={`/years/${y.slug}`}
+				>
 					{y.name}
 					<Badge pill title={title}>
-						{formatNumber(count)}
+						{count}
 					</Badge>
 				</Link>
 			);

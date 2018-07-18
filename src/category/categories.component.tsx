@@ -1,14 +1,14 @@
 import {Component} from "inferno";
 import {Alert} from "inferno-bootstrap";
-import {inject, observer} from "inferno-mobx";
+import {inject} from "inferno-mobx";
 import {Link, withRouter} from "inferno-router";
-import {SubcategoryListComponent} from ".";
+import {CategoryListComponent} from ".";
 import {Category} from "../category";
 import {Model} from "../model";
 import {RunComponent, RunTableComponent} from "../run";
 import {Store} from "../store";
 
-interface Injected {
+interface InjectedProps {
 	match: {params: {fullSlug: string}};
 	model: Model;
 }
@@ -23,63 +23,78 @@ interface Injected {
  */
 @inject(Store.Model)
 @withRouter
-@observer
 export class CategoriesComponent extends Component {
-	get injected(): Injected {
-		return this.props as Injected;
+	private get injected(): InjectedProps {
+		return this.props as InjectedProps;
 	}
 
 	public render(): JSX.Element {
 		const model = this.injected.model;
 
 		let category: Category | undefined;
-		let subcategories = model.categories;
-
 		const fullSlug = this.injected.match.params.fullSlug;
 		if (fullSlug) {
 			category = model.findCategory(fullSlug);
 			if (!category) {
 				return <Alert color="warning">Category not found.</Alert>;
 			}
-			subcategories = category.children;
 		}
 
+		let subcategories = model.categories;
+		if (category) {
+			subcategories = category.children;
+		}
 		if (!subcategories.length && (!category || !category.runs.length)) {
 			return <Alert color="primary">No categories or runs.</Alert>;
 		}
 
-		const children: JSX.Element[] = [];
-		if (category) {
-			const crumbs: Array<JSX.Element | string> = [category.name];
-
-			let parent = category.parent;
-			while (parent) {
-				crumbs.push(
-					" - ",
-					<Link to={`/categories/${parent.fullSlug}`}>
-						{parent.name}
-					</Link>,
-				);
-				parent = parent.parent;
-			}
-			crumbs.reverse();
-
-			children.push(<h2 className="mb-3">{crumbs}</h2>);
-		}
-		children.push(<SubcategoryListComponent categories={subcategories} />);
-
+		const subcategoriesWithChildren = subcategories.filter(
+			(c) => c.children.length,
+		);
 		const subcategoryRuns = subcategories
 			.filter((c) => c.runs.length)
 			.map((c) => c.runs[0]);
-		children.push(<RunTableComponent runs={subcategoryRuns} sums={true} />);
 
+		const elements: JSX.Element[] = [];
 		if (category) {
-			const runCount = category.runs.length;
-			category.runs.forEach((r, i) => {
-				children.push(<RunComponent run={r} number={runCount - i} />);
-			});
+			elements.push(this.breadcrumbs(category));
 		}
+		elements.push(
+			<CategoryListComponent categories={subcategoriesWithChildren} />,
+			<RunTableComponent runs={subcategoryRuns} sums={true} />,
+		);
+		if (category) {
+			elements.push(...this.runs(category));
+		}
+		return <section>{elements}</section>;
+	}
 
-		return <section>{children}</section>;
+	private breadcrumbs(category: Category): JSX.Element {
+		const crumbs: Array<JSX.Element | string> = [category.name];
+
+		let parent = category.parent;
+		while (parent) {
+			crumbs.push(
+				" - ",
+				<Link to={`/categories/${parent.fullSlug}`}>
+					{parent.name}
+				</Link>,
+			);
+			parent = parent.parent;
+		}
+		crumbs.reverse();
+
+		return <h2 className="mb-3">{crumbs}</h2>;
+	}
+
+	private runs(category: Category): JSX.Element[] {
+		const elements: JSX.Element[] = [];
+
+		const count = category.runs.length;
+		category.runs.forEach((r, i) => {
+			elements.push(<RunComponent run={r} number={count - i} />);
+		});
+
+		return elements;
 	}
 }

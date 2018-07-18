@@ -7,10 +7,10 @@ describe("Category", () => {
 	const parent = new Category("Parent", "parent");
 	const child = new Category("Child", "child", parent);
 
-	const emptyRuns = new Category("", "");
+	const emptyRuns = new Category();
 	emptyRuns.runs.push(new Run(emptyRuns));
 
-	const fullRuns = new Category("", "");
+	const fullRuns = new Category();
 	fullRuns.runs.push(
 		new Run(
 			fullRuns,
@@ -32,31 +32,5 @@ describe("Category", () => {
 	it("can return full slug", () => {
 		expect(parent.fullSlug).toBe("parent");
 		expect(child.fullSlug).toBe("parent/child");
-	});
-
-	it("can return if any runs have a platform", () => {
-		expect(emptyRuns.hasPlatforms).toBe(false);
-		expect(fullRuns.hasPlatforms).toBe(true);
-	});
-
-	it("can return if any runs have a version", () => {
-		expect(emptyRuns.hasVersions).toBe(false);
-		expect(fullRuns.hasVersions).toBe(true);
-	});
-
-	it("can return if any runs have an emulator", () => {
-		expect(emptyRuns.hasEmulators).toBe(false);
-		expect(fullRuns.hasEmulators).toBe(true);
-	});
-
-	it("can return if any runs have a date", () => {
-		expect(emptyRuns.hasDates).toBe(false);
-		expect(fullRuns.hasDates).toBe(true);
-	});
-
-	it("can return if any runs have a value", () => {
-		expect(emptyRuns.hasValues("Value")).toBe(false);
-		expect(fullRuns.hasValues("Value")).toBe(true);
-		expect(fullRuns.hasValues("None")).toBe(false);
 	});
 });
