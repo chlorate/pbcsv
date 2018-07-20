@@ -230,7 +230,7 @@ Category,1:00,Value,A,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 				expect(r.platform).toBe("");
 				expect(r.version).toBe("");
 				expect(r.emulator).toBe("");
-				expect(r.date).toBeUndefined();
+				expect(r.date.string).toBe("");
 				expect(r.comment).toBe("");
 				expect(r.link).toBe("");
 
@@ -241,7 +241,6 @@ Category,1:00,Value,A,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 				expect(r.platform).toBe("NES");
 				expect(r.version).toBe("1.1");
 				expect(r.emulator).toBe("FCEU");
-				requireDefined(r.date, done.fail);
 				expect(r.date.string).toBe("1987-12-17");
 				expect(r.comment).toBe("Run 1...");
 				expect(r.link).toBe("http://L1");
@@ -253,7 +252,6 @@ Category,1:00,Value,A,NES,1.0,FCEU,2010-03-01,Run 2...,https://L2`;
 				expect(r.platform).toBe("NES");
 				expect(r.version).toBe("1.0");
 				expect(r.emulator).toBe("FCEU");
-				requireDefined(r.date, done.fail);
 				expect(r.date.string).toBe("2010-03-01");
 				expect(r.comment).toBe("Run 2...");
 				expect(r.link).toBe("https://L2");
@@ -278,19 +276,16 @@ C1,0,2018-10-02`;
 
 				expect(y[0].name).toBe("2018");
 				requireLength(y[0].runs, 2, done.fail);
-				requireDefined(y[0].runs[0].date, done.fail);
 				expect(y[0].runs[0].date.string).toBe("2018-10-02");
-				requireDefined(y[0].runs[1].date, done.fail);
 				expect(y[0].runs[1].date.string).toBe("2018");
 
 				expect(y[1].name).toBe("2017");
 				requireLength(y[1].runs, 1, done.fail);
-				requireDefined(y[1].runs[0].date, done.fail);
 				expect(y[1].runs[0].date.string).toBe("2017");
 
 				expect(y[2].name).toBe("Unknown");
 				requireLength(y[2].runs, 1, done.fail);
-				expect(y[2].runs[0].date).toBeUndefined();
+				expect(y[2].runs[0].date.string).toBe("");
 
 				done();
 			}, done.fail);

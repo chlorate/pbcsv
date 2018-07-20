@@ -1,5 +1,5 @@
 import {Category} from ".";
-import {ApproxDate, DatePrecision} from "../date";
+import {DatePrecision, DateString} from "../date";
 import {Run} from "../run";
 import {Value} from "../value";
 
@@ -18,7 +18,7 @@ describe("Category", () => {
 			"Platform",
 			"Version",
 			"Emulator",
-			new ApproxDate("", new Date(), DatePrecision.Day),
+			new DateString("", new Date(), DatePrecision.Day),
 			"Comment",
 		),
 	);

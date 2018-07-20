@@ -1,7 +1,7 @@
 import {Component} from "inferno";
 import {Card, CardBody, CardHeader, Col, Row} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
-import {ApproxDateComponent} from "../date";
+import {DateStringComponent} from "../date";
 import {MarkdownComponent} from "../markdown";
 import {formatNumber} from "../math";
 import {Model} from "../model";
@@ -53,7 +53,10 @@ export class RunComponent extends Component<Props, {}> {
 			/>
 		));
 		header.push(
-			<ApproxDateComponent className="float-right" date={run.date} />,
+			<DateStringComponent
+				className="float-right"
+				dateString={run.date}
+			/>,
 		);
 
 		if (run.link) {

@@ -82,7 +82,7 @@ export class RunTableComponent extends Component<Props, {}> {
 
 		// Date column: only show if not empty.
 		let showDate = false;
-		if (runs.some((r) => r.date !== undefined)) {
+		if (runs.some((r) => r.date.string !== "")) {
 			header.push(<th>Date</th>);
 			showDate = true;
 		}

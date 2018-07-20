@@ -1,5 +1,5 @@
 import {Component} from "inferno";
-import {ApproxDate, DatePrecision} from ".";
+import {DatePrecision, DateString} from ".";
 import {formatNumber} from "../math";
 
 const veryRecentThreshold = 30;
@@ -7,21 +7,18 @@ const recentThreshold = 90;
 
 interface Props {
 	className?: string;
-	date?: ApproxDate;
+	dateString: DateString;
 }
 
 /**
- * Displays a date. Colour indicates how recent it is. Title contains extra
- * information.
+ * Displays a date string. Colour indicates how recent it is. Title contains
+ * extra information.
  */
-export class ApproxDateComponent extends Component<Props, {}> {
-	private get colorClass(): string | undefined {
-		const date = this.props.date;
-		if (!date) {
-			return undefined;
-		}
+export class DateStringComponent extends Component<Props, {}> {
+	private get colorClassName(): string {
+		const dateString = this.props.dateString;
 
-		const ago = date.daysAgo;
+		const ago = dateString.daysAgo;
 		if (ago !== undefined) {
 			if (ago <= veryRecentThreshold) {
 				return "text-success";
@@ -30,7 +27,8 @@ export class ApproxDateComponent extends Component<Props, {}> {
 			}
 		}
 
-		if (date.date && date.date.getFullYear() >= new Date().getFullYear()) {
+		const date = dateString.date;
+		if (date && date.getFullYear() >= new Date().getFullYear()) {
 			return "text-body";
 		}
 
@@ -38,38 +36,37 @@ export class ApproxDateComponent extends Component<Props, {}> {
 	}
 
 	private get title(): string | undefined {
-		const date = this.props.date;
-		if (!date) {
-			return undefined;
-		}
-
+		const dateString = this.props.dateString;
 		const lines: string[] = [];
 
-		const full = date.fullString;
-		if (full) {
-			lines.push(full);
+		const long = dateString.longString;
+		if (long) {
+			lines.push(long);
 		}
 
-		const ago = date.daysAgo;
+		const ago = dateString.daysAgo;
 		if (ago) {
-			const approx = date.precision !== DatePrecision.Day;
-			lines.push(
-				formatNumber(ago) +
-					(approx ? "+" : "") +
-					` day${ago !== 1 || approx ? "s" : ""} ago`,
-			);
+			const approximate = dateString.precision !== DatePrecision.Day;
+
+			let line = formatNumber(ago);
+			if (approximate) {
+				line += "+";
+			}
+			line += ` day${ago !== 1 || approximate ? "s" : ""} ago`;
+
+			lines.push(line);
 		}
 
 		return lines.join("\n");
 	}
 
 	public render(): JSX.Element | null {
-		const date = this.props.date;
-		if (!date) {
+		const dateString = this.props.dateString;
+		if (!dateString.string) {
 			return null;
 		}
 
-		const classNames = ["text-nowrap", this.colorClass];
+		const classNames = ["text-nowrap", this.colorClassName];
 		if (this.props.className) {
 			classNames.push(this.props.className);
 		}
@@ -78,9 +75,9 @@ export class ApproxDateComponent extends Component<Props, {}> {
 			<time
 				className={classNames.join(" ")}
 				title={this.title}
-				dateTime={date.iso8601}
+				dateTime={dateString.iso8601}
 			>
-				{date.string}
+				{dateString.string}
 			</time>
 		);
 	}

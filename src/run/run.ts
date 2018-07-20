@@ -1,5 +1,5 @@
 import {Category} from "../category";
-import {ApproxDate} from "../date";
+import {DateString} from "../date";
 import {Values} from "../value";
 
 /**
@@ -14,7 +14,7 @@ export class Run {
 	private _platform: string;
 	private _version: string;
 	private _emulator: string;
-	private _date?: ApproxDate;
+	private _date: DateString;
 	private _comment: string;
 	private _link: string;
 
@@ -24,7 +24,7 @@ export class Run {
 		platform?: string,
 		version?: string,
 		emulator?: string,
-		date?: ApproxDate,
+		date?: DateString,
 		comment?: string,
 		link?: string,
 	) {
@@ -33,7 +33,7 @@ export class Run {
 		this._platform = platform || "";
 		this._version = version || "";
 		this._emulator = emulator || "";
-		this._date = date;
+		this._date = date || new DateString();
 		this._comment = comment || "";
 		this._link = link || "";
 	}
@@ -66,7 +66,7 @@ export class Run {
 		return this._emulator;
 	}
 
-	get date(): ApproxDate | undefined {
+	get date(): DateString {
 		return this._date;
 	}
 

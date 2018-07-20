@@ -1,6 +1,6 @@
 import parse from "csv-parse";
 import {Category} from "../category";
-import {ApproxDate, parseApproxDate} from "../date";
+import {DateString, parseDateString} from "../date";
 import {Run} from "../run";
 import {SlugGenerator} from "../slug";
 import {parseValue, Values} from "../value";
@@ -284,23 +284,19 @@ export class CsvParser {
 			.filter((s) => s);
 	}
 
-	private parseDate(row: string[]): ApproxDate | undefined {
+	private parseDate(row: string[]): DateString | undefined {
 		if (this.dateIndex === undefined) {
 			return undefined;
 		}
 
 		const s = row[this.dateIndex];
-		const date = parseApproxDate(s);
-		if (date) {
-			if (!date.date) {
-				this.warn(`Unrecognized date: ${s}`);
-			}
-			if (date.ambiguous && !this.hasAmbiguousDates) {
-				this.warn(
-					"Assuming date format is MM/DD/YYYY, not DD/MM/YYYY.",
-				);
-				this.hasAmbiguousDates = true;
-			}
+		const date = parseDateString(s);
+		if (date.string && !date.date) {
+			this.warn(`Unrecognized date: ${s}`);
+		}
+		if (date.ambiguous && !this.hasAmbiguousDates) {
+			this.warn("Assuming date format is MM/DD/YYYY, not DD/MM/YYYY.");
+			this.hasAmbiguousDates = true;
 		}
 		return date;
 	}

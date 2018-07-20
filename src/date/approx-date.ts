@@ -22,42 +22,27 @@ const months = [
 ];
 
 /**
- * A date that is either an exact day or an approximate month or year.
+ * A date parsed from a string. Dates can either be an exact day or an
+ * approximate month or year.
  */
-export class ApproxDate {
-	private _string: string;
-	private _date?: Date;
-	private _precision?: DatePrecision;
-	private _ambiguous: boolean;
-
-	get string(): string {
-		return this._string;
-	}
-
-	get date(): Date | undefined {
-		return this._date ? new Date(this._date) : undefined;
-	}
-
-	get precision(): DatePrecision | undefined {
-		return this._precision;
-	}
-
-	get ambiguous(): boolean {
-		return this._ambiguous;
-	}
+export class DateString {
+	public string: string;
+	public date?: Date;
+	public precision?: DatePrecision;
+	public ambiguous: boolean;
 
 	/**
-	 * Returns an approximate number of days between this date and now or
+	 * Returns an approximate number of days between this date and now, or
 	 * undefined if it cannot be determined or if this date is in the future. If
 	 * the date precision is month or year, then the end of the month or year
 	 * will be used and the minimum number of days since is returned.
 	 */
 	get daysAgo(): number | undefined {
-		const date = this.date;
-		if (!date) {
+		if (!this.date) {
 			return undefined;
 		}
 
+		const date = new Date(this.date);
 		switch (this.precision) {
 			case DatePrecision.Month:
 				date.setMonth(date.getMonth() + 1);
@@ -78,37 +63,37 @@ export class ApproxDate {
 	}
 
 	/**
-	 * Returns this date formatted as an ISO-8601 string.
+	 * Returns this date formatted as an ISO 8601 string.
 	 */
-	get iso8601(): string | undefined {
-		if (!this._date) {
-			return undefined;
+	get iso8601(): string {
+		if (!this.date) {
+			return "";
 		}
 
-		let s = `${this._date.getFullYear()}`;
+		let s = `${this.date.getFullYear()}`;
 		if (this.precision === DatePrecision.Year) {
 			return s;
 		}
 
-		s += `-${pad(this._date.getMonth() + 1, 2)}`;
+		s += `-${pad(this.date.getMonth() + 1, 2)}`;
 		if (this.precision === DatePrecision.Month) {
 			return s;
 		}
 
-		return `${s}-${pad(this._date.getDate(), 2)}`;
+		return `${s}-${pad(this.date.getDate(), 2)}`;
 	}
 
 	/**
 	 * Returns this date in "YYYY", "Month YYYY", or "Month DD, YYYY" format.
 	 */
-	get fullString(): string | undefined {
-		if (!this._date) {
-			return undefined;
+	get longString(): string {
+		if (!this.date) {
+			return "";
 		}
 
-		const year = this._date.getFullYear();
-		const month = months[this._date.getMonth()];
-		const day = this._date.getDate();
+		const year = this.date.getFullYear();
+		const month = months[this.date.getMonth()];
+		const day = this.date.getDate();
 
 		switch (this.precision) {
 			case DatePrecision.Year:
@@ -120,11 +105,16 @@ export class ApproxDate {
 		}
 	}
 
-	constructor(s?: string, d?: Date, p?: DatePrecision, ambiguous?: boolean) {
-		this._string = s || "";
-		this._date = d;
-		this._precision = p;
-		this._ambiguous = ambiguous || false;
+	constructor(
+		str?: string,
+		date?: Date,
+		precision?: DatePrecision,
+		ambiguous?: boolean,
+	) {
+		this.string = str || "";
+		this.date = date;
+		this.precision = precision;
+		this.ambiguous = ambiguous || false;
 	}
 }
 
@@ -163,14 +153,10 @@ const formats = [
 ];
 
 /**
- * Parses a string and returns an approximate date or undefined if no date was
- * found.
+ * Parses a string and returns a DateString or undefined if no date was found.
  */
-export function parseApproxDate(s: string): ApproxDate | undefined {
+export function parseDateString(s: string): DateString {
 	s = s.trim();
-	if (!s) {
-		return undefined;
-	}
 
 	let match: RegExpMatchArray | null = null;
 	const format = formats.find((f) => {
@@ -178,7 +164,7 @@ export function parseApproxDate(s: string): ApproxDate | undefined {
 		return match !== null;
 	});
 	if (!match || !format || !match[format.year]) {
-		return new ApproxDate(s);
+		return new DateString(s);
 	}
 
 	let year = parseInt(match[format.year], 10);
@@ -208,5 +194,5 @@ export function parseApproxDate(s: string): ApproxDate | undefined {
 	}
 
 	const date = new Date(year, month - 1, day);
-	return new ApproxDate(s, date, precision, format.ambiguous);
+	return new DateString(s, date, precision, format.ambiguous);
 }

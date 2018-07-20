@@ -3,7 +3,7 @@ import {Badge} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {Link} from "inferno-router";
 import {Run} from ".";
-import {ApproxDateComponent} from "../date";
+import {DateStringComponent} from "../date";
 import {Model} from "../model";
 import {Store} from "../store";
 import {ValueComponent} from "../value";
@@ -119,7 +119,7 @@ export class RunTableRowComponent extends Component<Props, {}> {
 		if (this.props.showDate) {
 			cells.push(
 				<td>
-					<ApproxDateComponent date={run.date} />
+					<DateStringComponent dateString={run.date} />
 				</td>,
 			);
 		}
