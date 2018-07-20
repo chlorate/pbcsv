@@ -31,7 +31,7 @@ interface State {
 	url: string;
 }
 
-interface Injected {
+interface InjectedProps {
 	history: History;
 	model: Model;
 }
@@ -46,46 +46,21 @@ export class FileComponent extends Component<{}, State> {
 	public state: State;
 	public fileInput: HTMLInputElement | null = null;
 
-	get injected(): Injected {
-		return this.props as Injected;
+	get injected(): InjectedProps {
+		return this.props as InjectedProps;
 	}
 
-	constructor() {
-		super();
-		this.state = {
-			mode: Mode.Url,
-			url: "",
-		};
-	}
-
-	public render(): JSX.Element {
-		const mode = this.state.mode;
-		const model = this.injected.model;
-
-		const onSubmit = linkEvent(this, handleSubmit);
+	private get nav(): JSX.Element {
 		const onClickModeUrl = () => handleClickMode(this, Mode.Url);
 		const onClickModeFile = () => handleClickMode(this, Mode.File);
-		const onChangeFile = linkEvent(this, handleChangeFile);
-		const onClickBrowse = () => handleClickBrowse(this);
-		const onInputUrl = linkEvent(this, handleInputUrl);
 
-		let warnings: JSX.Element | undefined;
-		if (model.warnings.length) {
-			warnings = alertList("warning", model.warnings);
-		}
-
-		let errors: JSX.Element | undefined;
-		if (model.errors.length) {
-			errors = alertList("danger", model.errors);
-		}
-
-		const nav = (
+		return (
 			<Nav tabs className="card-header-tabs">
 				<NavItem>
 					<NavLink
 						tag="button"
 						className="btn-nav-link"
-						active={mode === Mode.Url}
+						active={this.state.mode === Mode.Url}
 						onClick={onClickModeUrl}
 					>
 						Fetch URL
@@ -95,7 +70,7 @@ export class FileComponent extends Component<{}, State> {
 					<NavLink
 						tag="button"
 						className="btn-nav-link"
-						active={mode === Mode.File}
+						active={this.state.mode === Mode.File}
 						onClick={onClickModeFile}
 					>
 						Upload file
@@ -103,13 +78,22 @@ export class FileComponent extends Component<{}, State> {
 				</NavItem>
 			</Nav>
 		);
+	}
 
-		const body: JSX.Element[] = [
+	private get body(): JSX.Element[] {
+		const model = this.injected.model;
+
+		const onSubmit = linkEvent(this, handleSubmit);
+		const onChangeFile = linkEvent(this, handleChangeFile);
+		const onClickBrowse = () => handleClickBrowse(this);
+		const onInputUrl = linkEvent(this, handleInputUrl);
+
+		const elements: JSX.Element[] = [
 			<p>Upload a CSV file, get a listing of your personal bests.</p>,
 		];
-		switch (mode) {
+		switch (this.state.mode) {
 			case Mode.Url:
-				body.push(
+				elements.push(
 					<Form onSubmit={onSubmit}>
 						<FormGroup>
 							<Label for="file-url">URL:</Label>
@@ -130,7 +114,7 @@ export class FileComponent extends Component<{}, State> {
 				);
 				break;
 			case Mode.File:
-				body.push(
+				elements.push(
 					<input
 						type="file"
 						accept=".csv"
@@ -148,71 +132,91 @@ export class FileComponent extends Component<{}, State> {
 				);
 				break;
 		}
+		return elements;
+	}
+
+	constructor() {
+		super();
+
+		this.state = {
+			mode: Mode.Url,
+			url: "",
+		};
+	}
+
+	public render(): JSX.Element {
+		const model = this.injected.model;
 
 		return (
 			<Row tag="section">
 				<Col xs="12" md="9" lg="7" xl="6">
 					<Card className="mb-3">
-						<CardHeader>{nav}</CardHeader>
-						<CardBody>{body}</CardBody>
+						<CardHeader>{this.nav}</CardHeader>
+						<CardBody>{this.body}</CardBody>
 					</Card>
 				</Col>
 				<Col xs="12" md="9" lg="5" xl="6">
-					{warnings}
-					{errors}
+					{this.alertList("danger", model.errors)}
+					{this.alertList("warning", model.warnings)}
 				</Col>
 			</Row>
 		);
 	}
+
+	private alertList(color: string, messages: string[]): JSX.Element | null {
+		if (!messages.length) {
+			return null;
+		}
+
+		return (
+			<Alert color={color} className="mb-3">
+				<ul className="list-unstyled m-0">
+					{messages.map((m) => <li>{m}</li>)}
+				</ul>
+			</Alert>
+		);
+	}
 }
 
-const alertList = (color: string, messages: string[]) => (
-	<Alert color={color} className="mb-3">
-		<ul className="list-unstyled m-0">
-			{messages.map((m) => <li>{m}</li>)}
-		</ul>
-	</Alert>
-);
-
-function handleClickMode(c: FileComponent, m: Mode): void {
-	c.setState({mode: m});
+function handleClickMode(component: FileComponent, mode: Mode): void {
+	component.setState({mode});
 }
 
-function handleSubmit(c: FileComponent, e: Event): void {
-	e.preventDefault();
+function handleSubmit(component: FileComponent, event: Event): void {
+	event.preventDefault();
 
-	const promise = c.injected.model.parseUrl(c.state.url);
-	handleParse(c, promise);
+	const promise = component.injected.model.parseUrl(component.state.url);
+	handleParse(component, promise);
 }
 
 function handleInputUrl(
-	c: FileComponent,
-	e: ChangeEvent<HTMLInputElement>,
+	component: FileComponent,
+	event: ChangeEvent<HTMLInputElement>,
 ): void {
-	c.setState({url: e.target.value});
+	component.setState({url: event.target.value});
 }
 
-function handleClickBrowse(c: FileComponent): void {
-	if (c.fileInput) {
-		c.fileInput.click();
+function handleClickBrowse(component: FileComponent): void {
+	if (component.fileInput) {
+		component.fileInput.click();
 	}
 }
 
-function handleChangeFile(c: FileComponent): void {
-	const input = c.fileInput;
-	if (!input || !input.files) {
-		return;
+function handleChangeFile(component: FileComponent): void {
+	const input = component.fileInput;
+	if (input && input.files) {
+		const promise = component.injected.model.parseFile(input.files[0]);
+		handleParse(component, promise);
 	}
-
-	const promise = c.injected.model.parseFile(input.files[0]);
-	handleParse(c, promise);
 }
 
-function handleParse(c: FileComponent, p: Promise<void>) {
-	p.then(() => {
-		c.injected.history.push("/categories");
-	}).catch(() => {
-		// Nothing to handle.
-		// Callback required to prevent console error.
-	});
+function handleParse(component: FileComponent, promise: Promise<void>) {
+	promise
+		.then(() => {
+			component.injected.history.push("/categories");
+		})
+		.catch(() => {
+			// Nothing to handle.
+			// Callback required to prevent console error.
+		});
 }
