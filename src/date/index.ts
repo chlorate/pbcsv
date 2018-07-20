@@ -1,4 +1,4 @@
-export * from "./approx-date";
 export * from "./date-precision";
+export * from "./date-string";
 
-export * from "./approx-date.component";
+export * from "./date-string.component";
