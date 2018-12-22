@@ -1,6 +1,8 @@
 KARMA=node_modules/.bin/karma
 NCU=node_modules/.bin/ncu
 PRETTIER=node_modules/.bin/prettier
+STYLELINT=node_modules/.bin/stylelint
+TSLINT=node_modules/.bin/tslint
 WEBPACK=node_modules/.bin/webpack
 WEBPACK_DEV_SERVER=node_modules/.bin/webpack-dev-server
 
@@ -29,9 +31,11 @@ clean:
 clean-deps:
 	rm --recursive --force node_modules
 
-.PHONY: prettier
-prettier: node_modules
-	$(PRETTIER) --write "**/*.{js,json,md,ts,tsx}"
+.PHONY: format
+format: node_modules
+	$(STYLELINT) --fix src/**/*.scss
+	$(TSLINT) --fix src/**/*.{ts,tsx}
+	$(PRETTIER) --write "**/*.{js,json,md,scss,ts,tsx}"
 
 .PHONY: upgrade
 upgrade:
