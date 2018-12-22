@@ -2,7 +2,7 @@ import {Component} from "inferno";
 import {Nav, NavItem} from "inferno-bootstrap";
 import {inject, observer} from "inferno-mobx";
 import {NavLink, Route, Switch, withRouter} from "inferno-router";
-import {CategoriesComponent} from "../category";
+import {CategoriesTab} from "../category";
 import {FileComponent} from "../file";
 import {HelpComponent} from "../help";
 import {Model} from "../model";
@@ -74,7 +74,7 @@ export class NavComponent extends Component {
 					<Route exact path="/" component={FileComponent} />
 					<Route
 						path="/categories/:fullSlug*"
-						component={CategoriesComponent}
+						component={CategoriesTab}
 					/>
 					<Route exact path="/years" component={YearsComponent} />
 					<Route

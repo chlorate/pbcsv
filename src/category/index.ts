@@ -1,4 +1,4 @@
 export * from "./category";
 
-export * from "./categories.component";
-export * from "./category-list.component";
+export * from "./categories-tab";
+export * from "./category-list";

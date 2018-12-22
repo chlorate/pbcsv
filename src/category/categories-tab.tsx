@@ -1,12 +1,11 @@
-import {Component} from "inferno";
+import {Component, InfernoChildren, VNode} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {Link, withRouter} from "inferno-router";
-import {CategoryListComponent} from ".";
-import {Category} from "../category";
-import {Model} from "../model";
-import {RunComponent, RunTableComponent} from "../run";
-import {Store} from "../store";
+import {Category, CategoryList} from "pbcsv/category";
+import {Model} from "pbcsv/model";
+import {RunComponent, RunTableComponent} from "pbcsv/run";
+import {Store} from "pbcsv/store";
 
 interface InjectedProps {
 	match: {params: {fullSlug: string}};
@@ -23,16 +22,16 @@ interface InjectedProps {
  */
 @inject(Store.Model)
 @withRouter
-export class CategoriesComponent extends Component {
+export class CategoriesTab extends Component {
 	private get injected(): InjectedProps {
 		return this.props as InjectedProps;
 	}
 
-	public render(): JSX.Element {
-		const model = this.injected.model;
+	public render(): InfernoChildren {
+		const {match, model} = this.injected;
 
 		let category: Category | undefined;
-		const fullSlug = this.injected.match.params.fullSlug;
+		const fullSlug = match.params.fullSlug;
 		if (fullSlug) {
 			category = model.findCategory(fullSlug);
 			if (!category) {
@@ -55,22 +54,21 @@ export class CategoriesComponent extends Component {
 			.filter((c) => c.runs.length)
 			.map((c) => c.runs[0]);
 
-		const elements: JSX.Element[] = [];
-		if (category) {
-			elements.push(this.breadcrumbs(category));
-		}
-		elements.push(
-			<CategoryListComponent categories={subcategoriesWithChildren} />,
-			<RunTableComponent runs={subcategoryRuns} sums={true} />,
-		);
-		if (category) {
-			elements.push(...this.runs(category));
-		}
-		return <section>{elements}</section>;
+		const children: InfernoChildren = [
+			this.breadcrumbs(category),
+			<CategoryList categories={subcategoriesWithChildren} />,
+			<RunTableComponent runs={subcategoryRuns} sums />,
+			...this.runs(category),
+		];
+		return <section>{children}</section>;
 	}
 
-	private breadcrumbs(category: Category): JSX.Element {
-		const crumbs: Array<JSX.Element | string> = [category.name];
+	private breadcrumbs(category?: Category): VNode | null {
+		if (!category) {
+			return null;
+		}
+
+		const crumbs: Array<VNode | string> = [category.name];
 
 		let parent = category.parent;
 		while (parent) {
@@ -87,14 +85,14 @@ export class CategoriesComponent extends Component {
 		return <h2 className="mb-3">{crumbs}</h2>;
 	}
 
-	private runs(category: Category): JSX.Element[] {
-		const elements: JSX.Element[] = [];
+	private runs(category?: Category): VNode[] {
+		if (!category) {
+			return [];
+		}
 
 		const count = category.runs.length;
-		category.runs.forEach((r, i) => {
-			elements.push(<RunComponent run={r} number={count - i} />);
-		});
-
-		return elements;
+		return category.runs.map((run, i) => (
+			<RunComponent run={run} number={count - i} />
+		));
 	}
 }

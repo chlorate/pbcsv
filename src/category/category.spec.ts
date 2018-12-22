@@ -1,7 +1,7 @@
-import {Category} from ".";
-import {DatePrecision, DateString} from "../date";
-import {Run} from "../run";
-import {Value} from "../value";
+import {Category} from "pbcsv/category";
+import {DatePrecision, DateString} from "pbcsv/date";
+import {Run} from "pbcsv/run";
+import {Value} from "pbcsv/value";
 
 describe("Category", () => {
 	const parent = new Category("Parent", "parent");

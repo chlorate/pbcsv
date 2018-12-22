@@ -1,4 +1,4 @@
-import {Run} from "../run";
+import {Run} from "pbcsv/run";
 
 /**
  * A category contains subcategories and runs.

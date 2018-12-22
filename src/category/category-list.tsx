@@ -1,8 +1,9 @@
+import {SFC} from "inferno";
 import {Badge, ListGroup} from "inferno-bootstrap";
 import {Link} from "inferno-router";
-import {Category} from ".";
-import {formatNumber} from "../math";
-import {listGroupItemClassName} from "../ui";
+import {Category} from "pbcsv/category";
+import {formatNumber} from "pbcsv/math";
+import {listGroupItemClassName} from "pbcsv/ui";
 
 interface Props {
 	categories: Category[];
@@ -12,17 +13,16 @@ interface Props {
  * A list linking to categories. Shows the number of subcategories each category
  * has.
  */
-export function CategoryListComponent(props: Props): JSX.Element | null {
-	const items = props.categories.map((c) => {
-		const count = formatNumber(c.children.length);
+export const CategoryList: SFC<Props> = ({categories}) => {
+	const items = categories.map((category) => {
+		const count = formatNumber(category.children.length);
 		const title = `${count} subcategor${count === "1" ? "y" : "ies"}`;
-
 		return (
 			<Link
 				className={listGroupItemClassName}
-				to={`/categories/${c.fullSlug}`}
+				to={`/categories/${category.fullSlug}`}
 			>
-				{c.name}
+				{category.name}
 				<Badge pill title={title}>
 					{count}
 				</Badge>
@@ -38,4 +38,4 @@ export function CategoryListComponent(props: Props): JSX.Element | null {
 			{items}
 		</ListGroup>
 	);
-}
+};
