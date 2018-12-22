@@ -27,9 +27,11 @@ module.exports = function(config) {
 			resolve: {
 				extensions: [".tsx", ".ts", ".js"],
 				alias: {
-					inferno:
-						__dirname +
-						"/node_modules/inferno/dist/index.dev.esm.js",
+					inferno: path.resolve(
+						__dirname,
+						"node_modules/inferno/dist/index.dev.esm.js",
+					),
+					pbcsv: path.resolve(__dirname, "src"),
 				},
 			},
 			module: {

@@ -13,6 +13,9 @@ module.exports = (env, options) => {
 		},
 		resolve: {
 			extensions: [".tsx", ".ts", ".js"],
+			alias: {
+				pbcsv: path.resolve(__dirname, "src"),
+			},
 		},
 		output: {
 			filename: "[name].[chunkhash].js",
@@ -69,9 +72,10 @@ module.exports = (env, options) => {
 	};
 
 	if (options.mode === "development") {
-		config.resolve.alias = {
-			inferno: __dirname + "/node_modules/inferno/dist/index.dev.esm.js",
-		};
+		config.resolve.alias.inferno = path.resolve(
+			__dirname,
+			"node_modules/inferno/dist/index.dev.esm.js",
+		);
 	}
 
 	return config;
