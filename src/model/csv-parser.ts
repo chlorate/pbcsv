@@ -336,7 +336,11 @@ export class CsvParser {
 		}
 
 		const lastPart = nameParts[nameParts.length - 1];
-		category = new Category(lastPart, slugs.slugify(lastPart), parent);
+		category = new Category({
+			name: lastPart,
+			slug: slugs.slugify(lastPart),
+			parent,
+		});
 		if (!parent) {
 			this.categories.push(category);
 		} else {
@@ -355,7 +359,7 @@ export class CsvParser {
 
 		let year = this.yearsByName[name];
 		if (!year) {
-			year = new Category(name, name.toLowerCase());
+			year = new Category({name, slug: name.toLowerCase()});
 			this._years.push(year);
 			this.yearsByName[name] = year;
 		}

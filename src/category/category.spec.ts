@@ -1,11 +1,9 @@
 import {Category} from "pbcsv/category";
-import {DatePrecision, DateString} from "pbcsv/date";
 import {Run} from "pbcsv/run";
-import {Value} from "pbcsv/value";
 
 describe("Category", () => {
-	const parent = new Category("Parent", "parent");
-	const child = new Category("Child", "child", parent);
+	const parent = new Category({name: "Parent", slug: "parent"});
+	const child = new Category({name: "Child", slug: "child", parent});
 
 	it("can return full name", () => {
 		expect(parent.fullName).toBe("Parent");

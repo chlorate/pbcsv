@@ -1,5 +1,13 @@
 import {Run} from "pbcsv/run";
 
+interface IProps {
+	name?: string;
+	slug?: string;
+	parent?: Category;
+	children?: Category[];
+	runs?: Run[];
+}
+
 /**
  * A category contains subcategories and runs.
  */
@@ -7,13 +15,21 @@ export class Category {
 	public name: string;
 	public slug: string;
 	public parent?: Category;
-	public children: Category[] = [];
-	public runs: Run[] = [];
+	public children: Category[];
+	public runs: Run[];
 
-	constructor(name?: string, slug?: string, parent?: Category) {
-		this.name = name || "";
-		this.slug = slug || "";
+	constructor({
+		name = "",
+		slug = "",
+		parent,
+		children = [],
+		runs = [],
+	}: IProps = {}) {
+		this.name = name;
+		this.slug = slug;
 		this.parent = parent;
+		this.children = children;
+		this.runs = runs;
 	}
 
 	get fullName(): string {

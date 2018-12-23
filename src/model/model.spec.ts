@@ -2,21 +2,27 @@ import {Model} from ".";
 import {Category} from "../category";
 
 describe("Model", () => {
-	let model;
-	let parent;
-	let child;
-	let grandchild;
+	const model = new Model();
 
-	beforeEach(() => {
-		model = new Model();
-
-		parent = new Category("Parent", "p");
-		child = new Category("Child", "c", parent);
-		grandchild = new Category("Grandchild", "gc", child);
-		model.categories.push(parent);
-		parent.children.push(child);
-		child.children.push(grandchild);
+	const parent = new Category({
+		name: "Parent",
+		slug: "p",
 	});
+	model.categories.push(parent);
+
+	const child = new Category({
+		name: "Child",
+		slug: "c",
+		parent,
+	});
+	parent.children.push(child);
+
+	const grandchild = new Category({
+		name: "Grandchild",
+		slug: "gc",
+		parent: child,
+	});
+	child.children.push(grandchild);
 
 	describe("findCategory", () => {
 		it("should return category if found", () => {
