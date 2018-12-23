@@ -1,72 +1,20 @@
-@import 'markdown/markdown';
-@import 'run/run';
-
-.btn-nav-link {
-	background: transparent;
-	color: $link-color;
-}
-
-.card-table {
-	margin: 0;
-	border: 0;
-
-	thead,
-	tfoot {
-		background-color: $card-cap-bg;
-	}
-
-	thead th {
-		border-top: 0;
-	}
-
-	th:first-child,
-	td:first-child {
-		border-left: 0;
-	}
-
-	th:last-child,
-	td:last-child {
-		border-right: 0;
-	}
-
-	tr:last-child th,
-	tr:last-child td {
-		border-bottom: 0;
-	}
-
-	/* stylelint-disable selector-max-compound-selectors */
-	:first-child tr:first-child :first-child {
-		border-top-left-radius: $card-border-radius;
-	}
-
-	:first-child tr:first-child :last-child {
-		border-top-right-radius: $card-border-radius;
-	}
-
-	:last-child tr:last-child :first-child {
-		border-bottom-left-radius: $card-border-radius;
-	}
-
-	:last-child tr:last-child :last-child {
-		border-bottom-right-radius: $card-border-radius;
-	}
-	/* stylelint-enable */
-}
-
-// Links that fit their entire parent element.
-.td-link {
-	display: block;
-	margin: -$table-cell-padding;
-	padding: $table-cell-padding;
-}
-
-.panel-header-link {
-	display: block;
-	margin: (-$card-spacer-y) (-$card-spacer-x);
-	padding: $card-spacer-y $card-spacer-x;
-}
-
-// List group padding is noticeably inconsistent with cards and tables.
-.list-group-item-card-padding {
-	padding: $card-spacer-x;
-}
+@import '~bootstrap-theme/src/pre-bootstrap';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+@import '~bootstrap/scss/code';
+@import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+@import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/card';
+@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/alert';
+@import '~bootstrap/scss/list-group';
+@import '~bootstrap/scss/utilities';
+@import '~bootstrap-theme/src/post-bootstrap';
+@import 'app';
