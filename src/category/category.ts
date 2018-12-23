@@ -1,3 +1,4 @@
+import {computed, observable} from "mobx";
 import {Run} from "pbcsv/run";
 
 interface IProps {
@@ -12,11 +13,11 @@ interface IProps {
  * A category contains subcategories and runs.
  */
 export class Category {
-	public name: string;
-	public slug: string;
-	public parent?: Category;
-	public children: Category[];
-	public runs: Run[];
+	@observable public name: string;
+	@observable public slug: string;
+	@observable public parent?: Category;
+	@observable public children: Category[];
+	@observable public runs: Run[];
 
 	constructor({
 		name = "",
@@ -32,14 +33,17 @@ export class Category {
 		this.runs = runs;
 	}
 
+	@computed
 	get fullName(): string {
 		return (this.parent ? `${this.parent.fullName} - ` : "") + this.name;
 	}
 
+	@computed
 	get fullSlug(): string {
 		return (this.parent ? `${this.parent.fullSlug}/` : "") + this.slug;
 	}
 
+	@computed
 	get totalDescendantsWithRuns(): number {
 		return this.children.reduce(
 			(total, category) =>
