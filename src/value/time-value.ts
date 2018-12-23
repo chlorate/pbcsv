@@ -24,25 +24,13 @@ export class TimeValue extends NumberValue {
 	}
 }
 
-const formats = [
-	{
-		// HH:MM:SS "string" or MM:SS "string" (with optional sign and decimal)
-		regExp: /^([+-])?(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)\s+"(.+)"$/,
-		sign: 1,
-		hours: 2,
-		minutes: 3,
-		seconds: 4,
-		string: 5,
-	},
-	{
-		// HH:MM:SS or MM:SS (with optional sign and decimal, "x" or "?" can
-		// be used in minutes or seconds to indicate an approximate time)
-		regExp: /([+-])?(?:(\d+):)?([\dx?]+):([\dx?]+(?:\.[\dx?]+)?)/i,
-		sign: 1,
-		hours: 2,
-		minutes: 3,
-		seconds: 4,
-	},
+const formatRegExps = [
+	// HH:MM:SS "string" or MM:SS "string" (with optional sign and decimal)
+	/^([+-])?(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)\s+"(.+)"$/,
+
+	// HH:MM:SS or MM:SS (with optional sign and decimal, "x" or "?" can
+	// be used in minutes or seconds to indicate an approximate time)
+	/([+-])?(?:(\d+):)?([\dx?]+):([\dx?]+(?:\.[\dx?]+)?)/i,
 
 	// SS and SS.SSS are not accepted here because they are ambiguous; could be
 	// a number or a time. Assume it's a number.
@@ -54,25 +42,26 @@ const formats = [
 export function parseTimeValue(s: string): TimeValue | undefined {
 	s = s.trim();
 
-	let match: RegExpMatchArray | null = null;
-	const format = formats.find((f) => {
-		match = s.match(f.regExp);
-		return match !== null;
-	});
-	if (!match || !format) {
+	const regExp = formatRegExps.find((re) => re.test(s));
+	if (!regExp) {
 		return undefined;
 	}
 
-	const matchSign = match[format.sign];
-	const matchHours = format.hours ? match[format.hours] : undefined;
-	let matchMinutes = match[format.minutes];
-	let matchSeconds = match[format.seconds];
+	const match = s.match(regExp);
+	if (!match) {
+		return undefined;
+	}
+	const matchSign = match[1];
+	const matchHours = match[2];
+	let matchMinutes = match[3];
+	let matchSeconds = match[4];
+	const matchString = match[5];
 
 	// Approximate times: substitute "x" or "?" for zero.
 	let approximate = false;
 	if (approximateRegExp.test(matchMinutes + matchSeconds)) {
-		matchMinutes = matchMinutes.replace(approximateRegExp, 0);
-		matchSeconds = matchSeconds.replace(approximateRegExp, 0);
+		matchMinutes = matchMinutes.replace(approximateRegExp, "0");
+		matchSeconds = matchSeconds.replace(approximateRegExp, "0");
 		approximate = true;
 	}
 
@@ -94,8 +83,8 @@ export function parseTimeValue(s: string): TimeValue | undefined {
 		n *= -1;
 	}
 
-	if (format.string) {
-		s = match[format.string].trim();
+	if (matchString) {
+		s = matchString.trim();
 	}
 
 	return new TimeValue(s, n, precision, approximate);

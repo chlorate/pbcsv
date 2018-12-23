@@ -53,12 +53,20 @@ export class NavComponent extends Component {
 		const items = links
 			.filter((l) => !l.loadedOnly || model.loaded)
 			.map((l) => (
+				// TODO: Have to pass undefined attributes due to bad typings on
+				// NavLink.
 				<NavItem className={l.className}>
 					<NavLink
 						className="nav-link"
 						activeClassName="active"
 						exact={l.exact}
 						to={l.path}
+						strict={undefined}
+						onClick={undefined}
+						location={undefined}
+						activeStyle={undefined}
+						style={undefined}
+						isActive={undefined}
 					>
 						{l.name}
 					</NavLink>

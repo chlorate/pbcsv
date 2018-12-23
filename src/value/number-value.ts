@@ -45,19 +45,13 @@ export class NumberValue extends Value {
 	}
 }
 
-const formats = [
-	{
-		// NNN "string" (with optional sign, decimal, and leading zero)
-		regExp: /^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s+"(.+)"$/,
-		number: 1,
-		string: 2,
-	},
-	{
-		// NNN (with optional sign, decimal, and leading zero, "x" or "?" can be
-		// used to indicate an approximate number)
-		regExp: /([+-]?(?:[\dx?]+(?:\.[\dx?]+)?|\.[\dx?]+))/i,
-		number: 1,
-	},
+const formatRegExps = [
+	// NNN "string" (with optional sign, decimal, and leading zero)
+	/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s+"(.+)"$/,
+
+	// NNN (with optional sign, decimal, and leading zero, "x" or "?" can be
+	// used to indicate an approximate number)
+	/([+-]?(?:[\dx?]+(?:\.[\dx?]+)?|\.[\dx?]+))/i,
 ];
 
 export const approximateRegExp = /[x?]/gi;
@@ -68,31 +62,32 @@ export const approximateRegExp = /[x?]/gi;
  */
 export function parseNumberValue(s: string): NumberValue | undefined {
 	s = s.trim();
-
-	let match: RegExpMatchArray | null = null;
 	const commaless = s.replace(/,/g, "");
-	const format = formats.find((f) => {
-		match = commaless.match(f.regExp);
-		return match !== null;
-	});
-	if (!match || !format) {
+
+	const regExp = formatRegExps.find((re) => re.test(commaless));
+	if (!regExp) {
 		return undefined;
 	}
 
-	let matchNumber = match[format.number];
+	const match = commaless.match(regExp);
+	if (!match) {
+		return undefined;
+	}
+	let matchNumber = match[1];
+	const matchString = match[2];
 
 	// Approximate numbers: substitute "x" or "?" for zero.
 	let approximate = false;
 	if (approximateRegExp.test(matchNumber)) {
-		matchNumber = matchNumber.replace(approximateRegExp, 0);
+		matchNumber = matchNumber.replace(approximateRegExp, "0");
 		approximate = true;
 	}
 
 	const n = parseFloat(matchNumber) || 0;
 	const precision = getPrecision(matchNumber);
 
-	if (format.string) {
-		s = match[format.string].trim();
+	if (matchString) {
+		s = matchString.trim();
 	}
 
 	return new NumberValue(s, n, precision, approximate);
