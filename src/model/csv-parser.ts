@@ -374,7 +374,7 @@ export class CsvParser {
 				return 1;
 			}
 			if (y.name === unknownYear) {
-				return 0;
+				return -1;
 			}
 			return parseInt(y.name, 10) - parseInt(x.name, 10);
 		});
