@@ -1,8 +1,8 @@
 import {Component, InfernoChildren, VNode} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
-import {Link, withRouter} from "inferno-router";
-import {Category, CategoryList} from "pbcsv/category";
+import {withRouter} from "inferno-router";
+import {Category, CategoryBreadcrumbs, CategoryList} from "pbcsv/category";
 import {Model} from "pbcsv/model";
 import {RunComponent, RunTableComponent} from "pbcsv/run";
 import {Store} from "pbcsv/store";
@@ -55,34 +55,12 @@ export class CategoriesTab extends Component {
 			.map((c) => c.runs[0]);
 
 		const children: InfernoChildren = [
-			this.breadcrumbs(category),
+			<CategoryBreadcrumbs category={category} />,
 			<CategoryList categories={subcategoriesWithChildren} />,
 			<RunTableComponent runs={subcategoryRuns} sums />,
 			...this.runs(category),
 		];
 		return <section>{children}</section>;
-	}
-
-	private breadcrumbs(category?: Category): VNode | null {
-		if (!category) {
-			return null;
-		}
-
-		const crumbs: Array<VNode | string> = [category.name];
-
-		let parent = category.parent;
-		while (parent) {
-			crumbs.push(
-				" - ",
-				<Link to={`/categories/${parent.fullSlug}`}>
-					{parent.name}
-				</Link>,
-			);
-			parent = parent.parent;
-		}
-		crumbs.reverse();
-
-		return <h2 className="mb-3">{crumbs}</h2>;
 	}
 
 	private runs(category?: Category): VNode[] {
