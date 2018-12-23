@@ -1,3 +1,4 @@
+const path = require("path");
 const webpack = require("webpack");
 
 // mobx fix: Fix "there are multiple mobx instances active" error:
