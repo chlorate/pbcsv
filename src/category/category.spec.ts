@@ -7,23 +7,6 @@ describe("Category", () => {
 	const parent = new Category("Parent", "parent");
 	const child = new Category("Child", "child", parent);
 
-	const emptyRuns = new Category();
-	emptyRuns.runs.push(new Run(emptyRuns));
-
-	const fullRuns = new Category();
-	fullRuns.runs.push(
-		new Run(
-			fullRuns,
-			"Primary",
-			"Platform",
-			"Version",
-			"Emulator",
-			new DateString("", new Date(), DatePrecision.Day),
-			"Comment",
-		),
-	);
-	fullRuns.runs[0].values.Value = new Value("value");
-
 	it("can return full name", () => {
 		expect(parent.fullName).toBe("Parent");
 		expect(child.fullName).toBe("Parent - Child");
@@ -32,5 +15,18 @@ describe("Category", () => {
 	it("can return full slug", () => {
 		expect(parent.fullSlug).toBe("parent");
 		expect(child.fullSlug).toBe("parent/child");
+	});
+
+	it("can return total descendants having runs", () => {
+		const categoryWithRuns = new Category();
+		categoryWithRuns.runs.push(new Run(categoryWithRuns));
+
+		const category = new Category();
+		category.children.push(new Category(), new Category());
+		category.children[0].children.push(categoryWithRuns);
+
+		expect(category.totalDescendantsWithRuns).toBe(1);
+		expect(category.children[0].totalDescendantsWithRuns).toBe(1);
+		expect(categoryWithRuns.totalDescendantsWithRuns).toBe(0);
 	});
 });

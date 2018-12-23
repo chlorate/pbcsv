@@ -23,4 +23,14 @@ export class Category {
 	get fullSlug(): string {
 		return (this.parent ? `${this.parent.fullSlug}/` : "") + this.slug;
 	}
+
+	get totalDescendantsWithRuns(): number {
+		return this.children.reduce(
+			(total, category) =>
+				total +
+				category.totalDescendantsWithRuns +
+				(category.runs.length ? 1 : 0),
+			0,
+		);
+	}
 }

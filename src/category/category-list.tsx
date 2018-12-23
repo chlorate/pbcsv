@@ -15,8 +15,8 @@ interface Props {
  */
 export const CategoryList: SFC<Props> = ({categories}) => {
 	const items = categories.map((category) => {
-		const count = formatNumber(category.children.length);
-		const title = `${count} subcategor${count === "1" ? "y" : "ies"}`;
+		const total = formatNumber(category.totalDescendantsWithRuns);
+		const title = `${total} subcategor${total === "1" ? "y" : "ies"}`;
 		return (
 			<Link
 				className={listGroupItemClassName}
@@ -24,7 +24,7 @@ export const CategoryList: SFC<Props> = ({categories}) => {
 			>
 				{category.name}
 				<Badge pill title={title}>
-					{count}
+					{total}
 				</Badge>
 			</Link>
 		);
