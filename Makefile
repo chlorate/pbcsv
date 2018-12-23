@@ -1,5 +1,5 @@
 KARMA=node_modules/.bin/karma
-NCU=node_modules/.bin/ncu
+NPM_CHECK=node_modules/.bin/npm-check
 PRETTIER=node_modules/.bin/prettier
 STYLELINT=node_modules/.bin/stylelint
 TSLINT=node_modules/.bin/tslint
@@ -42,7 +42,7 @@ upgrade:
 	# Waiting on:
 	# - inferno-mobx to use latest mobx
 	# - stylelint-webpack-plugin to use latest stylelint
-	$(NCU) --upgrade --reject mobx,stylelint,stylelint-config-sass-guidelines
+	$(NPM_CHECK) --update --ignore mobx,stylelint,stylelint-config-sass-guidelines --save-exact
 
 node_modules: package.json
 	npm install
