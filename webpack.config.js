@@ -77,6 +77,9 @@ module.exports = (env, options) => {
 				files: ["src/**/*.ts", "src/**/*.tsx"],
 			}),
 		],
+		devServer: {
+			disableHostCheck: true, // TODO: https://github.com/webpack/webpack-dev-server/issues/1604
+		},
 	};
 
 	if (options.mode === "development") {
