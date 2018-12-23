@@ -113,7 +113,7 @@ G1,C1,,0
 ,C3,C4,0
 ,,C5,0
 ,C6,,0
-
+,,,
 ,,C7,0`;
 
 			parser.parse(csv).then(() => {
@@ -361,10 +361,8 @@ C1,1,2,3`;
 
 		it("should ignore empty/unrecognized rows before header", (done) => {
 			const csv = `,
-
 Not a header,
 ,
-
 Category,Value
 Category,0`;
 
@@ -417,7 +415,6 @@ C1,0,P,,V,,E,,D,,C,`;
 		it("should ignore rows with no categories (after cascade)", (done) => {
 			const csv = `Category,Value
 ,
-
 ,0`;
 
 			parser.parse(csv).then(() => {
@@ -431,7 +428,6 @@ C1,0,P,,V,,E,,D,,C,`;
 		it("should ignore rows with no values", (done) => {
 			const csv = `Category,Value 1,Value 2
 ,,
-
 Category,,`;
 
 			parser.parse(csv).then(() => {
@@ -503,7 +499,7 @@ bad`;
 
 			parser.parse(csv).then(done.fail, () => {
 				expect(parser.errors).toEqual([
-					"Error: Number of columns is inconsistent on line 2",
+					"Error: Invalid Record Length: expect 2, got 1 on line 2",
 				]);
 				done();
 			});
