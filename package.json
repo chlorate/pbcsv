@@ -12,7 +12,7 @@
 		"inferno-mobx": "7.0.4",
 		"inferno-router": "7.0.4",
 		"marked": "0.5.2",
-		"mobx": "4.3.1",
+		"mobx": "5.8.0",
 		"sanitize-html": "1.20.0"
 	},
 	"devDependencies": {

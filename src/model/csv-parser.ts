@@ -381,7 +381,7 @@ export class CsvParser {
 
 		// Sort each years' runs in descending order.
 		this.years.forEach((year) => {
-			year.runs = year.runs.sort((x, y) => {
+			year.runs = year.runs.slice().sort((x, y) => {
 				let xTime = 0;
 				if (x.date && x.date.date) {
 					xTime = x.date.date.getTime();

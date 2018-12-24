@@ -39,10 +39,7 @@ format: node_modules
 
 .PHONY: upgrade
 upgrade:
-	# Waiting on:
-	# - inferno-mobx to use latest mobx
-	# - stylelint-webpack-plugin to use latest stylelint
-	$(NPM_CHECK) --update --ignore mobx,stylelint,stylelint-config-sass-guidelines --save-exact
+	$(NPM_CHECK) --update --save-exact
 
 node_modules: package.json
 	npm install
