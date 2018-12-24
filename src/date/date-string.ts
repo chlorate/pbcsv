@@ -1,5 +1,6 @@
-import {DatePrecision} from ".";
-import {pad} from "../math";
+import {computed, observable} from "mobx";
+import {DatePrecision} from "pbcsv/date";
+import {pad} from "pbcsv/math";
 
 const dayToMilliseconds = 24 * 60 * 60 * 1000;
 
@@ -26,10 +27,10 @@ const months = [
  * approximate month or year.
  */
 export class DateString {
-	public string: string;
-	public date?: Date;
-	public precision?: DatePrecision;
-	public ambiguous: boolean;
+	@observable public string: string;
+	@observable public date?: Date;
+	@observable public precision?: DatePrecision;
+	@observable public ambiguous: boolean;
 
 	/**
 	 * Returns an approximate number of days between this date and now, or
@@ -37,7 +38,7 @@ export class DateString {
 	 * the date precision is month or year, then the end of the month or year
 	 * will be used and the minimum number of days since is returned.
 	 */
-	get daysAgo(): number | undefined {
+	@computed get daysAgo(): number | undefined {
 		if (!this.date) {
 			return undefined;
 		}
@@ -65,7 +66,7 @@ export class DateString {
 	/**
 	 * Returns this date formatted as an ISO 8601 string.
 	 */
-	get iso8601(): string {
+	@computed get iso8601(): string {
 		if (!this.date) {
 			return "";
 		}
@@ -86,7 +87,7 @@ export class DateString {
 	/**
 	 * Returns this date in "YYYY", "Month YYYY", or "Month DD, YYYY" format.
 	 */
-	get longString(): string {
+	@computed get longString(): string {
 		if (!this.date) {
 			return "";
 		}
