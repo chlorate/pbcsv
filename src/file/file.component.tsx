@@ -171,7 +171,9 @@ export class FileComponent extends Component<{}, State> {
 		return (
 			<Alert color={color} className="mb-3">
 				<ul className="list-unstyled m-0">
-					{messages.map((m) => <li>{m}</li>)}
+					{messages.map((m) => (
+						<li>{m}</li>
+					))}
 				</ul>
 			</Alert>
 		);

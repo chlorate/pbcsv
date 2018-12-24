@@ -1,5 +1,5 @@
 /**
- * Represents the precision of an ApproximateDate.
+ * Represents the precision of a DateString.
  */
 export enum DatePrecision {
 	Year = 1,

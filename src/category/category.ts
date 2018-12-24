@@ -33,18 +33,15 @@ export class Category {
 		this.runs = runs;
 	}
 
-	@computed
-	get fullName(): string {
+	@computed get fullName(): string {
 		return (this.parent ? `${this.parent.fullName} - ` : "") + this.name;
 	}
 
-	@computed
-	get fullSlug(): string {
+	@computed get fullSlug(): string {
 		return (this.parent ? `${this.parent.fullSlug}/` : "") + this.slug;
 	}
 
-	@computed
-	get totalDescendantsWithRuns(): number {
+	@computed get totalDescendantsWithRuns(): number {
 		return this.children.reduce(
 			(total, category) =>
 				total +
