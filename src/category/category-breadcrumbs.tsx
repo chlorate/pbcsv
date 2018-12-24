@@ -1,4 +1,4 @@
-import {SFC, VNode} from "inferno";
+import {InfernoNode} from "inferno";
 import {Link} from "inferno-router";
 import {Category} from "pbcsv/category";
 
@@ -9,12 +9,12 @@ interface IProps {
 /**
  * Breadcrumbs linking to the parent categories of some category.
  */
-export const CategoryBreadcrumbs: SFC<IProps> = ({category}) => {
+export const CategoryBreadcrumbs = ({category}: IProps) => {
 	if (!category) {
 		return null;
 	}
 
-	const crumbs: Array<VNode | string> = [category.name];
+	const crumbs: InfernoNode[] = [category.name];
 	let parent = category.parent;
 	while (parent) {
 		crumbs.push(

@@ -1,4 +1,4 @@
-import {Component, InfernoChildren, VNode} from "inferno";
+import {Component, InfernoNode} from "inferno";
 import {Alert} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {withRouter} from "inferno-router";
@@ -27,7 +27,7 @@ export class CategoriesTab extends Component {
 		return this.props as InjectedProps;
 	}
 
-	public render(): InfernoChildren {
+	public render(): InfernoNode {
 		const {match, model} = this.injected;
 
 		let category: Category | undefined;
@@ -53,17 +53,17 @@ export class CategoriesTab extends Component {
 		const subcategoryRuns = subcategories
 			.filter((c) => c.runs.length)
 			.map((c) => c.runs[0]);
-
-		const children: InfernoChildren = [
-			<CategoryBreadcrumbs category={category} />,
-			<CategoryList categories={subcategoriesWithChildren} />,
-			<RunTableComponent runs={subcategoryRuns} sums />,
-			...this.runs(category),
-		];
-		return <section>{children}</section>;
+		return (
+			<section>
+				<CategoryBreadcrumbs category={category} />
+				<CategoryList categories={subcategoriesWithChildren} />
+				<RunTableComponent runs={subcategoryRuns} sums />
+				{this.runs(category)}
+			</section>
+		);
 	}
 
-	private runs(category?: Category): VNode[] {
+	private runs(category?: Category): InfernoNode[] {
 		if (!category) {
 			return [];
 		}
