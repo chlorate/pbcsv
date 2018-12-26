@@ -22,6 +22,13 @@ const months = [
 	"December",
 ];
 
+interface IProps {
+	str?: string;
+	date?: Date;
+	precision?: DatePrecision;
+	ambiguous?: boolean;
+}
+
 /**
  * A date parsed from a string. Dates can either be an exact day or an
  * approximate month or year.
@@ -31,6 +38,13 @@ export class DateString {
 	@observable public date?: Date;
 	@observable public precision?: DatePrecision;
 	@observable public ambiguous: boolean;
+
+	constructor({str = "", date, precision, ambiguous = false}: IProps = {}) {
+		this.string = str;
+		this.date = date;
+		this.precision = precision;
+		this.ambiguous = ambiguous;
+	}
 
 	/**
 	 * Returns an approximate number of days between this date and now, or
@@ -105,18 +119,6 @@ export class DateString {
 				return `${month} ${day}, ${year}`;
 		}
 	}
-
-	constructor(
-		str?: string,
-		date?: Date,
-		precision?: DatePrecision,
-		ambiguous?: boolean,
-	) {
-		this.string = str || "";
-		this.date = date;
-		this.precision = precision;
-		this.ambiguous = ambiguous || false;
-	}
 }
 
 const formats = [
@@ -159,13 +161,14 @@ const formats = [
 export function parseDateString(s: string): DateString {
 	s = s.trim();
 
-	let match: RegExpMatchArray | null = null;
-	const format = formats.find((f) => {
-		match = s.match(f.regExp);
-		return match !== null;
-	});
-	if (!match || !format || !match[format.year]) {
-		return new DateString(s);
+	const format = formats.find((f) => f.regExp.test(s));
+	if (!format) {
+		return new DateString({str: s});
+	}
+
+	const match = s.match(format.regExp);
+	if (!match || !match[format.year]) {
+		return new DateString({str: s});
 	}
 
 	let year = parseInt(match[format.year], 10);
@@ -194,6 +197,10 @@ export function parseDateString(s: string): DateString {
 		precision = DatePrecision.Day;
 	}
 
-	const date = new Date(year, month - 1, day);
-	return new DateString(s, date, precision, format.ambiguous);
+	return new DateString({
+		str: s,
+		date: new Date(year, month - 1, day),
+		precision,
+		ambiguous: format.ambiguous,
+	});
 }

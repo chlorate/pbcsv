@@ -1,4 +1,4 @@
-import {DatePrecision, DateString, parseDateString} from ".";
+import {DatePrecision, DateString, parseDateString} from "pbcsv/date";
 
 describe("DateString", () => {
 	describe("daysAgo", () => {
@@ -12,61 +12,55 @@ describe("DateString", () => {
 		});
 
 		it("should return exact days for day precision", () => {
-			const d = new DateString(
-				"",
-				new Date(1987, 11, 10),
-				DatePrecision.Day,
-			);
+			const d = new DateString({
+				date: new Date(1987, 11, 10),
+				precision: DatePrecision.Day,
+			});
 			expect(d.daysAgo).toBe(7);
 		});
 
 		it("should return undefined if day precision and in the future", () => {
-			const d = new DateString(
-				"",
-				new Date(2018, 1, 2),
-				DatePrecision.Day,
-			);
+			const d = new DateString({
+				date: new Date(2018, 1, 2),
+				precision: DatePrecision.Day,
+			});
 			expect(d.daysAgo).toBeUndefined();
 		});
 
 		it("should return days since month end for month precision", () => {
-			const d = new DateString(
-				"",
-				new Date(1987, 10, 1),
-				DatePrecision.Month,
-			);
+			const d = new DateString({
+				date: new Date(1987, 10, 1),
+				precision: DatePrecision.Month,
+			});
 			expect(d.daysAgo).toBe(17);
 		});
 
 		it("should return undefined if month precision and same month", () => {
-			const d = new DateString(
-				"",
-				new Date(1987, 11, 1),
-				DatePrecision.Month,
-			);
+			const d = new DateString({
+				date: new Date(1987, 11, 1),
+				precision: DatePrecision.Month,
+			});
 			expect(d.daysAgo).toBeUndefined();
 		});
 
 		it("should returns days since year end for year precision", () => {
-			const d = new DateString(
-				"",
-				new Date(1986, 0, 1),
-				DatePrecision.Year,
-			);
+			const d = new DateString({
+				date: new Date(1986, 0, 1),
+				precision: DatePrecision.Year,
+			});
 			expect(d.daysAgo).toBe(351);
 		});
 
 		it("should return undefined if year precision and same year", () => {
-			const d = new DateString(
-				"",
-				new Date(1987, 0, 1),
-				DatePrecision.Year,
-			);
+			const d = new DateString({
+				date: new Date(1987, 0, 1),
+				precision: DatePrecision.Year,
+			});
 			expect(d.daysAgo).toBeUndefined();
 		});
 
 		it("should return undefined if no date", () => {
-			const d = new DateString("");
+			const d = new DateString();
 			expect(d.daysAgo).toBeUndefined();
 		});
 	});
@@ -75,22 +69,22 @@ describe("DateString", () => {
 		const date = new Date(2018, 2, 4);
 
 		it("should return YYYY for year precision", () => {
-			const d = new DateString("", date, DatePrecision.Year);
+			const d = new DateString({date, precision: DatePrecision.Year});
 			expect(d.iso8601).toBe("2018");
 		});
 
 		it("should return YYYY-MM for month precision", () => {
-			const d = new DateString("", date, DatePrecision.Month);
+			const d = new DateString({date, precision: DatePrecision.Month});
 			expect(d.iso8601).toBe("2018-03");
 		});
 
 		it("should return YYYY-MM-DD for day precision", () => {
-			const d = new DateString("", date, DatePrecision.Day);
+			const d = new DateString({date, precision: DatePrecision.Day});
 			expect(d.iso8601).toBe("2018-03-04");
 		});
 
 		it("should return empty string if no date", () => {
-			const d = new DateString("");
+			const d = new DateString();
 			expect(d.iso8601).toBe("");
 		});
 	});
@@ -99,22 +93,22 @@ describe("DateString", () => {
 		const date = new Date(2018, 2, 4);
 
 		it("should return 'YYYY' for year precision", () => {
-			const d = new DateString("", date, DatePrecision.Year);
+			const d = new DateString({date, precision: DatePrecision.Year});
 			expect(d.longString).toBe("2018");
 		});
 
 		it("should return 'Month YYYY' for month precision", () => {
-			const d = new DateString("", date, DatePrecision.Month);
+			const d = new DateString({date, precision: DatePrecision.Month});
 			expect(d.longString).toBe("March 2018");
 		});
 
 		it("should return 'Month DD, YYYY' for day precision", () => {
-			const d = new DateString("", date, DatePrecision.Day);
+			const d = new DateString({date, precision: DatePrecision.Day});
 			expect(d.longString).toBe("March 4, 2018");
 		});
 
 		it("should return empty string if no date", () => {
-			const d = new DateString("");
+			const d = new DateString();
 			expect(d.longString).toBe("");
 		});
 	});
