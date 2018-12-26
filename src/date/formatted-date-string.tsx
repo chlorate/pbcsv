@@ -1,4 +1,4 @@
-import {Component} from "inferno";
+import {Component, InfernoNode} from "inferno";
 import {DatePrecision, DateString} from "pbcsv/date";
 import {formatNumber} from "pbcsv/math";
 
@@ -15,7 +15,7 @@ interface Props {
  * extra information.
  */
 export class FormattedDateString extends Component<Props> {
-	public render(): JSX.Element | null {
+	public render(): InfernoNode {
 		const {dateString} = this.props;
 		if (!dateString.string) {
 			return null;
