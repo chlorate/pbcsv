@@ -1,6 +1,6 @@
 import {Component} from "inferno";
-import {DatePrecision, DateString} from ".";
-import {formatNumber} from "../math";
+import {DatePrecision, DateString} from "pbcsv/date";
+import {formatNumber} from "pbcsv/math";
 
 const veryRecentThreshold = 30;
 const recentThreshold = 90;
@@ -14,9 +14,31 @@ interface Props {
  * Displays a date string. Colour indicates how recent it is. Title contains
  * extra information.
  */
-export class DateStringComponent extends Component<Props, {}> {
+export class FormattedDateString extends Component<Props> {
+	public render(): JSX.Element | null {
+		const {dateString} = this.props;
+		if (!dateString.string) {
+			return null;
+		}
+
+		const classNames = ["text-nowrap", this.colorClassName];
+		if (this.props.className) {
+			classNames.push(this.props.className);
+		}
+
+		return (
+			<time
+				className={classNames.join(" ")}
+				title={this.title}
+				dateTime={dateString.iso8601}
+			>
+				{dateString.string}
+			</time>
+		);
+	}
+
 	private get colorClassName(): string {
-		const dateString = this.props.dateString;
+		const {dateString} = this.props;
 
 		const ago = dateString.daysAgo;
 		if (ago !== undefined) {
@@ -36,7 +58,7 @@ export class DateStringComponent extends Component<Props, {}> {
 	}
 
 	private get title(): string | undefined {
-		const dateString = this.props.dateString;
+		const {dateString} = this.props;
 		const lines: string[] = [];
 
 		const long = dateString.longString;
@@ -58,27 +80,5 @@ export class DateStringComponent extends Component<Props, {}> {
 		}
 
 		return lines.join("\n");
-	}
-
-	public render(): JSX.Element | null {
-		const dateString = this.props.dateString;
-		if (!dateString.string) {
-			return null;
-		}
-
-		const classNames = ["text-nowrap", this.colorClassName];
-		if (this.props.className) {
-			classNames.push(this.props.className);
-		}
-
-		return (
-			<time
-				className={classNames.join(" ")}
-				title={this.title}
-				dateTime={dateString.iso8601}
-			>
-				{dateString.string}
-			</time>
-		);
 	}
 }
