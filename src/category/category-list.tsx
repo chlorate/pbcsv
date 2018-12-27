@@ -1,33 +1,19 @@
-import {Badge, ListGroup} from "inferno-bootstrap";
-import {Link} from "inferno-router";
-import {Category} from "pbcsv/category";
-import {formatNumber} from "pbcsv/math";
-import {listGroupItemClassName} from "pbcsv/ui";
+import {StatelessComponent} from "inferno";
+import {ListGroup} from "inferno-bootstrap";
+import {Category, CategoryListItem} from "pbcsv/category";
 
 interface IProps {
 	categories: Category[];
 }
 
 /**
- * A list linking to categories. Shows the number of subcategories each category
- * has.
+ * A list of categories. Each category links to its page and shows its number of
+ * subcategories.
  */
-export const CategoryList = ({categories}: IProps) => {
-	const items = categories.map((category) => {
-		const total = formatNumber(category.totalDescendantsWithRuns);
-		const title = `${total} subcategor${total === "1" ? "y" : "ies"}`;
-		return (
-			<Link
-				className={listGroupItemClassName}
-				to={`/categories/${category.fullSlug}`}
-			>
-				{category.name}
-				<Badge pill title={title}>
-					{total}
-				</Badge>
-			</Link>
-		);
-	});
+export const CategoryList: StatelessComponent<IProps> = ({categories}) => {
+	const items = categories.map((category) => (
+		<CategoryListItem key={category.fullSlug} category={category} />
+	));
 	if (!items.length) {
 		return null;
 	}
