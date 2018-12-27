@@ -3,9 +3,15 @@ import {Alert} from "inferno-bootstrap";
 import {inject} from "inferno-mobx";
 import {withRouter} from "inferno-router";
 import {Category, CategoryBreadcrumbs, CategoryList} from "pbcsv/category";
+import {createMessages} from "pbcsv/i18n";
 import {Model} from "pbcsv/model";
 import {RunComponent, RunTableComponent} from "pbcsv/run";
 import {Store} from "pbcsv/store";
+
+const messages = createMessages({
+	empty: "No categories or runs found.",
+	notFound: "Category not found.",
+});
 
 interface InjectedProps {
 	match: {params: {fullSlug: string}};
@@ -29,13 +35,13 @@ export class CategoriesTab extends Component {
 
 	public render(): InfernoNode {
 		const {match, model} = this.injected;
+		const {fullSlug} = match.params;
 
 		let category: Category | undefined;
-		const fullSlug = match.params.fullSlug;
 		if (fullSlug) {
 			category = model.findCategory(fullSlug);
 			if (!category) {
-				return <Alert color="warning">Category not found.</Alert>;
+				return <Alert color="warning">{messages.notFound()}</Alert>;
 			}
 		}
 
@@ -44,7 +50,7 @@ export class CategoriesTab extends Component {
 			subcategories = category.children;
 		}
 		if (!subcategories.length && (!category || !category.runs.length)) {
-			return <Alert color="primary">No categories or runs.</Alert>;
+			return <Alert color="primary">{messages.empty()}</Alert>;
 		}
 
 		const subcategoriesWithChildren = subcategories.filter(
