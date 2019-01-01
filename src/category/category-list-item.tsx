@@ -7,7 +7,7 @@ import {listGroupItemClassName} from "pbcsv/ui";
 
 const messages = createMessages({
 	badge: "{total, number}",
-	title: "{total, plural, one {# subcategory} other {# subcategories}}",
+	title: "{total, plural, one {# category} other {# categories}}",
 });
 
 interface IProps {
