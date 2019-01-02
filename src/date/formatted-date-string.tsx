@@ -1,9 +1,23 @@
 import {Component, InfernoNode} from "inferno";
 import {DatePrecision, DateString} from "pbcsv/date";
-import {formatNumber} from "pbcsv/math";
+import {createMessages} from "pbcsv/i18n";
 
 const veryRecentThreshold = 30;
 const recentThreshold = 90;
+
+const messages = createMessages({
+	dateDay: "{date, date, long}",
+	dateMonth: "{date, date, month}",
+	dateYear: "{date, date, year}",
+	daysAgoApproximate: "{daysAgo, number}+ days ago",
+	daysAgoExact: "{daysAgo, plural, one {# day} other {# days}} ago",
+});
+
+const precisionToMessage = {
+	[DatePrecision.Year]: messages.dateYear,
+	[DatePrecision.Month]: messages.dateMonth,
+	[DatePrecision.Day]: messages.dateDay,
+};
 
 interface Props {
 	className?: string;
@@ -58,25 +72,22 @@ export class FormattedDateString extends Component<Props> {
 	}
 
 	private get title(): string | undefined {
-		const {dateString} = this.props;
+		const {date, precision, approximate, daysAgo} = this.props.dateString;
 		const lines: string[] = [];
 
-		const long = dateString.longString;
-		if (long) {
-			lines.push(long);
+		let message;
+		if (precision) {
+			message = precisionToMessage[precision];
+		}
+		if (message) {
+			lines.push(message({date}));
 		}
 
-		const ago = dateString.daysAgo;
-		if (ago) {
-			const approximate = dateString.precision !== DatePrecision.Day;
-
-			let line = formatNumber(ago);
-			if (approximate) {
-				line += "+";
-			}
-			line += ` day${ago !== 1 || approximate ? "s" : ""} ago`;
-
-			lines.push(line);
+		if (daysAgo) {
+			message = approximate
+				? messages.daysAgoApproximate
+				: messages.daysAgoExact;
+			lines.push(message({daysAgo}));
 		}
 
 		return lines.join("\n");
