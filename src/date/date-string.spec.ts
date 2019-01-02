@@ -114,30 +114,6 @@ describe("DateString", () => {
 			expect(d.iso8601).toBe("");
 		});
 	});
-
-	describe("longString", () => {
-		const date = new Date(2018, 2, 4);
-
-		it("should return 'YYYY' for year precision", () => {
-			const d = new DateString({date, precision: DatePrecision.Year});
-			expect(d.longString).toBe("2018");
-		});
-
-		it("should return 'Month YYYY' for month precision", () => {
-			const d = new DateString({date, precision: DatePrecision.Month});
-			expect(d.longString).toBe("March 2018");
-		});
-
-		it("should return 'Month DD, YYYY' for day precision", () => {
-			const d = new DateString({date, precision: DatePrecision.Day});
-			expect(d.longString).toBe("March 4, 2018");
-		});
-
-		it("should return empty string if no date", () => {
-			const d = new DateString();
-			expect(d.longString).toBe("");
-		});
-	});
 });
 
 describe("parseDateString", () => {

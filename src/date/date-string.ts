@@ -4,24 +4,6 @@ import {pad} from "pbcsv/math";
 
 const dayToMilliseconds = 24 * 60 * 60 * 1000;
 
-// TODO: Should use Date.toLocaleDateString but Chrome and Firefox want to have
-// a whack-a-mole game of "unsupported time zone specified" errors when running
-// tests, so I can't be bothered to figure it out right now.
-const months = [
-	"January",
-	"February",
-	"March",
-	"April",
-	"May",
-	"June",
-	"July",
-	"August",
-	"September",
-	"October",
-	"November",
-	"December",
-];
-
 interface IProps {
 	str?: string;
 	date?: Date;
@@ -102,28 +84,6 @@ export class DateString {
 		}
 
 		return `${s}-${pad(this.date.getDate(), 2)}`;
-	}
-
-	/**
-	 * Returns this date in "YYYY", "Month YYYY", or "Month DD, YYYY" format.
-	 */
-	@computed get longString(): string {
-		if (!this.date) {
-			return "";
-		}
-
-		const year = this.date.getFullYear();
-		const month = months[this.date.getMonth()];
-		const day = this.date.getDate();
-
-		switch (this.precision) {
-			case DatePrecision.Year:
-				return `${year}`;
-			case DatePrecision.Month:
-				return `${month} ${year}`;
-			default:
-				return `${month} ${day}, ${year}`;
-		}
 	}
 }
 
