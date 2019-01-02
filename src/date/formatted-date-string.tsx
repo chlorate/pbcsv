@@ -42,14 +42,14 @@ interface Props {
  */
 export class FormattedDateString extends Component<Props> {
 	public render(): InfernoNode {
-		const {dateString} = this.props;
+		const {className, dateString} = this.props;
 		if (!dateString.string) {
 			return null;
 		}
 
 		const classNames = ["text-nowrap", this.colorClassName];
-		if (this.props.className) {
-			classNames.push(this.props.className);
+		if (className) {
+			classNames.push(className);
 		}
 
 		return (
@@ -76,7 +76,7 @@ export class FormattedDateString extends Component<Props> {
 		return "text-muted";
 	}
 
-	private get title(): string | undefined {
+	private get title(): string {
 		const {date, precision, approximate, daysAgo} = this.props.dateString;
 		const lines: string[] = [];
 
