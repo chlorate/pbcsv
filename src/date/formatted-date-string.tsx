@@ -2,8 +2,20 @@ import {Component, InfernoNode} from "inferno";
 import {DatePrecision, DateString} from "pbcsv/date";
 import {createMessages} from "pbcsv/i18n";
 
-const veryRecentThreshold = 30;
-const recentThreshold = 90;
+const recentThresholds = [
+	{
+		daysAgo: 30,
+		className: "text-success",
+	},
+	{
+		daysAgo: 90,
+		className: "text-info",
+	},
+	{
+		daysAgo: 365,
+		className: "text-body",
+	},
+];
 
 const messages = createMessages({
 	dateDay: "{date, date, long}",
@@ -52,22 +64,15 @@ export class FormattedDateString extends Component<Props> {
 	}
 
 	private get colorClassName(): string {
-		const {dateString} = this.props;
-
-		const ago = dateString.daysAgo;
-		if (ago !== undefined) {
-			if (ago <= veryRecentThreshold) {
-				return "text-success";
-			} else if (ago <= recentThreshold) {
-				return "text-info";
+		const {daysAgo} = this.props.dateString;
+		if (daysAgo !== undefined) {
+			const threshold = recentThresholds.find(
+				(t) => daysAgo <= t.daysAgo,
+			);
+			if (threshold) {
+				return threshold.className;
 			}
 		}
-
-		const date = dateString.date;
-		if (date && date.getFullYear() >= new Date().getFullYear()) {
-			return "text-body";
-		}
-
 		return "text-muted";
 	}
 
