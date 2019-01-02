@@ -1,6 +1,32 @@
 import {DatePrecision, DateString, parseDateString} from "pbcsv/date";
 
 describe("DateString", () => {
+	describe("approximate", () => {
+		[
+			{
+				precision: undefined,
+				expected: false,
+			},
+			{
+				precision: DatePrecision.Year,
+				expected: true,
+			},
+			{
+				precision: DatePrecision.Month,
+				expected: true,
+			},
+			{
+				precision: DatePrecision.Day,
+				expected: false,
+			},
+		].forEach(({precision, expected}) => {
+			it(`should return ${expected} when precision is ${precision}`, () => {
+				const dateString = new DateString({precision});
+				expect(dateString.approximate).toBe(expected);
+			});
+		});
+	});
+
 	describe("daysAgo", () => {
 		beforeEach(() => {
 			jasmine.clock().install();

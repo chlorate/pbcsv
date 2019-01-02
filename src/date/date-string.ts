@@ -46,6 +46,12 @@ export class DateString {
 		this.ambiguous = ambiguous;
 	}
 
+	@computed get approximate(): boolean {
+		return (
+			this.precision !== undefined && this.precision !== DatePrecision.Day
+		);
+	}
+
 	/**
 	 * Returns an approximate number of days between this date and now, or
 	 * undefined if it cannot be determined or if this date is in the future. If
